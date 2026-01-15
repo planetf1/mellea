@@ -165,6 +165,20 @@ While powerful, the Alora/Adapter pattern has a **Runtime cost**:
 *   **No Ollama Support**: fast runtimes like Ollama (`llama.cpp`) do not yet support dynamic per-token adapter switching (aLoRA).
 *   **The Trade-off**: You choose between **Maximum Speed/Ease** (Ollama) and **Maximum Control** (Mellea + Alora).
     *   *Recommendation*: Start with standard prompting (Ollama). Upgrade to Alora (LocalHF) only when you hit a accuracy wall that prompts can't fix.
+    *   *Recommendation*: Start with standard prompting (Ollama). Upgrade to Alora (LocalHF) only when you hit a accuracy wall that prompts can't fix.
+
+### 5.4 The "Migration" Value Prop (Competitive Analysis)
+Why switch to Mellea Intrinsics? Here is the "Migration Map" for popular frameworks:
+
+| Feature | The "Industry Standard" Way | The Mellea Way |
+| :--- | :--- | :--- |
+| **"Answerable?"** | **LangChain**: Build a custom `SelfRAG` graph with explicit `ISREL` token parsing. | `check_answerability(q, docs)` |
+| **Citations** | **LlamaIndex**: Switch your entire pipeline to `CitationQueryEngine` (different storage format). | `find_citations(response, docs)` |
+| **Hallucinations** | **CrewAI**: Spin up a dedicated "Grader Agent" (high latency/cost). | `flag_hallucinated_content(resp, docs)` |
+| **Grounding** | **Google Vertex**: Call external `Check Grounding` API (<500ms, external bill). | Built-in Adapter (Local, included). |
+| **Guardrails** | **OpenAI**: Use `Guardrails AI` (separate library) or safety model calls. | `m.instruct(..., requirements=[...])` |
+
+**The Insight**: Competitors often treat these as **Architectures** (you must build your app *around* them). Mellea treats them as **Standard Library Functions** (you just call them when needed).
 
 
 ## 6. Future Frontier: IDE Agents via MCP
