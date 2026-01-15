@@ -138,6 +138,13 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 
 > **Technical Note**: These examples **work today** with the current Mellea release (Outputs/Return Types are fully supported). They do **not** depend on the hypothetical "Pydantic-as-Input" enhancements discussed previously.
 
+## 5.1 The "Specialist Judge" Pattern (Mellea + Alora)
+**Problem**: General-purpose LLMs (even GPT-4) are mediocre judges of specific domain rules (e.g., "Is this legally compliant?" or "Is this tone strictly professional?").
+**Solution**: Use Mellea's **Alora** integration to hot-swap "Validation Adapters".
+*   **Mechanism**: You train a tiny LoRA adapter on your specific criteria (using `m alora train`).
+*   **Runtime**: When you call `m.instruct(..., requirements=[req("Be legal")])`, Mellea *automatically reroutes* the validation check to your specialized adapter.
+*   **Benefit**: You get "Expert-Level" supervision on a "Junior-Level" (cheap/fast) model.
+
 
 ## 6. Future Frontier: IDE Agents via MCP
 The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
