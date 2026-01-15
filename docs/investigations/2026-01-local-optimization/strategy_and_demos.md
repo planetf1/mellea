@@ -120,21 +120,44 @@ except Exception as e:
     print(f"Parsing failed: {e}")
 ```
 
+### Case Study: Job Description Extraction (The "gkamradt" Pattern)
+Greg Kamradt's popular "OpeningAttributes" tutorial (extracting tools/tech from Job Descriptions) is a staple of the LangChain community. It uses `PydanticOutputParser` and is often cited as a "complex" workflow.
+
+#### The "Before" (LangChain)
+*Code adapted from `gkamradt/langchain-tutorials`:*
+```python
+class JobInfo(BaseModel):
+    role: str = Field(description="job title")
+    tools: list[str] = Field(description="list of tech stack tools")
+
+parser = PydanticOutputParser(pydantic_object=JobInfo)
+prompt = PromptTemplate(
+    template="Extract job info.\n{format_instructions}\nDesc: {text}",
+    partial_variables={"format_instructions": parser.get_format_instructions()},
+    input_variables=["text"],
+)
+chain = prompt | llm | parser
+
+# Users often complain about:
+# 1. "OutputParserException: Got invalid JSON"
+# 2. Infinite retry loops on 7B models
+```
+
 #### The "After" (Mellea Injection)
-Mellea handles the schema injection, type coercion, and retries natively.
 ```python
 from mellea import generative
 
-# 1. Define Function (Schema + Logic + Parsing)
 @generative
-def extract_user(query: str) -> User:
-    """Extract the user's name and age from the query string."""
+def extract_job_info(description: str) -> JobInfo:
+    """Extract the role and list of technical tools from the job description."""
 
-# 2. Just call it.
-data = extract_user(query="Alice is 30")
+# No parsers, no prompt templates, no retry logic code.
+info = extract_job_info(description=raw_text)
 ```
 
-**The Pitch**: "LangChain is your **Orchestrator** (Retrieval, Memory). Mellea is your **Reliable Worker**. Use Mellea for the specific nodes in your graph that need guaranteed structured output."
+**The Value Add**:
+*   **7B Model Reliability**: Mellea's built-in retry/repair logic (and potentially `xgrammar` integration) makes this work on local models where LangChain's basic parser often fails.
+*   **Readability**: The core logic is defined in the *Type Signature*, not the *Prompt String*.
 
 ## 5. Documentation Opportunities
 *   **"Mellea for Software Engineers"**: A guide specifically for people who hate "Prompt Engineering" and love "Type Systems".
