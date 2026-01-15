@@ -93,6 +93,7 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 *   **Vector-less Router**: Use `Enum` return types for fast, zero-infra semantic routing.
 *   **Schema-as-Code** (derived from *spotify-stop-ai*): Replace `.txt` prompt files containing JSON schemas (which drift) with Python Pydantic models (which don't).
 *   **Validation-as-Types**: Replace post-hoc manual validation checks (e.g., `if confidence < 0.0`) with `Field` validators (e.g., `Field(ge=0.0)`).
+*   **Test-Time Backend Switching**: Decouple logic from models by checking `os.environ` in test fixtures. This allows the same suite to run against Mocks (CI), Ollama (Local), or OpenAI (Staging) without changing code.
 
 > **Technical Note**: These examples **work today** with the current Mellea release (Outputs/Return Types are fully supported). They do **not** depend on the hypothetical "Pydantic-as-Input" enhancements discussed previously.
 
