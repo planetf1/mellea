@@ -92,7 +92,7 @@ The original tutorial solves `OutputParserException` by adding *more* complexity
 ### Demo B: The "Reliable RAG Grader" (Targeting DeepLearning.AI)
 *   **Source Material**: [DeepLearning.AI: Building and Evaluating Advanced RAG (Lab 3)](https://www.deeplearning.ai/short-courses/building-evaluating-advanced-rag/)
 *   **The Hook**: "Stop your Judge from hallucinating formats. Get a raw `int` every time."
-*   **The Problem**: In the course, they use complex prompting to get a "Score" from 1-5. It often fails (outputting "Score: 4" instead of "4").
+*   **The Confusion**: Students struggle because their prompt says "Score: [1-5]", but the LLM politely writes a sentence instead. They then have to write regex to "find the number in the string".
 *   **The Mellea Fix**:
 
 **The "After"**:
@@ -114,6 +114,7 @@ def grade_answer(q: str, a: str) -> Grade: ...
 ### Demo D: The "Sub-Question" Logic (Targeting LlamaIndex)
 *   **Source Material**: [LlamaIndex: Query Transformations Cookbook](https://docs.llamaindex.ai/en/stable/examples/query_transformations/query_transform_cookbook/)
 *   **The Hook**: "Replace `SubQuestionQueryEngine` complexity with one Python function."
+*   **The Confusion**: Users find `PydanticProgram` and `SubQuestionQueryEngine` hard to debug. It's a "Black Box" abstraction.
 *   **The Fix**:
 ```python
 @generative
@@ -123,6 +124,7 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 ### Demo E: The "System 2" Solver (Targeting Research/Math)
 *   **Community**: Kaggle / AlphaCode fans
 *   **The Hook**: "Turn Llama 3 into a Reasoning Model with one line of code."
+*   **The Difficulty**: Implementing "Self-Consistency" requires writing a loop, parsing 8 answers, finding the most frequent answer, and handling ties. It's 50 lines of boilerplate.
 *   **The Fix**: Use `MajorityVotingStrategy` to generate 8 solutions and vote for the consensus.
 ```python
 # No complex "Chain" logic. Just pass a strategy.
