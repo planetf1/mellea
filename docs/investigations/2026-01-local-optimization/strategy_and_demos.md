@@ -82,8 +82,10 @@ The original tutorial solves `OutputParserException` by adding *more* complexity
 
 ### Demo B: The "Reliable RAG Grader" (Targeting DeepLearning.AI)
 *   **Community**: RAG Evaluation / DL.AI Students
-*   **The Hook**: "Get integer scores (1-5), not string hallucinations ('4/5')."
-*   **Unique Value**: Token-level constraint (ge=1, le=5).
+*   **The Hook**: "Stop your Judge from hallucinating formats. Get a raw `int` every time."
+*   **The Solution to Hallucination**:
+    *   *Type I (Format)*: Model answers "The score is 4" instead of "4". **Mellea Fix**: Token masks generally prevent any token except digits.
+    *   *Type II (Range)*: Model answers "10" on a 1-5 scale. **Mellea Fix**: `Field(ge=1, le=5)` validation.
 
 **The "After"**:
 ```python
@@ -119,7 +121,7 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 4.  Write `docs/integrations/langchain.md` explaining the "Injection" pattern.
 
 ## 5. Architectural Patterns
-*   **Reasoning Field**: Improve accuracy effectively by adding `reasoning: str` to Pydantic models (Chain of Thought).
+*   **Reasoning Field (Anti-Hallucination)**: Add `reasoning: str` *before* the answer field. This forces the model to "show its work" (Chain of Thought), drastically reducing *logic* hallucinations compared to asking for a raw answer.
 *   **Vector-less Router**: Use `Enum` return types for fast, zero-infra semantic routing.
 *   **Schema-as-Code** (derived from *spotify-stop-ai*): Replace `.txt` prompt files containing JSON schemas (which drift) with Python Pydantic models (which don't).
 *   **Validation-as-Types**: Replace post-hoc manual validation checks (e.g., `if confidence < 0.0`) with `Field` validators (e.g., `Field(ge=0.0)`).
