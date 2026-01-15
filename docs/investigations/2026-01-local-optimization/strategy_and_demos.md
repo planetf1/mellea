@@ -94,6 +94,8 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 *   **Schema-as-Code** (derived from *spotify-stop-ai*): Replace `.txt` prompt files containing JSON schemas (which drift) with Python Pydantic models (which don't).
 *   **Validation-as-Types**: Replace post-hoc manual validation checks (e.g., `if confidence < 0.0`) with `Field` validators (e.g., `Field(ge=0.0)`).
 
+> **Technical Note**: Mellea `main` currently supports Pydantic models as **Outputs** (Return Types). Full support for Pydantic as **Inputs** (Arguments) is planned but not required for these demos.
+
 
 ## 6. Future Frontier: IDE Agents via MCP
 The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
