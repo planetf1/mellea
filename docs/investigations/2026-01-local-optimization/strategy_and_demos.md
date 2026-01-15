@@ -92,8 +92,6 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 *   **Reasoning Field**: Improve accuracy effectively by adding `reasoning: str` to Pydantic models (Chain of Thought).
 *   **Vector-less Router**: Use `Enum` return types for fast, zero-infra semantic routing.
 
-## 6. Future Frontier: IDE Code Generation
-Users are moving beyond "Chatboxes" to "Agents in the Editor". Mellea is uniquely positioned to handle the **Structure** required for robust code automation.
 
 ## 6. Future Frontier: IDE Agents via MCP
 The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
