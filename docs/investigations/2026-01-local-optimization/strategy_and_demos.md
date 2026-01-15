@@ -1,7 +1,7 @@
 # Strategy & Demo Roadmap: "The Mellea Injection"
-**Status**: Ready for Implementation
-**Target Audience**: Future AI Agents & Mellea Contributors
-**Context**: [Mellea GitHub Repo](https://github.com/planetf1/mellea)
+*   **Status**: Ready for Implementation
+*   **Target Audience**: Future AI Agents & Mellea Contributors
+*   **Context**: [Mellea GitHub Repo](https://github.com/planetf1/mellea)
 
 ## 1. The Mission: "The Reasoning Compiler"
 Mellea is not just another Agent Framework. It is a **Reasoning Compiler**.
@@ -111,7 +111,6 @@ def grade_answer(q: str, a: str) -> Grade: ...
 *   **The Fix**: Mellea + `xgrammar` forces the backend to *only* emit valid JSON tokens. No "yapping" possible.
 
 ### Demo D: The "Sub-Question" Logic (Targeting LlamaIndex)
-### Demo D: The "Sub-Question" Logic (Targeting LlamaIndex)
 *   **Source Material**: [LlamaIndex: Query Transformations Cookbook](https://docs.llamaindex.ai/en/stable/examples/query_transformations/query_transform_cookbook/)
 *   **The Hook**: "Replace `SubQuestionQueryEngine` complexity with one Python function."
 *   **The Confusion**: Users find `PydanticProgram` and `SubQuestionQueryEngine` hard to debug. It's a "Black Box" abstraction.
@@ -132,7 +131,6 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 def solve_math(problem: str) -> int: ...
 
 res = solve_math(..., strategy=MajorityVotingStrategy(n=8))
-```
 ```
 
 ---
@@ -244,7 +242,9 @@ Instead of writing custom plugins for VS Code, we expose Mellea functions as **M
 
 ## 7. Distribution Strategy: "The One-Liner"
 To drive adoption, we must lower the friction to try these demos.
+
 **The Goal**: A user should be able to run the "Agentic Migration" challenge in < 2 minutes without cloning the repo.
+
 **The Command**:
 ```bash
 uvx --from mellea mellea-demo langchain-extraction
