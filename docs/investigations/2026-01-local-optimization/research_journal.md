@@ -3,18 +3,15 @@
 **Investigator**: Antigravity
 **Context**: Initially investigating "Local HF Backend" performance on Apple Silicon.
 
-## 1. The Starting Point: "Why doesn't it run?"
-The initial goal was simple: Make `uv run pytest` pass on a MacBook M1/M2/M3.
-*   **Blocker 1**: `RuntimeError: "addmm_impl_cpu_" not implemented for 'Half'`.
-    *   *Fix*: Auto-detect `mps` device in `LocalHFBackend` and enforce `torch_dtype=torch.float16` if and only if on execution (not CPU fallback).
-*   **Blocker 2**: Python 3.13 vs `outlines`.
-    *   *Finding*: `outlines` (Rust dependency) failed to build on 3.13. We documented the recommendation to stick to 3.12 for local stability.
+## 1. Technical Investigations (Detailed Reports)
+We have separated our technical findings into specific deep-dives:
 
-## 2. The Technical Pivot: "It runs, but is it good?"
-Once the tests ran, we audited the `LocalHFBackend` quality with `Llama-3-8B-Instruct`.
-*   **Discovery**: The model was "yapping" (conversational filler) instead of returning strict JSON, even with strict prompts.
-*   **Solution**: We needed `xgrammar` (via `outlines`) to force the logits.
-*   **Insight**: "Local LLMs are unusable for agents *unless* you have structural enforcement." -> This became a key selling point for Mellea.
+*   **[Local Backend Optimization](./local_backend_optimization.md)**: Details the switch to `float16` on Apple Silicon and the `xgrammar` dependency.
+*   **[Test Suite Categorization](./test_suite_categorization.md)**: Analyzing the split between "Logic" (deterministic) and "Qualitative" (probabilistic) tests.
+*   **[LM Studio Compatibility](./lmstudio_compatibility.md)**: Findings on why `OllamaModelBackend` fails with LM Studio and the recommendation to use `OpenAIModelBackend`.
+
+## 2. The Strategic Pivot
+Once the technical baseline was established, we realized Mellea's strength wasn't just "running locally", but...
 
 ## 3. The Strategic Pivot: "Selling the Solution"
 We realized Mellea's strength wasn't just "running locally", but "fixing the pain" of modern agent engineering (Types vs Tokens).
