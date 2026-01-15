@@ -42,6 +42,14 @@ def extract_job_info(description: str) -> JobInfo:
     """Extract role and tools. Logic handled by type signature."""
 ```
 
+### The "Agentic Migration" Pattern (How to Demo)
+Instead of just showing the "After" code, we can gamify the demo using our **Agent Template**:
+1.  Provide a folder with `legacy_langchain.py` (a brittle script).
+2.  Provide `AGENTS_TEMPLATE.md`.
+3.  **The Challenge**: "Drop the Template into this folder and ask Cursor to 'Refactor legacy_langchain.py to use Mellea'."
+4.  **The Win**: The user watches *their own AI* fix the code using Mellea's simple primitives. This proves Mellea is "Agent-Native".
+
+
 ### Demo B: The "Reliable RAG Grader" (Targeting DeepLearning.AI)
 *   **Community**: RAG Evaluation / DL.AI Students
 *   **The Hook**: "Get integer scores (1-5), not string hallucinations ('4/5')."
