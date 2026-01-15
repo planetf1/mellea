@@ -158,18 +158,17 @@ Mellea comes with a standard library of **RAG Intrinsics** (`m.stdlib.intrinsics
 *   `flag_hallucinated_content(response, docs) -> float`: Detect "faithfulness" issues automatically.
 *   `rewrite_question(q) -> str`: Optimize user queries for your vector store.
 
-### 5.3 The "Universal Router" Pattern (Interceptors)
-**The Principle**: Every `@generative` function is a **Hook Point**. Mellea does not just "call an LLM"; it routes your intent through a chain of interceptors.
+### 5.3 The "Specialist Judge" Pattern
+This architectural pattern answers the hardest question in RAG: *"How do I trust a small model to grade a complex answer?"*
 
-**How it Works**:
-*   **Intercept**: The runtime captures the function signature (`name`, `args`, `return_type`).
-*   **Route**: It decides *where* to send this request based on configuration or metadata.
-*   **Execute**: It could be a local model, a remote API, a mock for testing, or a specialized adapter.
+**The Hook (User Pain)**:
+*   "I want to run evaluations locally, but small models (8B) are terrible judges."
+*   "Prompting a model to 'Be Professional' or 'Check specific legal clauses' consumes huge context and is flaky."
 
-#### Application: The "Specialist Judge" (Mellea + Alora)
-This routing capability is most powerful when combined with **Alora (Activated LoRA)**.
-*   **Problem**: General models are bad at specific rules (e.g., "Legality").
-*   **Solution**: When you call `m.instruct(..., requirements=[req("Be legal")])`, the Router *intercepts* the call and *swaps* the weights to a "Legality Adapter" for that single generation.
+**The Mellea Fix (Alora)**:
+Mellea uses **Alora (Activated LoRA)** to hot-swap "Validation Adapters" at runtime.
+*   **Concept**: Instead of *prompting* the model to be a judge, we *swap its brain* for a "Judge Adapter" just for that one function call.
+*   **The Result**: You get "Expert-Level" supervision on a "Junior-Level" (cheap/fast) model.
 
 #### Technical Reality Check (The "Cost" of Alora)
 While powerful, the Alora/Adapter pattern has a **Runtime cost**:
