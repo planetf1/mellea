@@ -62,3 +62,14 @@ We executed a "Double-Click" on the Strategy to verify assumptions and prepare d
 ### C. Git State
 *   Created branch `docs/research-analysis` to house all documentation updates.
 *   Persisted local **LM Studio Test Configurations** (`test/*.py`) to this branch to preserve the developer environment without polluting `main`.
+
+## 7. Documentation Architecture Refactor (2026-01-15)
+To prepare for public consumption, we split the monolithic "Strategy" document into two coherent artifacts.
+
+### A. The "Split" Architecture
+*   **`strategy_and_demos.md`**: Renamed to focus solely on the **"Why"** (Mission, Layer Cake, Competitive Edge) and the **"What"** (The 4 Demos). This is the "Pitch Deck" for repo visitors.
+*   **`technical_reference.md`**: Created to house the **"How"** (Alora, Intrinsics, System 2). This is the "Manual" for engineers.
+
+### B. Strategic Refinements
+*   **"Pain-First" Messaging**: Updated all demo descriptions to explicitly start with **"The Confusion/Pain"**. We moved from "Showcasing Features" to "Solving Friction" (e.g., stopping retry loops, fixing broken JSON).
+*   **"Truth in Labeling"**: Added the **Innovation vs Commodity Audit** table. We explicitly classify standard wrappers (Ollama, Code Sandbox) as "Commodities" to build trust, reserving the term "Innovation" only for our core compiler tech.
