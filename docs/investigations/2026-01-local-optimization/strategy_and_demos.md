@@ -83,3 +83,17 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 ## 5. Architectural Patterns
 *   **Reasoning Field**: Improve accuracy effectively by adding `reasoning: str` to Pydantic models (Chain of Thought).
 *   **Vector-less Router**: Use `Enum` return types for fast, zero-infra semantic routing.
+
+## 6. Future Frontier: IDE Code Generation
+Users are moving beyond "Chatboxes" to "Agents in the Editor". Mellea is uniquely positioned to handle the **Structure** required for robust code automation.
+
+### Concept: The "Mellea Test Architect" (Targeting Continue.dev)
+*   **The Gap**: Current IDE tools (Copilot, Cursor) are great at "autocomplete" but bad at "architecting". They output text, not plans.
+*   **The Idea**: A [Continue.dev](https://continue.dev) Python backend recipe that uses Mellea to generate a **Typed Test Plan** before writing code.
+*   **The Workflow**:
+    1.  User highlights a function: `src/utils.py`.
+    2.  User types `/plan-tests`.
+    3.  Mellea backend generates a `TestPlan(scenarios=[...], edge_cases=[...])` Pydantic object (constrained).
+    4.  The IDE UI renders this plan as a checklist.
+    5.  User confirms -> Mellea generates the actual `pytest` code following the plan.
+*   **Why Mellea**: Continue's default LLM connection is text-in/text-out. Mellea adds the structural guarantee needed to make the "Plan -> Code" step reliable.
