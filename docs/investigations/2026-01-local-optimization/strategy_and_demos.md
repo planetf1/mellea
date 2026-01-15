@@ -181,7 +181,31 @@ Why switch to Mellea Intrinsics? Here is the "Migration Map" for popular framewo
 **The Insight**: Competitors often treat these as **Architectures** (you must build your app *around* them). Mellea treats them as **Standard Library Functions** (you just call them when needed).
 
 
-## 6. Future Frontier: IDE Agents via MCP
+### 5.5 Technical Caveat: The "Granite" Dependency
+**Important**: The `m.stdlib.intrinsics` module currently uses **Activated LoRA** adapters trained specifically for the **IBM Granite** model family.
+*   **Implication**: To use `check_answerability` or `find_citations` seamlessly, you must use a storage backend that supports Granite adapters (e.g. `LocalHFBackend`).
+*   **Non-Granite Users**: If you are using GPT-4 or Llama 3, Mellea falls back to standard prompting (less reliable) or requires you to train your own adapters.
+*   **The "Extras"**: These features require `mellea[hf]` dependencies (`transformers`, `peft`), which are heavy.
+
+## 6. What Mellea is NOT (The "Scope Check")
+To be honest with users, we must define where Mellea *ends* and other tools begin:
+1.  **No Data Connectors**: Mellea has no `PyPDFLoader` or `WebScraper`. It expects you to give it string/`Document` objects.
+    *   *Advice*: Use **LlamaIndex** or **Unstructured** to load data. Use Mellea to process it.
+2.  **No Vector Stores**: Mellea does not talk to Pinecone/Qdrant.
+    *   *Advice*: Use **LangChain** or the native DB client for retrieval.
+3.  **No "Graph" Engine**: Mellea has no stateful `Graph` orchestration (like LangGraph).
+    *   *Advice*: Use standard Python `if/else` and loops. If you need complex state machines, wrap Mellea functions inside a LangGraph node.
+4.  **No Multimodal**: Mellea is strictly Text-In, Structured-Out. No Image/Audio support yet.
+
+## 7. The Core USP: `@generative` vs The World
+User: *"Why not just use OpenAI's `response_format`?"*
+*   **OpenAI SDK**: Works great, but locks you into OpenAI.
+*   **Mellea**: The `@generative` decorator is a **Universal Router**.
+    *   On **OpenAI**: It translates your Python signature to `response_format`.
+    *   On **Local (Llama/Granite)**: It translates your signature to `xgrammar` logits constraints.
+    *   **Value**: You write the code *once*. You can switch from GPT-4 (Prototyping) to Llama 3 8B (Production/Local) without changing a single line of your validation logic.
+
+## 8. Future Frontier: IDE Agents via MCP
 The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
 
 ### The Strategy: "Mellea as an MCP Server"
