@@ -71,6 +71,11 @@ You will watch the agent:
 3.  **Delete** the retry loop (Mellea supports `instruct-validate-repair` if needed, but `@generative` is usually enough).
 4.  **Produce** a clean, type-safe function in ~15 lines of code.
 
+**Why Mellea Wins (vs The Tutorial)**
+The original tutorial solves `OutputParserException` by adding *more* complexity (Retry Parsers, Auto-Fixing Chains).
+*   **LangChain (Reactive)**: LLM guesses -> Parser fails -> Retry Loop catches error -> LLM tries again. (Slow, expensive).
+*   **Mellea (Proactive)**: Type signature -> Backend *forces* valid JSON tokens. (Fast, correct by design).
+
 
 
 ### Demo B: The "Reliable RAG Grader" (Targeting DeepLearning.AI)
