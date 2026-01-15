@@ -94,7 +94,7 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 *   **Schema-as-Code** (derived from *spotify-stop-ai*): Replace `.txt` prompt files containing JSON schemas (which drift) with Python Pydantic models (which don't).
 *   **Validation-as-Types**: Replace post-hoc manual validation checks (e.g., `if confidence < 0.0`) with `Field` validators (e.g., `Field(ge=0.0)`).
 
-> **Technical Note**: Mellea `main` **already supports** Pydantic models as **Outputs** (Return Types), which is all that is required for the Spotify and LangChain demos. Full support for Pydantic as **Inputs** (Arguments) is an enhancement that would make the library more robust but is not a blocker.
+> **Technical Note**: These examples **work today** with the current Mellea release (Outputs/Return Types are fully supported). They do **not** depend on the hypothetical "Pydantic-as-Input" enhancements discussed previously.
 
 
 ## 6. Future Frontier: IDE Agents via MCP
