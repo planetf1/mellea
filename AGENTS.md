@@ -1,5 +1,6 @@
-# Agent Guidelines for Mellea (`AGENTS.md`)
-> **For AI Agents:** Read this file before making any code changes. It acts as your context window anchor.
+# Agent Guidelines for Mellea Contributors (`AGENTS.md`)
+> **For AI Agents:** Read this file before making any code changes **TO** the Mellea repository.
+> (If you are looking for how to *use* Mellea in a project, see `docs/AGENTS_TEMPLATE.md`)
 
 ## 1. Quick Reference (The "Must Knows")
 ```bash
