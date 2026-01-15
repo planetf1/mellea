@@ -9,21 +9,21 @@ Use these heuristics to identify files ripe for Mellea migration.
 
 | Pattern | Evidence in `spotify-stop-ai` | Why Mellea? |
 | :--- | :--- | :--- |
-| **Manual JSON Parsing** | `json.loads(response.strip().replace('```json', ''))` | Mellea handles parsing & validation automatically. |
-| **Schema in System Prompt** | `Note: You must output JSON with keys: 'label', ...` | Mellea derives formatting instructions from Pydantic types. |
-| **Manual Retry Logic** | `try: ... except json.DecodeError: ...` | `instruct-validate-repair` handles retries for you. |
-| **Manual Validation** | `if not (0.0 <= confidence <= 1.0): return None` | Pydantic `Field(ge=0.0, le=1.0)` enforces ranges. |
-| **Backend Coupling** | Hardcoded `/api/generate` endpoints | Mellea works with OpenAI, Anthropic, or Local execution. |
+| **Manual JSON Parsing** | `json.loads(response.strip().replace('```json', ''))` | **Mellea Types**: Mellea guarantees valid objects, eliminating parsing code. |
+| **Schema in System Prompt** | `Note: You must output JSON with keys: 'label', ...` | **Pydantic Models**: Your Python types *become* the schema, ensuring sync. |
+| **Manual Retry Logic** | `try: ... except json.DecodeError: ...` | **Instruct-Validate-Repair**: Built-in loops handle validation failures automatically. |
+| **Manual Validation** | `if not (0.0 <= confidence <= 1.0): return None` | **Field Validators**: `Field(ge=0.0, le=1.0)` runs validation before you see the data. |
+| **Backend Coupling** | Hardcoded `/api/generate` endpoints | **Portability**: Write once, run on OpenAI/Anthropic/Local by passing a `Session`. |
 
-## 2. Preparation (The Setup)
+## 2. Preparation (Mellea Context Only)
 
-Before refactoring code, establish the "Rules of the Road" for the agent.
+To enable the agent to use Mellea correctly, provide the *Mellea Pattern* definitions.
 
-### Step A: Create `AGENTS.md`
-The repo currently lacks an `AGENTS.md`. Create one at the root using the **Mellea Standard Template**.
+### Step A: Add Mellea Patterns
+Create a file named `AGENTS.md` (or `docs/MELLEA_PATTERNS.md`) containing strictly Mellea usage examples.
 *   **Source**: Copy content from `mellea/docs/AGENTS_TEMPLATE.md`.
 *   **Action**: Create `spotify-stop-ai/AGENTS.md`.
-*   **Reason**: This teaches the coding agent *how* to use Mellea correctly (e.g., "Use `@generative`, not `OutputParser`").
+*   **Why**: This file is a **technical reference** for the agent. It replaces "General Knowledge" with "Specific Mellea Syntax" (e.g. `@generative`).
 
 ### Step B: Install Mellea
 Add `mellea` to the project dependencies.
