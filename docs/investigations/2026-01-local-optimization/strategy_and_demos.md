@@ -120,44 +120,68 @@ except Exception as e:
     print(f"Parsing failed: {e}")
 ```
 
-### Case Study: Job Description Extraction (The "gkamradt" Pattern)
-Greg Kamradt's popular "OpeningAttributes" tutorial (extracting tools/tech from Job Descriptions) is a staple of the LangChain community. It uses `PydanticOutputParser` and is often cited as a "complex" workflow.
+## 4. The Showcase: Specific "Better Together" Examples
+These are concrete, runnable examples that target specific, popular community tutorials to show an immediate "Wow" factor.
 
-#### The "Before" (LangChain)
-*Code adapted from `gkamradt/langchain-tutorials`:*
+### Demo A: The "Extraction" Fix (Targeting `gkamradt`)
+*Context: Greg Kamradt's "OpeningAttributes" tutorial is a staple but uses verbose `PydanticOutputParser` logic.*
+
+**The "Before" (LangChain)**:
 ```python
-class JobInfo(BaseModel):
-    role: str = Field(description="job title")
-    tools: list[str] = Field(description="list of tech stack tools")
-
 parser = PydanticOutputParser(pydantic_object=JobInfo)
 prompt = PromptTemplate(
-    template="Extract job info.\n{format_instructions}\nDesc: {text}",
+    template="Extract info.\n{format_instructions}\nDesc: {text}",
     partial_variables={"format_instructions": parser.get_format_instructions()},
-    input_variables=["text"],
 )
-chain = prompt | llm | parser
-
-# Users often complain about:
-# 1. "OutputParserException: Got invalid JSON"
-# 2. Infinite retry loops on 7B models
+# Often fails with "OutputParserException" on local models
 ```
 
-#### The "After" (Mellea Injection)
+**The "After" (Mellea)**:
 ```python
-from mellea import generative
-
 @generative
 def extract_job_info(description: str) -> JobInfo:
-    """Extract the role and list of technical tools from the job description."""
-
-# No parsers, no prompt templates, no retry logic code.
-info = extract_job_info(description=raw_text)
+    """Extract role and tools from the job description."""
 ```
+*Value: Deletes 70% of the boilerplate code. Works on 7B models.*
 
-**The Value Add**:
-*   **7B Model Reliability**: Mellea's built-in retry/repair logic (and potentially `xgrammar` integration) makes this work on local models where LangChain's basic parser often fails.
-*   **Readability**: The core logic is defined in the *Type Signature*, not the *Prompt String*.
+### Demo B: The "Reliable SQL" Generator (Targeting Text-to-SQL)
+*Context: Text-to-SQL is notoriously brittle. Users struggle with specific SQL dialects and syntax errors.*
+
+**The "Before"**: Prompt engineering hell. "Do not use markdown formatting", "Use SQLite dialect", "Only select from these tables...".
+
+**The "After" (Mellea)**:
+```python
+class SQLQuery(BaseModel):
+    query: str = Field(description="Syntactically valid SQLite query")
+    explanation: str = Field(description="Why this query answers the user question")
+
+@generative
+def text_to_sql(question: str, schema: str) -> SQLQuery:
+    """Convert the natural language question into a SQL query based on the schema."""
+```
+*Value: Mellea (via `outlines`/`xgrammar`) constrains output, ensuring **syntactic correctness** before the code even runs.*
+
+---
+
+## 5. Common Patterns: Where Mellea Adds Value
+Broad architectural patterns where injecting Mellea simplifies the system.
+
+### Pattern 1: The "Reasoning Field" (CoT + Structure)
+Users want "Chain of Thought" but also "Structured Output". LangChain makes mixing these two awkward.
+**Mellea Pattern**: always include a `reasoning` field in your Pydantic model. The LLM generates the thought process *first* (improving accuracy), then the final answer, all in one robust type-checked call.
+
+### Pattern 2: The "Semantic Router" without Vectors
+For simple routing (e.g., "Refunds" vs "Tech Support"), users often spin up a Vector DB and Embedding model (over-engineering).
+**Mellea Pattern**: Just use an `Enum`.
+```python
+class Intent(str, Enum):
+    REFUND = "refund"
+    SUPPORT = "support"
+
+@generative
+def route(query: str) -> Intent: ...
+```
+This is faster, deterministic, and cheaper than a vector search for small sets.
 
 ## 5. Documentation Opportunities
 *   **"Mellea for Software Engineers"**: A guide specifically for people who hate "Prompt Engineering" and love "Type Systems".
