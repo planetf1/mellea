@@ -241,3 +241,25 @@ We have established the "Rules of the Road" for both contributors and users.
 *   **For Contributors**: [`AGENTS.md`](../../../AGENTS.md) - The strict internal development standard.
 *   **For Users**: [`docs/AGENTS_TEMPLATE.md`](../../AGENTS_TEMPLATE.md) - A "Copy-Paste" guide for users to teach their own agents (Cursor/Roo) how to write Mellea code.
     *   *Usage*: "Add this file to your repo to make Copilot stop writing LangChain code."
+    *   *Usage*: "Add this file to your repo to make Copilot stop writing LangChain code."
+
+## 9. The Mellea "Layer Cake" (Adoption Strategy)
+To answer "Where do I start?", we divide Mellea into 4 distinct layers of functionality.
+
+| Layer | Component | Friction (Adoption) | Value (Payoff) | Verdict |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. The Core** | `@generative`, `m.instruct` | **Low** (Pure Python) | **Extreme** (Portability) | **START HERE.** The "Gateway Drug". |
+| **2. The Brain** | Majority Voting (Sampling) | **Medium** (Tuning) | **High** (AlphaCode Math) | **NEXT STEP.** For hard domains. |
+| **3. The Hands** | Code Interpreter (Tools) | **Hard** (Docker) | **High** (Dev Agents) | **POWER USER.** For advanced agents. |
+| **4. The Toolkit** | RAG Intrinsics / Guardian | **Hard** (Granite-Only) | **Conflicted** (Useful but locked-in) | **SPECIALIST.** Only for local teams. |
+
+### 9.1 Refactoring Recommendation: "Decouple the Toolkit"
+*   **The Problem**: Currently, `m.stdlib.intrinsics` (**Layer 4**) is hard-coded to IBM Granite Adapters. This makes valuable features (Citations, Safety) inaccessible to OpenAI/Llama users.
+*   **The Fix**: Refactor `Intrinsics` to be backend-agnostic.
+    *   *Current*: `check_answerability` -> `GraniteAdapter`
+    *   *Proposed*: `check_answerability` -> `Router` -> (`GraniteAdapter` OR `OpenAI Prompt`)
+    *   *Result*: Unlocks Layer 4 value for the 90% of users on generic backends.
+
+### 9.2 The "Anti-Patterns" (Hard & Not Worth It)
+1.  **Generic Chat**: Mellea adds overhead for simple chat. **Use Ollama**.
+2.  **Infrastructure**: Building PDF loaders in Mellea. **Use LangChain**.
