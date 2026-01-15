@@ -210,7 +210,7 @@ def test_format(session):
         "Her email is olivia@example.com. "
         "No more than two sentences. ",
         format=Email,
-        model_options={ModelOption.MAX_NEW_TOKENS: 2**8},
+        model_options={ModelOption.MAX_NEW_TOKENS: 2**8, ModelOption.TEMPERATURE: 0.01},
     )
     print("Formatted output:")
     email = Email.model_validate_json(
@@ -255,6 +255,7 @@ async def test_generate_from_raw_with_format(session):
         actions=[CBlock(value=prompt) for prompt in prompts],
         format=Answer,
         ctx=session.ctx,
+        model_options={ModelOption.TEMPERATURE: 0.01},
     )
 
     assert len(results) == len(prompts)

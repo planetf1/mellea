@@ -46,6 +46,7 @@ dependencies = [
     "math_verify", # Needed for Majority Voting Sampling Strategies.
     "rouge_score", # Needed for Majority Voting Sampling Strategies.
     "llm-sandbox[docker]>=0.3.23",
+    "xgrammar", # Needed for structured generation in HF backend
 ]
 
 [project.scripts]
