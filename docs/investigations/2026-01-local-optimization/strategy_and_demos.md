@@ -101,3 +101,9 @@ Instead of writing custom plugins for VS Code, we expose Mellea functions as **M
     6.  Roo Code uses this plan to write code.
 *   **The Value**: Mellea becomes the "Cerebral Cortex" for these agents, handling the structured reasoning tasks (Planning, review, security audit) that pure LLMs struggle with, while the Agent handles the file I/O.
 *   **Why Easy?**: We don't write a VS Code extension. We just write a Python script that speaks MCP (using Mellea for the logic).
+
+## 7. Strategic Artifacts (Created)
+We have established the "Rules of the Road" for both contributors and users.
+*   **For Contributors**: [`AGENTS.md`](../../../AGENTS.md) - The strict internal development standard.
+*   **For Users**: [`docs/AGENTS_TEMPLATE.md`](../../AGENTS_TEMPLATE.md) - A "Copy-Paste" guide for users to teach their own agents (Cursor/Roo) how to write Mellea code.
+    *   *Usage*: "Add this file to your repo to make Copilot stop writing LangChain code."
