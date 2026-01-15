@@ -262,7 +262,20 @@ To answer "Where do I start?", we divide Mellea into 4 distinct layers of functi
 | **3. Hands** | **LangChain**: Requires complex setup (`langchain-experimental` or E2B). | **Pre-Wired**: Mellea bundles `llm-sandbox` (Docker) as a standard tool. No wiring required. | 📦 **Convenient** (Bundled) |
 | **4. Toolkit** | **Guardrails AI**: Backend-agnostic, mature ecosystem. | **Integration**: Mellea is faster (no proxy server) *if* you use Granite. Otherwise, Guardrails AI wins. | 😐 **Comparable** |
 
-### 9.2 Refactoring Recommendation: "Decouple the Toolkit"
+
+### 9.2 The "Innovation vs Commodity" Audit
+
+Use this table to look "under the hood" and know exactly what Mellea *is* (proprietary tech) and what it *wraps* (convenience).
+
+| Component | Status | Underlying Tech | Verdict |
+| :--- | :--- | :--- | :--- |
+| **`@generative`** | 🦄 **Innovation** | `pydantic`, `jinja2` | **Core IP**. The "Type-to-Prompt" compiler is unique to Mellea. |
+| **`LocalHFBackend`** | 🦄 **Innovation** | `transformers`, `peft`, `outlines` | **Core IP**. The "Alora" switching runtime is custom-built logic. |
+| **`OllamaBackend`** | 📦 **Commodity** | `ollama` SDK | **Wrapper**. Thin convenience layer. |
+| **`Code Sandbox`** | 📦 **Commodity** | `llm-sandbox` | **Wrapper**. Bundled dependency. |
+| **`RAG Intrinsics`** | 🦄 **Unique Asset** | `granite-common` | ** Proprietary Data**. These are custom-trained adapters (Granite only). |
+
+### 9.3 Refactoring Recommendation: "Decouple the Toolkit"
 *   **The Problem**: Currently, `m.stdlib.intrinsics` (**Layer 4**) is hard-coded to IBM Granite Adapters. This makes valuable features (Citations, Safety) inaccessible to OpenAI/Llama users.
 *   **The Fix**: Refactor `Intrinsics` to be backend-agnostic.
     *   *Current*: `check_answerability` -> `GraniteAdapter`
