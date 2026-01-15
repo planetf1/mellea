@@ -42,12 +42,35 @@ def extract_job_info(description: str) -> JobInfo:
     """Extract role and tools. Logic handled by type signature."""
 ```
 
-### The "Agentic Migration" Pattern (How to Demo)
-Instead of just showing the "After" code, we can gamify the demo using our **Agent Template**:
-1.  Provide a folder with `legacy_langchain.py` (a brittle script).
-2.  Provide `AGENTS_TEMPLATE.md`.
-3.  **The Challenge**: "Drop the Template into this folder and ask Cursor to 'Refactor legacy_langchain.py to use Mellea'."
-4.  **The Win**: The user watches *their own AI* fix the code using Mellea's simple primitives. This proves Mellea is "Agent-Native".
+### Demo Recipe: "The Agentic Migration"
+*A standalone experiment you can run today to see Mellea's power.*
+
+**Goal**: Watch your AI Agent (Cursor/Roo) refactor brittle LangChain code into robust Mellea code.
+
+**1. The Setup**
+Create a folder `mellea_migration_experiment/` with two files:
+
+*   **File A: `legacy_extraction.py`** (The "Before" state)
+    *   *Source*: Based on Greg Kamradt's popular [Data Extraction Tutorial](https://github.com/gkamradt/langchain-tutorials/blob/main/data_generation/Data%20Extraction%20-%20PydanticOutputParser.ipynb).
+    *   *Content*: A script using `PydanticOutputParser`, `PromptTemplate`, and a `try/except` loop for `OutputParserException`.
+*   **File B: `AGENTS.md`** (The Instructions)
+    *   *Content*: Copy-paste from [mellea/docs/AGENTS_TEMPLATE.md](https://github.com/planetf1/mellea/blob/main/docs/AGENTS_TEMPLATE.md).
+
+**2. The Prompt**
+Open the folder in your IDE (Cursor/VS Code) and ask your Agent:
+
+> "I want to refactor `legacy_extraction.py` to use the `mellea` library instead of LangChain.
+> Read `AGENTS.md` to understand the Mellea patterns.
+> Replace the manual parsing logic with a `@generative` function.
+> Keep the `JobInfo` Pydantic model."
+
+**3. The Result ("The Wow Moment")**
+You will watch the agent:
+1.  **Delete** the `PromptTemplate` (Mellea infers it).
+2.  **Delete** the `PydanticOutputParser` (Mellea handles structure).
+3.  **Delete** the retry loop (Mellea supports `instruct-validate-repair` if needed, but `@generative` is usually enough).
+4.  **Produce** a clean, type-safe function in ~15 lines of code.
+
 
 
 ### Demo B: The "Reliable RAG Grader" (Targeting DeepLearning.AI)
