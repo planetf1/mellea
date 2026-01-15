@@ -18,6 +18,15 @@ We believe that **Structured Generation** (Mellea's core competency) is the miss
 *   **Evaluators**: "Who judges the judge?"
     *   *Evidence*: [Discussion on flaky Eval scores](https://www.reddit.com/r/Rag/comments/...).
 
+### 2.1 The "Hooks" (Search Terms to Target)
+From our research, these are the high-traffic queries where Mellea is the perfect answer:
+1.  **"LangChain OutputParserException fix"**: Users are looking for a way out of retry loops.
+    *   *Mellea Pitch*: "Don't catch the error. Prevent it. Zero-shot JSON."
+2.  **"Llama 3 force JSON output"**: Users with 8B models can't get reliable structure.
+    *   *Mellea Pitch*: "Run strict Pydantic schemas on 8B models using xgrammar."
+3.  **"LangChain bind_tools vs OutputParser"**: Users are confused by the two APIs.
+    *   *Mellea Pitch*: "Stop choosing. It's just a python function. `@generative` handles both."
+
 ---
 
 ## 3. The Showcase: 4 Targeted Demos
