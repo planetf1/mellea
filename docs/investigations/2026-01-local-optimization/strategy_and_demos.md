@@ -142,70 +142,20 @@ res = solve_math(..., strategy=MajorityVotingStrategy(n=8))
 4.  Create `examples/math_solver.py` (Demo E).
 5.  Write `docs/integrations/langchain.md` explaining the "Injection" pattern.
 
-## 5. Architectural Patterns
-*   **Reasoning Field (Anti-Hallucination)**: Add `reasoning: str` *before* the answer field. This forces the model to "show its work" (Chain of Thought), drastically reducing *logic* hallucinations compared to asking for a raw answer.
-*   **Vector-less Router**: Use `Enum` return types for fast, zero-infra semantic routing.
-*   **Schema-as-Code** (derived from *spotify-stop-ai*): Replace `.txt` prompt files containing JSON schemas (which drift) with Python Pydantic models (which don't).
-*   **Validation-as-Types**: Replace post-hoc manual validation checks (e.g., `if confidence < 0.0`) with `Field` validators (e.g., `Field(ge=0.0)`).
-*   **Test-Time Backend Switching**: Decouple logic from models by checking `os.environ` in test fixtures. This allows the same suite to run against Mocks (CI), Ollama (Local), or OpenAI (Staging) without changing code.
+## 5. The Architecture: How It Works (Technical Preview)
+To achieve this reliability, Mellea uses a unique "Compiler & Runtime" architecture.
 
-> **Technical Note**: These examples **work today** with the current Mellea release (Outputs/Return Types are fully supported). They do **not** depend on the hypothetical "Pydantic-as-Input" enhancements discussed previously.
+> **Deep Dive**: For full implementation details, LoRA specs, and architecture diagrams, see the [**Technical Reference**](./technical_reference.md).
 
-## 5.1 The "RAG Toolkit" (Intrinsics)
-Mellea comes with a standard library of **RAG Intrinsics** (`m.stdlib.intrinsics.rag`) that replace complex prompt chains with simple function calls:
-*   `check_answerability(q, docs) -> float`: Don't answer if the docs are empty.
-*   `find_citations(response, docs) -> List[Citation]`: Extract exact sentence-level citations.
-*   `flag_hallucinated_content(response, docs) -> float`: Detect "faithfulness" issues automatically.
-*   `rewrite_question(q) -> str`: Optimize user queries for your vector store.
+### 5.1 The Runtime: Alora & Adapters
+Unlike frameworks that rely solely on prompting, Mellea uses **Alora (Activated LoRA)** to hot-swap model weights at runtime.
+*   **Why**: Prompting specific rules (e.g. "Be legally compliant") consumes context and is flaky.
+*   **The Fix**: Mellea switches to a specialized "Legality Adapter" for just that validation step.
 
-## 5.2 The "Specialist Judge" Pattern (Mellea + Alora)
-**Problem**: General-purpose LLMs (even GPT-4) are mediocre judges of specific domain rules (e.g., "Is this legally compliant?" or "Is this tone strictly professional?").
-**Solution**: Use Mellea's **Alora** integration to hot-swap "Validation Adapters".
-*   **Mechanism**: You train a tiny LoRA adapter on your specific criteria (using `m alora train`).
-*   **Runtime**: When you call `m.instruct(..., requirements=[req("Be legal")])`, Mellea *automatically reroutes* the validation check to your specialized adapter.
-*   **Benefit**: You get "Expert-Level" supervision on a "Junior-Level" (cheap/fast) model.
+### 5.2 The Standard Library: Intrinsics
+We provide a "Standard Library" of **RAG Intrinsics** (`check_answerability`, `find_citations`) that are backend-agnostic but powered by these specialized adapters where available.
 
-### 5.2 The Alora "Hooks" (When to use this?)
-*User Question: "Why train an adapter when I can just prompt?"*
-*   **Hook 1: The "Small Model" Constraint**: You want to run on a local 8B model (e.g. Granite/Llama 3), but it's too dumb to understand complex legal/medical guidelines.
-    *   *Alora Fix*: Train the adapter on 50 examples. Now the 8B model behaves like an expert on *just that rule*.
-*   **Hook 2: The "Speed" Factor**: Validation prompting requires generating many tokens ("Let me think step by step..."). An adapter classification is often a single forward pass.
-*   **Hook 3: "Brand Voice" Policing**: It is very hard to prompt a model to "sound like us". It is very easy to finetune an adapter on 100 marketing emails to recognize "off-brand" tone.
-
-### 5.3 Technical Reality Check (The "Cost" of Alora)
-While powerful, the Alora/Adapter pattern has a **Runtime cost**:
-*   **Backend Lock-in**: Currently, this only works on Mellea's `LocalHFBackend` (built on HuggingFace Transformers).
-*   **No Ollama Support**: fast runtimes like Ollama (`llama.cpp`) do not yet support dynamic per-token adapter switching (aLoRA).
-*   **The Trade-off**: You choose between **Maximum Speed/Ease** (Ollama) and **Maximum Control** (Mellea + Alora).
-    *   *Recommendation*: Start with standard prompting (Ollama). Upgrade to Alora (LocalHF) only when you hit a accuracy wall that prompts can't fix.
-    *   *Recommendation*: Start with standard prompting (Ollama). Upgrade to Alora (LocalHF) only when you hit a accuracy wall that prompts can't fix.
-
-### 5.4 The "Hidden Gems" (Advanced Features)
-Beyond `@generative` and RAG, Mellea has powerful "System 2" capabilities hidden in `m.stdlib`:
-
-*   **Code Interpreter**: `m.stdlib.tools.interpreter` includes a Docker-based **Safe Execution Environment** (`LLMSandboxEnvironment`). You can build agents that write *and run* Python code securely.
-*   **Majority Voting**: `m.stdlib.sampling.majority_voting` implements "Self-Consistency" decoding (generate 8 solutions, vote for the consensus). This is how models like AlphaCode achieve high math scores.
-*   **Guardian**: `m.stdlib.safety.guardian` provides built-in risk detection (Harm, Jailbreak, Bias) using IBM's Granite Guardian models.
-
-### 5.5 The "Migration" Value Prop (Competitive Analysis)
-Why switch to Mellea Intrinsics? Here is the "Migration Map" for popular frameworks:
-
-| Feature | The "Industry Standard" Way | The Mellea Way |
-| :--- | :--- | :--- |
-| **"Answerable?"** | **LangChain**: Build a custom `SelfRAG` graph with explicit `ISREL` token parsing. | `check_answerability(q, docs)` |
-| **Citations** | **LlamaIndex**: Switch your entire pipeline to `CitationQueryEngine` (different storage format). | `find_citations(response, docs)` |
-| **Hallucinations** | **CrewAI**: Spin up a dedicated "Grader Agent" (high latency/cost). | `flag_hallucinated_content(resp, docs)` |
-| **Grounding** | **Google Vertex**: Call external `Check Grounding` API (<500ms, external bill). | Built-in Adapter (Local, included). |
-| **Guardrails** | **OpenAI**: Use `Guardrails AI` (separate library) or safety model calls. | `m.instruct(..., requirements=[...])` |
-
-**The Insight**: Competitors often treat these as **Architectures** (you must build your app *around* them). Mellea treats them as **Standard Library Functions** (you just call them when needed).
-
-
-### 5.5 Technical Caveat: The "Granite" Dependency
-**Important**: The `m.stdlib.intrinsics` module currently uses **Activated LoRA** adapters trained specifically for the **IBM Granite** model family.
-*   **Implication**: To use `check_answerability` or `find_citations` seamlessly, you must use a storage backend that supports Granite adapters (e.g. `LocalHFBackend`).
-*   **Non-Granite Users**: If you are using GPT-4 or Llama 3, Mellea falls back to standard prompting (less reliable) or requires you to train your own adapters.
-*   **The "Extras"**: These features require `mellea[hf]` dependencies (`transformers`, `peft`), which are heavy.
+---
 
 ## 6. What Mellea is NOT (The "Scope Check")
 To be honest with users, we must define where Mellea *ends* and other tools begin:
@@ -217,7 +167,7 @@ To be honest with users, we must define where Mellea *ends* and other tools begi
     *   *Advice*: Use standard Python `if/else` and loops. If you need complex state machines, wrap Mellea functions inside a LangGraph node.
 4.  **No Multimodal**: Mellea is strictly Text-In, Structured-Out. No Image/Audio support yet.
 
-## 7. The Core USP: `@generative` vs The World
+## 6. The Core USP: `@generative` vs The World
 User: *"Why not just use OpenAI's `response_format`?"*
 *   **OpenAI SDK**: Works great, but locks you into OpenAI.
 *   **Mellea**: The `@generative` decorator is a **Universal Router**.
@@ -225,7 +175,7 @@ User: *"Why not just use OpenAI's `response_format`?"*
     *   On **Local (Llama/Granite)**: It translates your signature to `xgrammar` logits constraints.
     *   **Value**: You write the code *once*. You can switch from GPT-4 (Prototyping) to Llama 3 8B (Production/Local) without changing a single line of your validation logic.
 
-## 8. Future Frontier: IDE Agents via MCP
+## 7. Future Frontier: IDE Agents via MCP
 The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
 
 ### The Strategy: "Mellea as an MCP Server"
@@ -240,7 +190,7 @@ Instead of writing custom plugins for VS Code, we expose Mellea functions as **M
 *   **The Value**: Mellea becomes the "Cerebral Cortex" for these agents, handling the structured reasoning tasks (Planning, review, security audit) that pure LLMs struggle with, while the Agent handles the file I/O.
 *   **Why Easy?**: We don't write a VS Code extension. We just write a Python script that speaks MCP (using Mellea for the logic).
 
-## 7. Distribution Strategy: "The One-Liner"
+## 8. Distribution Strategy: "The One-Liner"
 To drive adoption, we must lower the friction to try these demos.
 
 **The Goal**: A user should be able to run the "Agentic Migration" challenge in < 2 minutes without cloning the repo.
@@ -251,14 +201,13 @@ uvx --from mellea mellea-demo langchain-extraction
 ```
 *(Note: We need to expose a `mellea-demo` entrypoint in `pyproject.toml` to enable this)*.
 
-## 8. Strategic Artifacts (Created)
+## 9. Strategic Artifacts (Created)
 We have established the "Rules of the Road" for both contributors and users.
 *   **For Contributors**: [`AGENTS.md`](../../../AGENTS.md) - The strict internal development standard.
 *   **For Users**: [`docs/AGENTS_TEMPLATE.md`](../../AGENTS_TEMPLATE.md) - A "Copy-Paste" guide for users to teach their own agents (Cursor/Roo) how to write Mellea code.
     *   *Usage*: "Add this file to your repo to make Copilot stop writing LangChain code."
-    *   *Usage*: "Add this file to your repo to make Copilot stop writing LangChain code."
 
-## 9. The Mellea "Layer Cake" (Adoption Strategy)
+## 10. The Mellea "Layer Cake" (Adoption Strategy)
 To answer "Where do I start?", we divide Mellea into 4 distinct layers of functionality.
 
 | Layer | Component | Friction (Adoption) | Value (Payoff) | Verdict |
@@ -268,7 +217,7 @@ To answer "Where do I start?", we divide Mellea into 4 distinct layers of functi
 | **3. The Hands** | Code Interpreter (Tools) | **Hard** (Docker) | **High** (Dev Agents) | **POWER USER.** For advanced agents. |
 | **4. The Toolkit** | RAG Intrinsics / Guardian | **Hard** (Granite-Only) | **Conflicted** (Useful but locked-in) | **SPECIALIST.** Only for local teams. |
 
-### 9.1 The "Competitive Edge" (Is it Unique or just Comparable?)
+### 10.1 The "Competitive Edge" (Is it Unique or just Comparable?)
 
 | Layer | The Alternative | Mellea's Edge (Why use us?) | Uniqueness Score |
 | :--- | :--- | :--- | :--- |
@@ -278,7 +227,7 @@ To answer "Where do I start?", we divide Mellea into 4 distinct layers of functi
 | **4. Toolkit** | **Guardrails AI**: Backend-agnostic, mature ecosystem. | **Integration**: Mellea is faster (no proxy server) *if* you use Granite. Otherwise, Guardrails AI wins. | 😐 **Comparable** |
 
 
-### 9.2 The "Innovation vs Commodity" Audit
+### 10.2 The "Innovation vs Commodity" Audit
 
 Use this table to look "under the hood" and know exactly what Mellea *is* (proprietary tech) and what it *wraps* (convenience).
 
@@ -290,13 +239,7 @@ Use this table to look "under the hood" and know exactly what Mellea *is* (propr
 | **`Code Sandbox`** | 📦 **Commodity** | `llm-sandbox` | **Wrapper**. Bundled dependency. |
 | **`RAG Intrinsics`** | 🦄 **Unique Asset** | `granite-common` | ** Proprietary Data**. These are custom-trained adapters (Granite only). |
 
-### 9.3 Refactoring Recommendation: "Decouple the Toolkit"
-*   **The Problem**: Currently, `m.stdlib.intrinsics` (**Layer 4**) is hard-coded to IBM Granite Adapters. This makes valuable features (Citations, Safety) inaccessible to OpenAI/Llama users.
-*   **The Fix**: Refactor `Intrinsics` to be backend-agnostic.
-    *   *Current*: `check_answerability` -> `GraniteAdapter`
-    *   *Proposed*: `check_answerability` -> `Router` -> (`GraniteAdapter` OR `OpenAI Prompt`)
-    *   *Result*: Unlocks Layer 4 value for the 90% of users on generic backends.
 
-### 9.2 The "Anti-Patterns" (Hard & Not Worth It)
+### 10.3 The "Anti-Patterns" (Hard & Not Worth It)
 1.  **Generic Chat**: Mellea adds overhead for simple chat. **Use Ollama**.
 2.  **Infrastructure**: Building PDF loaders in Mellea. **Use LangChain**.
