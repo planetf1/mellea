@@ -167,7 +167,14 @@ While powerful, the Alora/Adapter pattern has a **Runtime cost**:
     *   *Recommendation*: Start with standard prompting (Ollama). Upgrade to Alora (LocalHF) only when you hit a accuracy wall that prompts can't fix.
     *   *Recommendation*: Start with standard prompting (Ollama). Upgrade to Alora (LocalHF) only when you hit a accuracy wall that prompts can't fix.
 
-### 5.4 The "Migration" Value Prop (Competitive Analysis)
+### 5.4 The "Hidden Gems" (Advanced Features)
+Beyond `@generative` and RAG, Mellea has powerful "System 2" capabilities hidden in `m.stdlib`:
+
+*   **Code Interpreter**: `m.stdlib.tools.interpreter` includes a Docker-based **Safe Execution Environment** (`LLMSandboxEnvironment`). You can build agents that write *and run* Python code securely.
+*   **Majority Voting**: `m.stdlib.sampling.majority_voting` implements "Self-Consistency" decoding (generate 8 solutions, vote for the consensus). This is how models like AlphaCode achieve high math scores.
+*   **Guardian**: `m.stdlib.safety.guardian` provides built-in risk detection (Harm, Jailbreak, Bias) using IBM's Granite Guardian models.
+
+### 5.5 The "Migration" Value Prop (Competitive Analysis)
 Why switch to Mellea Intrinsics? Here is the "Migration Map" for popular frameworks:
 
 | Feature | The "Industry Standard" Way | The Mellea Way |
