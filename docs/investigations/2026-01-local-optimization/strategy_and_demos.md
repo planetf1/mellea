@@ -258,8 +258,8 @@ To answer "Where do I start?", we divide Mellea into 4 distinct layers of functi
 | Layer | The Alternative | Mellea's Edge (Why use us?) | Uniqueness Score |
 | :--- | :--- | :--- | :--- |
 | **1. Core** | **Instructor / Marvin**: Great for OpenAI, but rely on "JSON Mode" (flaky) for local models. | **xgrammar Support**: Mellea uses *logit masking* for structure. This makes it **uniquely viable** for small (8B) models that fail with Instructor. | 🦄 **Unique** (for Local) |
-| **2. Brain** | **LangChain**: You must write the "Generate -> Parse -> Vote" loop yourself (50+ lines). | **Batteries Included**: `MajorityVotingStrategy` wraps "AlphaCode" logic (Math verify, Rouge score) in 1 line. | ✅ **Easier** |
-| **3. Hands** | **Open Interpreter**: Often runs code on *your host machine* (Unsafe). **OpenAI**: Cloud-only. | **Docker Sandbox**: Mellea ships with a secure containerized environment. Safe for "Agentic" loops. | 🦄 **Unique** (Secure + Local) |
+| **2. Brain** | **LangChain**: You must write the "Generate -> Parse -> Vote" loop yourself. | **Batteries Included**: `MajorityVotingStrategy` wraps "AlphaCode" logic in 1 line. | ✅ **Easier** |
+| **3. Hands** | **LangChain**: Requires complex setup (`langchain-experimental` or E2B). | **Pre-Wired**: Mellea bundles `llm-sandbox` (Docker) as a standard tool. No wiring required. | 📦 **Convenient** (Bundled) |
 | **4. Toolkit** | **Guardrails AI**: Backend-agnostic, mature ecosystem. | **Integration**: Mellea is faster (no proxy server) *if* you use Granite. Otherwise, Guardrails AI wins. | 😐 **Comparable** |
 
 ### 9.2 Refactoring Recommendation: "Decouple the Toolkit"
