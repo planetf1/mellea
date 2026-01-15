@@ -253,7 +253,16 @@ To answer "Where do I start?", we divide Mellea into 4 distinct layers of functi
 | **3. The Hands** | Code Interpreter (Tools) | **Hard** (Docker) | **High** (Dev Agents) | **POWER USER.** For advanced agents. |
 | **4. The Toolkit** | RAG Intrinsics / Guardian | **Hard** (Granite-Only) | **Conflicted** (Useful but locked-in) | **SPECIALIST.** Only for local teams. |
 
-### 9.1 Refactoring Recommendation: "Decouple the Toolkit"
+### 9.1 The "Competitive Edge" (Is it Unique or just Comparable?)
+
+| Layer | The Alternative | Mellea's Edge (Why use us?) | Uniqueness Score |
+| :--- | :--- | :--- | :--- |
+| **1. Core** | **Instructor / Marvin**: Great for OpenAI, but rely on "JSON Mode" (flaky) for local models. | **xgrammar Support**: Mellea uses *logit masking* for structure. This makes it **uniquely viable** for small (8B) models that fail with Instructor. | 🦄 **Unique** (for Local) |
+| **2. Brain** | **LangChain**: You must write the "Generate -> Parse -> Vote" loop yourself (50+ lines). | **Batteries Included**: `MajorityVotingStrategy` wraps "AlphaCode" logic (Math verify, Rouge score) in 1 line. | ✅ **Easier** |
+| **3. Hands** | **Open Interpreter**: Often runs code on *your host machine* (Unsafe). **OpenAI**: Cloud-only. | **Docker Sandbox**: Mellea ships with a secure containerized environment. Safe for "Agentic" loops. | 🦄 **Unique** (Secure + Local) |
+| **4. Toolkit** | **Guardrails AI**: Backend-agnostic, mature ecosystem. | **Integration**: Mellea is faster (no proxy server) *if* you use Granite. Otherwise, Guardrails AI wins. | 😐 **Comparable** |
+
+### 9.2 Refactoring Recommendation: "Decouple the Toolkit"
 *   **The Problem**: Currently, `m.stdlib.intrinsics` (**Layer 4**) is hard-coded to IBM Granite Adapters. This makes valuable features (Citations, Safety) inaccessible to OpenAI/Llama users.
 *   **The Fix**: Refactor `Intrinsics` to be backend-agnostic.
     *   *Current*: `check_answerability` -> `GraniteAdapter`
