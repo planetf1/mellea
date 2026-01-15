@@ -138,7 +138,14 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 
 > **Technical Note**: These examples **work today** with the current Mellea release (Outputs/Return Types are fully supported). They do **not** depend on the hypothetical "Pydantic-as-Input" enhancements discussed previously.
 
-## 5.1 The "Specialist Judge" Pattern (Mellea + Alora)
+## 5.1 The "RAG Toolkit" (Intrinsics)
+Mellea comes with a standard library of **RAG Intrinsics** (`m.stdlib.intrinsics.rag`) that replace complex prompt chains with simple function calls:
+*   `check_answerability(q, docs) -> float`: Don't answer if the docs are empty.
+*   `find_citations(response, docs) -> List[Citation]`: Extract exact sentence-level citations.
+*   `flag_hallucinated_content(response, docs) -> float`: Detect "faithfulness" issues automatically.
+*   `rewrite_question(q) -> str`: Optimize user queries for your vector store.
+
+## 5.2 The "Specialist Judge" Pattern (Mellea + Alora)
 **Problem**: General-purpose LLMs (even GPT-4) are mediocre judges of specific domain rules (e.g., "Is this legally compliant?" or "Is this tone strictly professional?").
 **Solution**: Use Mellea's **Alora** integration to hot-swap "Validation Adapters".
 *   **Mechanism**: You train a tiny LoRA adapter on your specific criteria (using `m alora train`).
