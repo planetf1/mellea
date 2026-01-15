@@ -55,3 +55,34 @@ if analyze_sentiment(email) == "negative":
 else:
     draft = draft_response(email)
 ```
+
+#### 4. Chain-of-Thought via "Reasoning Fields"
+*   **Rule**: To improve accuracy on complex tasks, add a `reasoning` field to your Pydantic model.
+*   **Why**: This forces the LLM to "think" (output tokens) before it commits to a final answer.
+```python
+class AnalysisResult(BaseModel):
+    reasoning: str  # The LLM fills this first, "showing its work"
+    conclusion: Literal["approve", "reject"]
+    confidence: float = Field(ge=0.0, le=1.0)
+
+@generative
+def analyze_document(doc: str) -> AnalysisResult: ...
+```
+
+#### 5. Backend Portability
+*   **Rule**: Mellea code is backend-agnostic. Write the function once, run it anywhere.
+```python
+# Option A: Local Development (Ollama/Granite)
+m = start_session() 
+
+# Option B: Production (OpenAI/Anthropic)
+# m = MelleaSession(backend=OpenAIModelBackend(model_id="gpt-4o"))
+
+# The logic remains identical:
+result = analyze_document(m, text="...")
+```
+
+#### 6. Anti-Patterns (What NOT to do)
+*   **Don't** wrap `@generative` calls in `try/except` loops. Mellea handles retries and validation internally.
+*   **Don't** use `json.loads(response.content)`. Always use typed return signatures.
+*   **Don't** create "Agent Classes" just to wrap a single function. Use a standalone function.
