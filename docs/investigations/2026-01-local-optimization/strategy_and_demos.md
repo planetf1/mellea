@@ -3,12 +3,12 @@
 **Target Audience**: Future AI Agents & Mellea Contributors
 **Context**: [Mellea GitHub Repo](https://github.com/planetf1/mellea)
 
-## 1. The Mission: "Better Together"
-Our goal is to drive adoption of Mellea not by effectively asking users to "switch frameworks", but by offering **surgical replacements** for the most painful parts of their existing stack.
+## 1. The Mission: "The Reasoning Compiler"
+Mellea is not just another Agent Framework. It is a **Reasoning Compiler**.
+*   **The Problem**: Other frameworks (LangChain, LlamaIndex) are *wrappers* that guess what the LLM might do.
+*   **The Solution**: Mellea captures your intent as python types and *compiles* them into strict constraints (Logits Masking) and runtime logic (Adapters).
 
-We believe that **Structured Generation** (Mellea's core competency) is the missing link in the modern AI stack. Users struggle with brittle regex parsers (LangChain), over-engineered "Programs" (LlamaIndex), and flaky JSON from local models.
-
-**The Strategy**: specific, clickable demos that show Mellea solving a well-known community pain point in <10 lines of code.
+Our goal is to drive adoption by offering **surgical replacements** for the most brittle parts of the stack.
 
 ## 2. Evidence of Pain (The "Why")
 *   **LangChain**: "OutputParserException" is a meme. Users hate retry loops.
@@ -90,11 +90,10 @@ The original tutorial solves `OutputParserException` by adding *more* complexity
 
 
 ### Demo B: The "Reliable RAG Grader" (Targeting DeepLearning.AI)
-*   **Community**: RAG Evaluation / DL.AI Students
+*   **Source Material**: [DeepLearning.AI: Building and Evaluating Advanced RAG (Lab 3)](https://www.deeplearning.ai/short-courses/building-evaluating-advanced-rag/)
 *   **The Hook**: "Stop your Judge from hallucinating formats. Get a raw `int` every time."
-*   **The Solution to Hallucination**:
-    *   *Type I (Format)*: Model answers "The score is 4" instead of "4". **Mellea Fix**: Token masks generally prevent any token except digits.
-    *   *Type II (Range)*: Model answers "10" on a 1-5 scale. **Mellea Fix**: `Field(ge=1, le=5)` validation.
+*   **The Problem**: In the course, they use complex prompting to get a "Score" from 1-5. It often fails (outputting "Score: 4" instead of "4").
+*   **The Mellea Fix**:
 
 **The "After"**:
 ```python
@@ -106,19 +105,32 @@ class Grade(BaseModel):
 def grade_answer(q: str, a: str) -> Grade: ...
 ```
 
-### Demo C: The "Local Llama 3" JSON Fix (Targeting HuggingFace)
-*   **Community**: r/LocalLLaMA / Self-Hosters
-*   **The Hook**: "Make 8B models behave like GPT-4 for structure."
-*   **The Pain**: Llama 3 is notoriously chatty. `format="json"` is often ignored on small models.
-*   **The Fix**: Mellea + `xgrammar` backend forces the logits.
+### Demo C: The "Local Llama 3" JSON Fix (Targeting r/LocalLLaMA)
+*   **Source Material**: [Reddit: "Llama 3 won't stop yapping"](https://www.reddit.com/r/LocalLLaMA/comments/1cgxz2m/llama_3_refuses_to_output_only_json/)
+*   **The Pain**: "I set `format='json'`, but Llama 3 still says 'Here is your JSON...'". This breaks `json.loads()`.
+*   **The Fix**: Mellea + `xgrammar` forces the backend to *only* emit valid JSON tokens. No "yapping" possible.
 
 ### Demo D: The "Sub-Question" Logic (Targeting LlamaIndex)
-*   **Community**: LlamaIndex / Advanced RAG
-*   **The Hook**: "Replace 'PydanticProgram' complexity with standard Python functions."
+### Demo D: The "Sub-Question" Logic (Targeting LlamaIndex)
+*   **Source Material**: [LlamaIndex: Query Transformations Cookbook](https://docs.llamaindex.ai/en/stable/examples/query_transformations/query_transform_cookbook/)
+*   **The Hook**: "Replace `SubQuestionQueryEngine` complexity with one Python function."
 *   **The Fix**:
 ```python
 @generative
 def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
+```
+
+### Demo E: The "System 2" Solver (Targeting Research/Math)
+*   **Community**: Kaggle / AlphaCode fans
+*   **The Hook**: "Turn Llama 3 into a Reasoning Model with one line of code."
+*   **The Fix**: Use `MajorityVotingStrategy` to generate 8 solutions and vote for the consensus.
+```python
+# No complex "Chain" logic. Just pass a strategy.
+@generative
+def solve_math(problem: str) -> int: ...
+
+res = solve_math(..., strategy=MajorityVotingStrategy(n=8))
+```
 ```
 
 ---
@@ -127,7 +139,8 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 1.  Create `examples/langchain_extraction.py` (Demo A).
 2.  Create `examples/rag_evaluation.py` (Demo B).
 3.  Create `examples/local_llama_json.py` (Demo C).
-4.  Write `docs/integrations/langchain.md` explaining the "Injection" pattern.
+4.  Create `examples/math_solver.py` (Demo E).
+5.  Write `docs/integrations/langchain.md` explaining the "Injection" pattern.
 
 ## 5. Architectural Patterns
 *   **Reasoning Field (Anti-Hallucination)**: Add `reasoning: str` *before* the answer field. This forces the model to "show its work" (Chain of Thought), drastically reducing *logic* hallucinations compared to asking for a raw answer.
