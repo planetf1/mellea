@@ -3,6 +3,8 @@
 **Objective**: Replace fragile manual prompt engineering with Mellea's type-safe `Generative Programming` primitives.
 **Target Audience**: An AI Agent (Cursor, Roo, or Human Developer) tasked with the refactor.
 
+> **Why Bother?** The current `ollama_client.py` is ~400 lines, with roughly half dedicated to manual JSON parsing, regex cleanup, and error handling. Mellea could reduce this to ~50 lines of type-safe code while improving reliability.
+
 ## 1. Detection: Is this code a candidate?
 
 Use these heuristics to identify files ripe for Mellea migration.
@@ -79,15 +81,18 @@ def run_classification(m, evidence):
     return classify_artist_evidence(m, evidence_summary=str(evidence))
 ```
 
-## 4. Specific Refactoring Instructions
+## 4. What Would Change
 
-1.  **Delete** `prompts/classify_artist.txt`. (The Pydantic model is the new schema).
-2.  **Modify** `src/spotify_stop_ai/ollama_client.py`:
-    *   Remove `httpx` logic.
-    *   Remove `json` parsing logic.
-    *   Remove `_validate_output` method.
-    *   Instantiate `mellea.start_session()` instead of `OllamaClient`.
-    *   Call `classify_artist_evidence(m, ...)` directly.
+With Mellea handling structured output and validation, several pieces of the current implementation become unnecessary:
+
+*   **Prompt Templates**: The file `prompts/classify_artist.txt` is replaced by the Pydantic model `ClassificationResult`, which defines the schema directly in code.
+*   **Manual Parsing**: The custom logic to strip markdown code blocks and `json.loads` the response is handled automatically.
+*   **Explicit Validation**: The `_validate_output()` method is redundant because `Field(ge=0.0, le=1.0)` enforces constraints before the function returns.
+*   **Direct API Calls**: The `httpx` logic is abstracted by the Mellea Session.
+
+*Note: The existing logic for `_web_search` and `_format_evidence` would remain, simply feeding into the new `@generative` function.*
+
+> **Caveat**: This is an architectural sketch. The actual implementation will need to handle async execution (Mellea supports async via `await m.chat_async(...)`) and mapping the existing configuration values to the Mellea Session.
 
 ## 5. Integrating the "Agent Fragment"
 
