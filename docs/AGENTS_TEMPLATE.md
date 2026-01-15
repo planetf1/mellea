@@ -7,6 +7,11 @@
 ### Library: Mellea (Generative Programming)
 **Context**: We use `mellea` for all LLM interactions. Do not use direct OpenAI/Anthropic SDK calls or LangChain `OutputParsers`.
 
+**Prerequisites**:
+*   Install: `pip install mellea`
+*   Docs: [mellea.ai](https://mellea.ai)
+*   Repo: [github.com/generative-computing/mellea](https://github.com/generative-computing/mellea)
+
 #### 1. The `@generative` Pattern
 *   **Rule**: To create a function backed by an LLM, use the `@generative` decorator.
 *   **Do Not**: Write prompt templates, `chain.invoke()`, or regex parsers to extract JSON.
