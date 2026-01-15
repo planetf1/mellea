@@ -145,6 +145,13 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 *   **Runtime**: When you call `m.instruct(..., requirements=[req("Be legal")])`, Mellea *automatically reroutes* the validation check to your specialized adapter.
 *   **Benefit**: You get "Expert-Level" supervision on a "Junior-Level" (cheap/fast) model.
 
+### 5.2 The Alora "Hooks" (When to use this?)
+*User Question: "Why train an adapter when I can just prompt?"*
+*   **Hook 1: The "Small Model" Constraint**: You want to run on a local 8B model (e.g. Granite/Llama 3), but it's too dumb to understand complex legal/medical guidelines.
+    *   *Alora Fix*: Train the adapter on 50 examples. Now the 8B model behaves like an expert on *just that rule*.
+*   **Hook 2: The "Speed" Factor**: Validation prompting requires generating many tokens ("Let me think step by step..."). An adapter classification is often a single forward pass.
+*   **Hook 3: "Brand Voice" Policing**: It is very hard to prompt a model to "sound like us". It is very easy to finetune an adapter on 100 marketing emails to recognize "off-brand" tone.
+
 
 ## 6. Future Frontier: IDE Agents via MCP
 The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
