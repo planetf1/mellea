@@ -1,73 +1,100 @@
-# Analysis: `spotify-stop-ai` Migration Opportunity
+# Migration Manual: Refactoring `spotify-stop-ai` to Mellea
 
-**Target Repo**: `../spotify-stop-ai`
-**Current Implementation**: `OllamaClient` in `src/spotify_stop_ai/ollama_client.py`
+**Objective**: Replace fragile manual prompt engineering with Mellea's type-safe `Generative Programming` primitives.
+**Target Audience**: An AI Agent (Cursor, Roo, or Human Developer) tasked with the refactor.
 
-## 1. Summary of Inefficiencies
-The current implementation works, but is "High Friction" code. It re-invents several wheels that Mellea provides out of the box.
+## 1. Detection: Is this code a candidate?
 
-*   **Manual JSON Parsing**: The client has ~40 lines of code just to strip markdown backticks and `json.loads` the response.
-*   **Prompt-Based Schema**: The prompt (`classify_artist.txt`) wastes ~20 lines explaining JSON syntax to the LLM.
-*   **Manual Validation**: `_validate_output` manually checks types and ranges (e.g., `0.0 <= confidence <= 1.0`).
-*   **Backend Lock-in**: Hardcoded to Ollama endpoints (`/api/generate`).
+Use these heuristics to identify files ripe for Mellea migration.
 
-## 2. The "Before" (Current Code)
-```python
-# src/spotify_stop_ai/ollama_client.py (Simplified)
+| Pattern | Evidence in `spotify-stop-ai` | Why Mellea? |
+| :--- | :--- | :--- |
+| **Manual JSON Parsing** | `json.loads(response.strip().replace('```json', ''))` | Mellea handles parsing & validation automatically. |
+| **Schema in System Prompt** | `Note: You must output JSON with keys: 'label', ...` | Mellea derives formatting instructions from Pydantic types. |
+| **Manual Retry Logic** | `try: ... except json.DecodeError: ...` | `instruct-validate-repair` handles retries for you. |
+| **Manual Validation** | `if not (0.0 <= confidence <= 1.0): return None` | Pydantic `Field(ge=0.0, le=1.0)` enforces ranges. |
+| **Backend Coupling** | Hardcoded `/api/generate` endpoints | Mellea works with OpenAI, Anthropic, or Local execution. |
 
-# 1. Complex Prompting
-prompt = """
-Response format (strict JSON):
-{
-  "label": "virtual_idol|vocaloid...",
-  "confidence": 0.0-1.0
-}
-"""
+## 2. Preparation (The Setup)
 
-# 2. Manual Parsing
-raw = response["response"]
-if raw.startswith("```json"): raw = raw[7:-3]
-data = json.loads(raw)
+Before refactoring code, establish the "Rules of the Road" for the agent.
 
-# 3. Manual Validation
-if not (0.0 <= data["confidence"] <= 1.0):
-    return None
+### Step A: Create `AGENTS.md`
+The repo currently lacks an `AGENTS.md`. Create one at the root using the **Mellea Standard Template**.
+*   **Source**: Copy content from `mellea/docs/AGENTS_TEMPLATE.md`.
+*   **Action**: Create `spotify-stop-ai/AGENTS.md`.
+*   **Reason**: This teaches the coding agent *how* to use Mellea correctly (e.g., "Use `@generative`, not `OutputParser`").
+
+### Step B: Install Mellea
+Add `mellea` to the project dependencies.
+```bash
+# In pyproject.toml or requirements.txt
+mellea>=0.1.0
 ```
 
-## 3. The "After" (Mellea Code)
-Mellea replaces the parsing, prompting, and validation with a Type Signature.
+## 3. Implementation Plan (`ollama_client.py`)
+
+**Goal**: Delete `OllamaClient` complexity and replace with a Mellea Session.
+
+### The "Before" Logic (Pseudocode)
+```python
+class OllamaClient:
+    def classify(self, evidence):
+        prompt = load_prompt("prompts/classify_artist.txt")
+        raw_json = http_post(self.host, prompt)
+        clean_json = regex_strip_markdown(raw_json)
+        data = json.loads(clean_json)
+        if validate(data): return data
+```
+
+### The "After" Logic (Mellea Pattern)
+Define the schema once, and use `@generative`.
 
 ```python
+# src/spotify_stop_ai/classification.py
+
 from mellea import generative
 from pydantic import BaseModel, Field
 from typing import Literal
 
-# 1. Schema DEFINES the Prompt and Validation
-class ArtistClassification(BaseModel):
-    label: Literal["virtual_idol", "vocaloid", "human", "band", "unknown"]
+# 1. Define the Schema (Replaces 'prompts/classify_artist.txt')
+class ClassificationResult(BaseModel):
+    label: Literal["virtual_idol", "vocaloid", "vtuber", "fictional", "ai_generated", "human", "band", "unknown"]
     is_artificial: bool | None
-    confidence: float = Field(ge=0.0, le=1.0) # Validators included!
-    reason: str
+    confidence: float = Field(ge=0.0, le=1.0, description="Confidence score 0-1")
+    reason: str = Field(description="Brief explanation citing evidence")
     citations: list[str]
+    ambiguity_notes: str | None
 
+# 2. Define the Function (Replaces 'OllamaClient')
 @generative
-def classify_artist(evidence: str) -> ArtistClassification:
+def classify_artist_evidence(evidence_summary: str) -> ClassificationResult:
     """
-    Analyze the evidence to classify the artist.
+    Analyze the provided evidence to determine if the artist is artificial.
     Be conservative. If unsure, use 'unknown'.
     """
 
-# Usage
-# No parsing, no validation code needed. Mellea guarantees it matches the schema.
-result = classify_artist(formatted_evidence)
+# 3. Usage
+def run_classification(m, evidence):
+    return classify_artist_evidence(m, evidence_summary=str(evidence))
 ```
 
-## 4. Key Improvements
-1.  **Robustness**: Mellea uses `xgrammar` (if local) or native function calling to *force* valid JSON. The `try/except json.JSONDecodeError` block disappears.
-2.  **Portability**: The Mellea version works with OpenAI (GPT-4), Anthropic (Claude), or Local (Granite) by just changing the Session backend. The current `OllamaClient` only works with Ollama.
-3.  **Simplicity**: Reduces `ollama_client.py` from 400 lines to ~50 lines.
+## 4. Specific Refactoring Instructions
 
-## 5. Recommendation
-This is a perfect candidate for the **Agentic Migration** pilot.
-1.  Copy `docs/AGENTS_TEMPLATE.md` into `spotify-stop-ai`.
-2.  Ask Cursor: "Refactor `ollama_client.py` to use Mellea primitives defined in AGENTS_TEMPLATE.md".
+1.  **Delete** `prompts/classify_artist.txt`. (The Pydantic model is the new schema).
+2.  **Modify** `src/spotify_stop_ai/ollama_client.py`:
+    *   Remove `httpx` logic.
+    *   Remove `json` parsing logic.
+    *   Remove `_validate_output` method.
+    *   Instantiate `mellea.start_session()` instead of `OllamaClient`.
+    *   Call `classify_artist_evidence(m, ...)` directly.
+
+## 5. Integrating the "Agent Fragment"
+
+When instructing your AI to perform this work, use this prompt:
+
+> "I need to refactor `ollama_client.py` to use Mellea.
+> I have added `AGENTS.md` to the root of this repo.
+> Please read `AGENTS.md` first to understand the `@generative` pattern.
+> Then, look at `ClassificationResult` in my proposed plan.
+> Refactor the code to use a typed `@generative` function instead of manual JSON parsing."
