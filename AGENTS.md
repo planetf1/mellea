@@ -15,12 +15,12 @@ uv run pytest -m integration # Run tests requiring API keys (OpenAI/Anthropic)
 3. Did I over-engineer? (Prefer primitives over Classes)
 ````
 
-## 2. Core Philosophy: "Typed & Deterministic"
-Mellea is a library for **Generative Programming**, not "Chatbot Evaluation".
-*   **Do**: Treat LLMs as "Fuzzy CPUs" that implement specific functions.
-*   **Do**: Use standard Python control flow (`if`, `for`, `while`).
-*   **Don't**: Create complex "Graph" abstractions or "Chains" unless necessary.
-*   **Primary Primitive**: The `@generative` function.
+## 2. Core Philosophy: "Building the Typed AI Runtime"
+We are building the **runtime** that enables Generative Programming.
+*   **Goal**: Enable users to treat LLMs as "Fuzzy CPUs".
+*   **Values**:
+    *   **Robustness**: The engine must never crash on bad inputs; it must handle retries/backoff transparently.
+    *   **Invisibility**: Mellea's complexity should be hidden. Users see `@generative`, we see `AsyncGenerativeSlot`.
 
 ## 2. Coding Standards
 ### 2.1 The `@generative` Decorator (When to use it)
@@ -51,8 +51,10 @@ class GroqBackend(BaseBackend):
 *   **Fixing Tests**: If you break a test, fix the **code**, not the test (unless the test was hallucinated).
 
 ### 2.3 Dependency Management
-*   **Tool**: We use `uv`.
-*   **Adding Deps**: `uv add <package>`.
+
+### 2.3 Dependency Management (Contributors Only)
+*   **Tool**: We use `uv` for development. (Users will install via `pip`).
+*   **Adding Deps**: `uv add <package>`. Keep dependencies minimal to ensure fast installs for users.
 *   **Lockfile**: Always update `uv.lock`.
 
 ## 3. The "Agent Self-Review" Protocol
@@ -64,9 +66,9 @@ Before notifying the user, you **MUST** recursively verify your own work:
 2.  **The Type Check**:
     *   Are all my new functions typed?
     *   Did I import from `typing`?
-3.  **The "Simplicity" Check**:
-    *   Did I write 50 lines of code where 5 lines of `@generative` logic would do?
-    *   *Correction*: If yes, refactor to use Mellea's core primitives.
+3.  **The "API Design" Check**:
+    *   Did I leak implementation details (e.g. `http_client`) to the user?
+    *   Did I maintain the "Zero Setup" promise? (Users shouldn't need to configure 10 objects to make a call).
 
 ## 4. Strategic Context (Where are we going?)
 *   **Primary Goal**: "Mellea Injection" (Surgical replacement of brittle logic in other frameworks).
