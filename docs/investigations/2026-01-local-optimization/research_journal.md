@@ -44,7 +44,7 @@ We created a portable "Go-to-Market" kit to operationalize this strategy in any 
 This investigation started as a bug fix hunt and evolved into a comprehensive Product Strategy refresh. We confirmed that Mellea's "Type-Safe Generation" value proposition is strongest when positioned as a surgical tool for existing broken workflows.
 
 ## 6. Strategy Refinement and Verification (2026-01-15)
-We executed a "Double-Click" on the Strategy to verify assumptions and prepare demos (`docs/spotify-analysis` branch).
+We executed a "Double-Click" on the Strategy to verify assumptions and prepare demos (`docs/research-analysis` branch).
 
 ### A. Technical Verification
 *   **Pydantic Outputs**: Verified via reproduction script that Mellea `main` **natively supports** Pydantic `BaseModel` return types.
@@ -60,5 +60,5 @@ We executed a "Double-Click" on the Strategy to verify assumptions and prepare d
 *   **Demo Recipe**: Detailed the "Agentic Migration" demo in `strategy_and_demos.md` as a standalone recipe for users to run with their own agents.
 
 ### C. Git State
-*   Created branch `docs/spotify-analysis` to house all documentation updates.
+*   Created branch `docs/research-analysis` to house all documentation updates.
 *   Persisted local **LM Studio Test Configurations** (`test/*.py`) to this branch to preserve the developer environment without polluting `main`.
