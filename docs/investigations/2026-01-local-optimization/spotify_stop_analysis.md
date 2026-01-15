@@ -1,4 +1,4 @@
-# Migration Manual: Refactoring `spotify-stop-ai` to Mellea
+# Migration Proposal: Refactoring `spotify-stop-ai` to Mellea
 
 **Objective**: Replace fragile manual prompt engineering with Mellea's type-safe `Generative Programming` primitives.
 **Target Audience**: An AI Agent (Cursor, Roo, or Human Developer) tasked with the refactor.
