@@ -84,47 +84,57 @@ To prove Mellea's value, we need demos that would be *painful* to write in LangC
 *   **The "Sell"**: Reliability. Show Mellea generating correct SQL where a standard "Chat with Data" bot hallucinates non-existent columns.
 
 ## 4. Integration Strategy: "Mellea Injection"
-Instead of asking users to "switch frameworks", show them how to **inject** Mellea into their existing LangChain/LlamaIndex apps to delete 20 lines of brittle code.
+Instead of asking users to "switch frameworks", show them how to **inject** Mellea into their existing LangChain/LlamaIndex apps to delete brittle extraction code.
 
-### The "Output Parser" Killer
-LangChain users struggle with `PydanticOutputParser`. It requires defining the parser, injecting format instructions, and handling exceptions.
+### Case Study: The "Extraction Chain" Pain
+A very common pattern in LangChain is the "Extraction Chain" (see `create_extraction_chain_pydantic` or popular tutorials like `vb100/langchain_pydantic`). Users often face:
+1.  **Verbosity**: Requires defining schemas, parsers, and prompt templates separately.
+2.  **Version Conflicts**: Long-standing struggles between Pydantic v1 (LangChain internal) and Pydantic v2 (User code).
+3.  **Fragility**: If the LLM output drifts (e.g., adds "Here is the JSON..."), the parser crashes with `OutputParserException`.
 
-**The LangChain Way (Standard)**:
+#### The "Before" (LangChain Extraction)
+*Adapted from standard LangChain docs:*
 ```python
+from langchain.output_parsers import PydanticOutputParser
+from langchain.prompts import PromptTemplate
+from pydantic import BaseModel, Field
+
 # 1. Define Schema
-class Receipt(BaseModel): ...
+class User(BaseModel):
+    name: str = Field(description="name of a user")
+    age: int = Field(description="age of a user")
 
-# 2. Setup Parser
-parser = PydanticOutputParser(pydantic_object=Receipt)
-
-# 3. Inject Instructions into Prompt
+# 2. Setup Parser & Inject Instructions
+parser = PydanticOutputParser(pydantic_object=User)
 prompt = PromptTemplate(
-    template="Extract info.\n{format_instructions}\nText: {text}",
+    template="Extract user info.\n{format_instructions}\nInfo: {query}",
     partial_variables={"format_instructions": parser.get_format_instructions()},
+    input_variables=["query"],
 )
 
-# 4. Chain it up
+# 3. Execution (Runtime validation only)
 chain = prompt | llm | parser
-
-# 5. Run (and pray it doesn't crash)
 try:
-    result = chain.invoke({"text": ocr_text})
-except OutputParserException:
-    ...
+    data = chain.invoke({"query": "Alice is 30"})
+except Exception as e:
+    print(f"Parsing failed: {e}")
 ```
 
-**The Mellea Way (Injection)**:
+#### The "After" (Mellea Injection)
+Mellea handles the schema injection, type coercion, and retries natively.
 ```python
-# 1. Define Function (Schema + Logic + Parsing in one)
+from mellea import generative
+
+# 1. Define Function (Schema + Logic + Parsing)
 @generative
-def parse_receipt(text: str) -> Receipt:
-    """Extract receipt information from the provided text."""
+def extract_user(query: str) -> User:
+    """Extract the user's name and age from the query string."""
 
 # 2. Just call it.
-result = parse_receipt(text=ocr_text)
+data = extract_user(query="Alice is 30")
 ```
 
-**The Pitch**: "Keep your LangChain retrieval, memory, and routing. Use Mellea for the **leaf nodes**—the actual extraction and reasoning steps—to get type safety and robustness for free."
+**The Pitch**: "LangChain is your **Orchestrator** (Retrieval, Memory). Mellea is your **Reliable Worker**. Use Mellea for the specific nodes in your graph that need guaranteed structured output."
 
 ## 5. Documentation Opportunities
 *   **"Mellea for Software Engineers"**: A guide specifically for people who hate "Prompt Engineering" and love "Type Systems".
