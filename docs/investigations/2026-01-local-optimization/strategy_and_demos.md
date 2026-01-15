@@ -83,7 +83,50 @@ To prove Mellea's value, we need demos that would be *painful* to write in LangC
 *   **The Mellea Way**: Use `LocalHFBackend` with `xgrammar` to enforce that a generated SQL query adheres to the *actual* table schema provided in the context.
 *   **The "Sell"**: Reliability. Show Mellea generating correct SQL where a standard "Chat with Data" bot hallucinates non-existent columns.
 
-## 4. Documentation Opportunities
+## 4. Integration Strategy: "Mellea Injection"
+Instead of asking users to "switch frameworks", show them how to **inject** Mellea into their existing LangChain/LlamaIndex apps to delete 20 lines of brittle code.
+
+### The "Output Parser" Killer
+LangChain users struggle with `PydanticOutputParser`. It requires defining the parser, injecting format instructions, and handling exceptions.
+
+**The LangChain Way (Standard)**:
+```python
+# 1. Define Schema
+class Receipt(BaseModel): ...
+
+# 2. Setup Parser
+parser = PydanticOutputParser(pydantic_object=Receipt)
+
+# 3. Inject Instructions into Prompt
+prompt = PromptTemplate(
+    template="Extract info.\n{format_instructions}\nText: {text}",
+    partial_variables={"format_instructions": parser.get_format_instructions()},
+)
+
+# 4. Chain it up
+chain = prompt | llm | parser
+
+# 5. Run (and pray it doesn't crash)
+try:
+    result = chain.invoke({"text": ocr_text})
+except OutputParserException:
+    ...
+```
+
+**The Mellea Way (Injection)**:
+```python
+# 1. Define Function (Schema + Logic + Parsing in one)
+@generative
+def parse_receipt(text: str) -> Receipt:
+    """Extract receipt information from the provided text."""
+
+# 2. Just call it.
+result = parse_receipt(text=ocr_text)
+```
+
+**The Pitch**: "Keep your LangChain retrieval, memory, and routing. Use Mellea for the **leaf nodes**—the actual extraction and reasoning steps—to get type safety and robustness for free."
+
+## 5. Documentation Opportunities
 *   **"Mellea for Software Engineers"**: A guide specifically for people who hate "Prompt Engineering" and love "Type Systems".
 *   **"Local Development Guide"**: A dedicated page on optimizations for Apple Silicon/Consumer Hardware (codifying our `float16` findings).
 
