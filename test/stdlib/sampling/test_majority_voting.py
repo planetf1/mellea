@@ -12,7 +12,17 @@ from mellea.core import SamplingResult
 
 @pytest.fixture(scope="module")
 def m_session(gh_run):
-    if gh_run == 1:
+    import os
+
+    if os.environ.get("USE_LMSTUDIO", "0") == "1":
+        m = start_session(
+            "openai",
+            model_id="granite-4.0-h-tiny-mlx",
+            base_url="http://localhost:1234/v1",
+            api_key="lm-studio",
+            model_options={ModelOption.MAX_NEW_TOKENS: 5},
+        )
+    elif gh_run == 1:
         m = start_session(
             "ollama",
             model_id="llama3.2:1b",
