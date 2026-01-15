@@ -5,7 +5,14 @@
 
 > **Why Bother?** The current `ollama_client.py` is ~400 lines, with roughly half dedicated to manual JSON parsing, regex cleanup, and error handling. Mellea could reduce this to ~50 lines of type-safe code while improving reliability.
 
-## 1. Detection: Is this code a candidate?
+## 1. Context: What does the app do?
+**spotify-stop-ai** monitors your currently playing Spotify track and attempts to classify the artist as "Human" or "Artificial" (e.g., Vocaloid, AI-generated, VTuber) to automatically skip AI music.
+
+**The LLM's Role**: It acts as a **Fallback Judge**.
+1.  The app first checks Wikidata, MusicBrainz, and Last.fm.
+2.  If sources disagree or are inconclusive (missing data), the LLM analyzes web search results to make a final boolean decision: `is_artificial: true/false`.
+
+## 2. Detection: Is this code a candidate?
 
 Use these heuristics to identify files ripe for Mellea migration.
 
@@ -17,7 +24,7 @@ Use these heuristics to identify files ripe for Mellea migration.
 | **Manual Validation** | `if not (0.0 <= confidence <= 1.0): return None` | **Field Validators**: `Field(ge=0.0, le=1.0)` runs validation before you see the data. |
 | **Backend Coupling** | Hardcoded `/api/generate` endpoints | **Portability**: Write once, run on OpenAI/Anthropic/Local by passing a `Session`. |
 
-## 2. Preparation (Mellea Context Only)
+## 3. Preparation (Mellea Context Only)
 
 To enable the agent to use Mellea correctly, provide the *Mellea Pattern* definitions.
 
@@ -34,7 +41,7 @@ Add `mellea` to the project dependencies.
 mellea>=0.1.0
 ```
 
-## 3. Implementation Plan (`ollama_client.py`)
+## 4. Implementation Plan (`ollama_client.py`)
 
 **Goal**: Delete `OllamaClient` complexity and replace with a Mellea Session.
 
@@ -81,7 +88,7 @@ def run_classification(m, evidence):
     return classify_artist_evidence(m, evidence_summary=str(evidence))
 ```
 
-## 4. What Would Change
+## 5. What Would Change
 
 With Mellea handling structured output and validation, several pieces of the current implementation become unnecessary:
 
@@ -94,7 +101,7 @@ With Mellea handling structured output and validation, several pieces of the cur
 
 > **Caveat**: This is an architectural sketch. The actual implementation will need to handle async execution (Mellea supports async via `await m.chat_async(...)`) and mapping the existing configuration values to the Mellea Session.
 
-## 5. Integrating the "Agent Fragment"
+## 6. Integrating the "Agent Fragment"
 
 When instructing your AI to perform this work, use this prompt:
 
