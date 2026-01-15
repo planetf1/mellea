@@ -162,8 +162,13 @@ class LocalHFBackend(FormatterBackend, AdapterMixin):
                     else "cpu"
                 )
                 # Get the model and tokenizer.
+                # Get the model and tokenizer.
+                model_kwargs = {}
+                if self._device.type == "mps":
+                    model_kwargs["torch_dtype"] = torch.float16
+
                 self._model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
-                    self._hf_model_id
+                    self._hf_model_id, **model_kwargs
                 ).to(self._device)  # type: ignore
                 self._tokenizer: PreTrainedTokenizer = AutoTokenizer.from_pretrained(
                     self._hf_model_id
