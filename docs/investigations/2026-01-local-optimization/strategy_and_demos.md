@@ -123,65 +123,77 @@ except Exception as e:
 ## 4. The Showcase: Specific "Better Together" Examples
 These are concrete, runnable examples that target specific, popular community tutorials to show an immediate "Wow" factor.
 
-### Demo A: The "Extraction" Fix (Targeting `gkamradt`)
-*Context: Greg Kamradt's "OpeningAttributes" tutorial is a staple but uses verbose `PydanticOutputParser` logic.*
+## 4. The Showcase: Specific "Better Together" Examples
+We target specific, widely-known tutorials where Mellea provides a dramatic simplification.
 
-**The "Before" (LangChain)**:
+### Demo A: The "Extraction" Fix (Targeting `gkamradt`)
+*Context: Greg Kamradt's "OpeningAttributes" tutorial. Solving `OutputParserException`.*
+
+**The "Before"**:
 ```python
 parser = PydanticOutputParser(pydantic_object=JobInfo)
-prompt = PromptTemplate(
-    template="Extract info.\n{format_instructions}\nDesc: {text}",
-    partial_variables={"format_instructions": parser.get_format_instructions()},
-)
-# Often fails with "OutputParserException" on local models
+prompt = PromptTemplate(template="... {format_instructions} ...", ...)
+chain = prompt | llm | parser
+# Fragile on 7B models.
 ```
 
-**The "After" (Mellea)**:
+**The "After"**:
 ```python
 @generative
 def extract_job_info(description: str) -> JobInfo:
     """Extract role and tools from the job description."""
 ```
-*Value: Deletes 70% of the boilerplate code. Works on 7B models.*
 
-### Demo B: The "Reliable SQL" Generator (Targeting Text-to-SQL)
-*Context: Text-to-SQL is notoriously brittle. Users struggle with specific SQL dialects and syntax errors.*
+### Demo B: The "Reliable RAG Grader" (Targeting DeepLearning.AI)
+*Context: The "Building Systems with LLMs" course teaches writing complex "Evaluation Prompts" to grade RAG answers.*
 
-**The "Before"**: Prompt engineering hell. "Do not use markdown formatting", "Use SQLite dialect", "Only select from these tables...".
+**The "Before"**:
+Writing a 50-word prompt: *"You are an assistant. Grade the answer 1-5. Output valid JSON only..."*. parsing the string, handling "I decided to give it a 4" failures.
 
-**The "After" (Mellea)**:
+**The "After" (Unique Vibe: Constrained Integers)**:
 ```python
-class SQLQuery(BaseModel):
-    query: str = Field(description="Syntactically valid SQLite query")
-    explanation: str = Field(description="Why this query answers the user question")
+class Grade(BaseModel):
+    score: int = Field(description="Score 1-5", ge=1, le=5)
+    reasoning: str 
 
 @generative
-def text_to_sql(question: str, schema: str) -> SQLQuery:
-    """Convert the natural language question into a SQL query based on the schema."""
+def grade_answer(question: str, answer: str) -> Grade:
+    """Grade the answer's relevance to the question."""
 ```
-*Value: Mellea (via `outlines`/`xgrammar`) constrains output, ensuring **syntactic correctness** before the code even runs.*
+*Unique Value*: Mellea (via `xgrammar`) enforces the `1-5` integer constraint at the token level. No retries needed for "invalid number".
+
+### Demo C: Safe SQL Generation (Targeting "Chat with Data")
+*Context: "Chat with Data" tutorials often fail when models hallucinate invalid SQL syntax.*
+
+**The "After"**:
+```python
+@generative
+def text_to_sql(question: str, schema: str) -> SQLQuery:
+    """Generate a valid SQLite query."""
+```
+*Unique Value*: Guarantees syntactically valid SQL (if using a grammar-constrained backend), preventing the dreaded `OperationalError: near "FROM": syntax error`.
 
 ---
 
-## 5. Common Patterns: Where Mellea Adds Value
-Broad architectural patterns where injecting Mellea simplifies the system.
+## 5. Common Patterns
+Broad architectural improvements.
 
-### Pattern 1: The "Reasoning Field" (CoT + Structure)
-Users want "Chain of Thought" but also "Structured Output". LangChain makes mixing these two awkward.
-**Mellea Pattern**: always include a `reasoning` field in your Pydantic model. The LLM generates the thought process *first* (improving accuracy), then the final answer, all in one robust type-checked call.
+### Pattern 1: The "Reasoning Field"
+**Problem**: You want Chain-of-Thought but need JSON output.
+**Mellea**: Just add `reasoning: str` to your Pydantic model. The LLM typically fills this first, improving the quality of the subsequent fields.
 
-### Pattern 2: The "Semantic Router" without Vectors
-For simple routing (e.g., "Refunds" vs "Tech Support"), users often spin up a Vector DB and Embedding model (over-engineering).
-**Mellea Pattern**: Just use an `Enum`.
+### Pattern 2: The "Vector-less" Router
+**Problem**: Spinning up ChromaDB just to route "Refund" vs "Sales".
+**Mellea**:
 ```python
 class Intent(str, Enum):
     REFUND = "refund"
-    SUPPORT = "support"
+    SALES = "sales"
 
 @generative
-def route(query: str) -> Intent: ...
+def route(msg: str) -> Intent: ...
 ```
-This is faster, deterministic, and cheaper than a vector search for small sets.
+Deterministic, typed, and zero-infra.
 
 ## 5. Documentation Opportunities
 *   **"Mellea for Software Engineers"**: A guide specifically for people who hate "Prompt Engineering" and love "Type Systems".
