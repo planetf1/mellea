@@ -29,7 +29,8 @@ def extract_age(text: str) -> int:
     """Extract the age of the user mentioned in the text."""
 
 # Usage
-age = extract_age("Alice is 30") # Returns int(30) strictly
+m = start_session()
+age = extract_age(m, text="Alice is 30") # Returns int(30) strictly
 ```
 
 #### 2. Type Safety
@@ -82,7 +83,22 @@ m = start_session()
 result = analyze_document(m, text="...")
 ```
 
-#### 6. Anti-Patterns (What NOT to do)
-*   **Don't** wrap `@generative` calls in `try/except` loops. Mellea handles retries and validation internally.
-*   **Don't** use `json.loads(response.content)`. Always use typed return signatures.
-*   **Don't** create "Agent Classes" just to wrap a single function. Use a standalone function.
+#### 7. Instruct-Validate-Repair (The "Killer Feature")
+*   **Rule**: For complex generation with strict requirements, use `m.instruct()` instead of `@generative`.
+*   **Why**: Mellea automatically retries (loops) until the `requirements` are met or budget is exhausted.
+```python
+from mellea.stdlib.requirement import req, simple_validate
+from mellea.stdlib.sampling import RejectionSamplingStrategy
+
+requirements = [
+    req("Must be formal"), 
+    req("Must use lower-case only", validation_fn=simple_validate(lambda x: x.islower()))
+]
+
+email = m.instruct(
+    "Write an invite for {{name}}",
+    requirements=requirements,
+    strategy=RejectionSamplingStrategy(loop_budget=3),
+    user_variables={"name": "Alice"}
+)
+```
