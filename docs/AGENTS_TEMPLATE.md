@@ -83,6 +83,11 @@ m = start_session()
 result = analyze_document(m, text="...")
 ```
 
+#### 6. Anti-Patterns (What NOT to do)
+*   **Don't** wrap `@generative` calls in `try/except` loops. Mellea handles retries and validation internally.
+*   **Don't** use `json.loads(response.content)`. Always use typed return signatures.
+*   **Don't** create "Agent Classes" just to wrap a single function. Use a standalone function.
+
 #### 7. Instruct-Validate-Repair (The "Killer Feature")
 *   **Rule**: For complex generation with strict requirements, use `m.instruct()` instead of `@generative`.
 *   **Why**: Mellea automatically retries (loops) until the `requirements` are met or budget is exhausted.
