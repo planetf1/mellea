@@ -1,7 +1,20 @@
 # Agent Guidelines for Mellea (`AGENTS.md`)
-> **For AI Agents:** Read this file before making any code changes. It contains the rules of the road for the Mellea project.
+> **For AI Agents:** Read this file before making any code changes. It acts as your context window anchor.
 
-## 1. Core Philosophy: "Typed & Deterministic"
+## 1. Quick Reference (The "Must Knows")
+```bash
+# Standard Dev Loop
+uv sync                     # Install dependencies & fix lockfile
+uv run pytest               # Run all tests
+uv run pytest -m integration # Run tests requiring API keys (OpenAI/Anthropic)
+
+# The "Self-Review" Check (Run BEFORE notifying user)
+1. Did I break the build? (uv run pytest)
+2. Did I export strict types? (Generative functions must return Pydantic/Types)
+3. Did I over-engineer? (Prefer primitives over Classes)
+````
+
+## 2. Core Philosophy: "Typed & Deterministic"
 Mellea is a library for **Generative Programming**, not "Chatbot Evaluation".
 *   **Do**: Treat LLMs as "Fuzzy CPUs" that implement specific functions.
 *   **Do**: Use standard Python control flow (`if`, `for`, `while`).
