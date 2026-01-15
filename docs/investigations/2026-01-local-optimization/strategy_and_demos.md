@@ -91,6 +91,8 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 ## 5. Architectural Patterns
 *   **Reasoning Field**: Improve accuracy effectively by adding `reasoning: str` to Pydantic models (Chain of Thought).
 *   **Vector-less Router**: Use `Enum` return types for fast, zero-infra semantic routing.
+*   **Schema-as-Code** (derived from *spotify-stop-ai*): Replace `.txt` prompt files containing JSON schemas (which drift) with Python Pydantic models (which don't).
+*   **Validation-as-Types**: Replace post-hoc manual validation checks (e.g., `if confidence < 0.0`) with `Field` validators (e.g., `Field(ge=0.0)`).
 
 
 ## 6. Future Frontier: IDE Agents via MCP
