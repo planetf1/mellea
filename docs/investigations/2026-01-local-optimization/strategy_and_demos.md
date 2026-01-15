@@ -126,16 +126,11 @@ These are concrete, runnable examples that target specific, popular community tu
 ## 4. The Showcase: Specific "Better Together" Examples
 We target specific, widely-known tutorials where Mellea provides a dramatic simplification.
 
+## 4. The Showcase: Specific "Better Together" Examples
+We target specific, widely-known tutorials where Mellea provides a dramatic simplification.
+
 ### Demo A: The "Extraction" Fix (Targeting `gkamradt`)
 *Context: Greg Kamradt's "OpeningAttributes" tutorial. Solving `OutputParserException`.*
-
-**The "Before"**:
-```python
-parser = PydanticOutputParser(pydantic_object=JobInfo)
-prompt = PromptTemplate(template="... {format_instructions} ...", ...)
-chain = prompt | llm | parser
-# Fragile on 7B models.
-```
 
 **The "After"**:
 ```python
@@ -145,33 +140,49 @@ def extract_job_info(description: str) -> JobInfo:
 ```
 
 ### Demo B: The "Reliable RAG Grader" (Targeting DeepLearning.AI)
-*Context: The "Building Systems with LLMs" course teaches writing complex "Evaluation Prompts" to grade RAG answers.*
-
-**The "Before"**:
-Writing a 50-word prompt: *"You are an assistant. Grade the answer 1-5. Output valid JSON only..."*. parsing the string, handling "I decided to give it a 4" failures.
-
-**The "After" (Unique Vibe: Constrained Integers)**:
-```python
-class Grade(BaseModel):
-    score: int = Field(description="Score 1-5", ge=1, le=5)
-    reasoning: str 
-
-@generative
-def grade_answer(question: str, answer: str) -> Grade:
-    """Grade the answer's relevance to the question."""
-```
-*Unique Value*: Mellea (via `xgrammar`) enforces the `1-5` integer constraint at the token level. No retries needed for "invalid number".
-
-### Demo C: Safe SQL Generation (Targeting "Chat with Data")
-*Context: "Chat with Data" tutorials often fail when models hallucinate invalid SQL syntax.*
+*Context: "Building Systems with LLMs" course. Solving flaky "Score: 4/5" string parsing.*
 
 **The "After"**:
 ```python
+class Grade(BaseModel):
+    score: int = Field(ge=1, le=5)
+    reasoning: str 
+
 @generative
-def text_to_sql(question: str, schema: str) -> SQLQuery:
-    """Generate a valid SQLite query."""
+def grade_answer(q: str, a: str) -> Grade: ...
 ```
-*Unique Value*: Guarantees syntactically valid SQL (if using a grammar-constrained backend), preventing the dreaded `OperationalError: near "FROM": syntax error`.
+
+### Demo C: The "Local Llama 3" JSON Fix (Targeting HuggingFace Users)
+*Context: Local Llama 3 8B is powerful but notoriously bad at following complex `format="json"` instructions without fine-tuning.*
+
+**The "Before"**:
+Using `chat_template` with complex "You are a JSON machine" system prompts. Parsing regex to find the JSON blob. Getting `"message": "Here is the JSON..."` and crashing.
+
+**The "After" (Mellea + xgrammar)**:
+```python
+# Mellea forces the logits to conform to the schema at the token level
+@generative(model="meta-llama/Meta-Llama-3-8B-Instruct", backend="hf")
+def analyze_sentiment(text: str) -> SentimentAnalysis: ...
+```
+*Unique Value*: We use grammar-constrained decoding (via `outlines`/`xgrammar`) so **7B models act like GPT-4** for structure.
+
+### Demo D: The "Sub-Question" Logic (Targeting LlamaIndex)
+*Context: LlamaIndex `SubQuestionQueryEngine` is powerful but the underlying "PydanticProgram" abstraction is verbose.*
+
+**The "Before"**:
+Defining a `PydanticProgram`, passing an `OpenAIPydanticProgram` class, setting up a verbose `prompt_template_str`.
+
+**The "After"**:
+```python
+class SubQuestion(BaseModel):
+    sub_query: str
+    tool_name: str
+
+@generative
+def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]:
+    """Break the query down into sub-questions."""
+```
+*Unique Value*: Pure Python. No "Program" classes to instantiate.
 
 ---
 
