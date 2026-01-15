@@ -75,6 +75,7 @@ You will watch the agent:
 The original tutorial solves `OutputParserException` by adding *more* complexity (Retry Parsers, Auto-Fixing Chains).
 *   **LangChain (Reactive)**: LLM guesses -> Parser fails -> Retry Loop catches error -> LLM tries again. (Slow, expensive).
 *   **Mellea (Proactive)**: Type signature -> Backend *forces* valid JSON tokens. (Fast, correct by design).
+*   **Small Model Viability**: Because formatting is enforced by the engine (xgrammar), you don't need a "smart" model (GPT-4) just to get valid JSON. You can run reliable extraction on 8B or even 3B local models.
 
 
 
