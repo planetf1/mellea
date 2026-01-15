@@ -23,18 +23,24 @@ Mellea is a library for **Generative Programming**, not "Chatbot Evaluation".
 *   **Primary Primitive**: The `@generative` function.
 
 ## 2. Coding Standards
-### 2.1 The `@generative` Decorator
-When adding new capabilities, prefer **Generative Functions** over complex classes.
-```python
-# GOOD: Simple, typed, functional
-@generative
-def parse_receipt(text: str) -> Receipt:
-    """Extract receipt details."""
+### 2.1 The `@generative` Decorator (When to use it)
+*   **Infrastructure Code** (`mellea/backends`, `mellea/core`): **DO NOT** use `@generative`. You are building the engine. Use standard, robust Python (httpx, asyncio, Pydantic).
+*   **Standard Library / Examples** (`mellea/stdlib`, `examples/`): **DO** use `@generative`. We "eat our own dogfood" to build higher-level primitives.
 
-# BAD: Over-engineered wrapper
-class ReceiptParserAgent:
-    def __init__(self, llm): ...
-    def parse(self, text): ...
+#### Example: Adding a new capability
+If you are adding a refined "Receipt Parser" to the standard library:
+```python
+# GOOD (Stdlib/Example): Uses Mellea's own primitives
+@generative
+def parse_receipt(text: str) -> Receipt: ...
+```
+
+If you are adding a new LLM Provider (e.g. Groq):
+```python
+# GOOD (Infrastructure): Uses raw Python/HTTP
+class GroqBackend(BaseBackend):
+    async def chat(self, ...):
+        async with httpx.AsyncClient() as client: ...
 ```
 *   **Type Hints**: ALL arguments and return types must be fully typed. This is how Mellea ensures reliability.
 *   **Docstrings**: The docstring is the prompt. Be specific.
