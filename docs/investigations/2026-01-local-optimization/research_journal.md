@@ -42,3 +42,23 @@ We created a portable "Go-to-Market" kit to operationalize this strategy in any 
 
 ## 5. Conclusion
 This investigation started as a bug fix hunt and evolved into a comprehensive Product Strategy refresh. We confirmed that Mellea's "Type-Safe Generation" value proposition is strongest when positioned as a surgical tool for existing broken workflows.
+
+## 6. Strategy Refinement and Verification (2026-01-15)
+We executed a "Double-Click" on the Strategy to verify assumptions and prepare demos (`docs/spotify-analysis` branch).
+
+### A. Technical Verification
+*   **Pydantic Outputs**: Verified via reproduction script that Mellea `main` **natively supports** Pydantic `BaseModel` return types.
+    *   *Conclusion*: "Demo A" (Extraction) and "Demo B" (Eval) work *today* without code changes. Pydantic *input* support is an enhancement, not a blocker.
+*   **Small Model Viability**: Confirmed that `xgrammar` backend enables reliable structured output on local 3B/8B models, a key differentiator vs. prompt-based parsers.
+
+### B. Strategic Artifacts
+*   **Viral Hooks**: Identified 3 high-traffic search terms to target:
+    1.  `OutputParserException` (LangChain)
+    2.  `Llama 3 force JSON` (Local)
+    3.  `bind_tools vs OutputParser` (Conceptual)
+*   **Spotify Analysis**: Created `docs/investigations/2026-01-local-optimization/spotify_stop_analysis.md` as a specific case study for refactoring a legacy app using the "Agentic Migration" pattern.
+*   **Demo Recipe**: Detailed the "Agentic Migration" demo in `strategy_and_demos.md` as a standalone recipe for users to run with their own agents.
+
+### C. Git State
+*   Created branch `docs/spotify-analysis` to house all documentation updates.
+*   Persisted local **LM Studio Test Configurations** (`test/*.py`) to this branch to preserve the developer environment without polluting `main`.
