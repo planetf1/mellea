@@ -87,13 +87,17 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 ## 6. Future Frontier: IDE Code Generation
 Users are moving beyond "Chatboxes" to "Agents in the Editor". Mellea is uniquely positioned to handle the **Structure** required for robust code automation.
 
-### Concept: The "Mellea Test Architect" (Targeting Continue.dev)
-*   **The Gap**: Current IDE tools (Copilot, Cursor) are great at "autocomplete" but bad at "architecting". They output text, not plans.
-*   **The Idea**: A [Continue.dev](https://continue.dev) Python backend recipe that uses Mellea to generate a **Typed Test Plan** before writing code.
+## 6. Future Frontier: IDE Agents via MCP
+The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
+
+### The Strategy: "Mellea as an MCP Server"
+Instead of writing custom plugins for VS Code, we expose Mellea functions as **MCP Tools**.
 *   **The Workflow**:
-    1.  User highlights a function: `src/utils.py`.
-    2.  User types `/plan-tests`.
-    3.  Mellea backend generates a `TestPlan(scenarios=[...], edge_cases=[...])` Pydantic object (constrained).
-    4.  The IDE UI renders this plan as a checklist.
-    5.  User confirms -> Mellea generates the actual `pytest` code following the plan.
-*   **Why Mellea**: Continue's default LLM connection is text-in/text-out. Mellea adds the structural guarantee needed to make the "Plan -> Code" step reliable.
+    1.  User installs `mellea-mcp-server`.
+    2.  User opens **Roo Code** or **Cline** in VS Code.
+    3.  User asks: "Refactor `utils.py`. First, generate a strict test plan."
+    4.  **Roo Code** calls the `mellea_test_planner` tool (backed by a Mellea `@generative` function).
+    5.  Mellea returns a strictly typed `TestPlan` object.
+    6.  Roo Code uses this plan to write code.
+*   **The Value**: Mellea becomes the "Cerebral Cortex" for these agents, handling the structured reasoning tasks (Planning, review, security audit) that pure LLMs struggle with, while the Agent handles the file I/O.
+*   **Why Easy?**: We don't write a VS Code extension. We just write a Python script that speaks MCP (using Mellea for the logic).
