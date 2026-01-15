@@ -10,6 +10,11 @@ We have separated our technical findings into specific deep-dives:
 *   **[Test Suite Categorization](./test_suite_categorization.md)**: Analyzing the split between "Logic" (deterministic) and "Qualitative" (probabilistic) tests.
 *   **[LM Studio Compatibility](./lmstudio_compatibility.md)**: Findings on why `OllamaModelBackend` fails with LM Studio and the recommendation to use `OpenAIModelBackend`.
 
+### Negative Results (Abandoned Experiments)
+*   **Deep Pydantic Integration (Inputs)**: We prototyped logic to automatically serialize Pydantic objects passed *into* functions.
+    *   *Result*: Abandoned. The `generative` decorator logic is complex enough; adding implicit Pydantic serialization created edge cases.
+    *   *Decision*: Encourage users to pass specific fields or simple dicts, or handle serialization explicitly in their "glue" code, rather than complicating the core Mellea runtime.
+
 ## 2. The Strategic Pivot
 Once the technical baseline was established, we realized Mellea's strength wasn't just "running locally", but...
 
