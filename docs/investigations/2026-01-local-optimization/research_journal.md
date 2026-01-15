@@ -10,6 +10,9 @@ We have separated our technical findings into specific deep-dives:
 *   **[Test Suite Categorization](./test_suite_categorization.md)**: Analyzing the split between "Logic" (deterministic) and "Qualitative" (probabilistic) tests.
 *   **[LM Studio Compatibility](./lmstudio_compatibility.md)**: Findings on why `OllamaModelBackend` fails with LM Studio and the recommendation to use `OpenAIModelBackend`.
 
+### Strategic input
+*   **[Peer Review Feedback](./review_feedback.md)**: External critique that drove the refinement of the "Agentic Migration" pattern and the distribution strategy.
+
 ### Negative Results (Abandoned Experiments)
 *   **Deep Pydantic Integration (Inputs)**: We prototyped logic to automatically serialize Pydantic objects passed *into* functions.
     *   *Result*: Abandoned. The `generative` decorator logic is complex enough; adding implicit Pydantic serialization created edge cases.
