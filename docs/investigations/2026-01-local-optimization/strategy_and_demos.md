@@ -152,6 +152,13 @@ def decompose_query(query: str, tools: list[str]) -> list[SubQuestion]: ...
 *   **Hook 2: The "Speed" Factor**: Validation prompting requires generating many tokens ("Let me think step by step..."). An adapter classification is often a single forward pass.
 *   **Hook 3: "Brand Voice" Policing**: It is very hard to prompt a model to "sound like us". It is very easy to finetune an adapter on 100 marketing emails to recognize "off-brand" tone.
 
+### 5.3 Technical Reality Check (The "Cost" of Alora)
+While powerful, the Alora/Adapter pattern has a **Runtime cost**:
+*   **Backend Lock-in**: Currently, this only works on Mellea's `LocalHFBackend` (built on HuggingFace Transformers).
+*   **No Ollama Support**: fast runtimes like Ollama (`llama.cpp`) do not yet support dynamic per-token adapter switching (aLoRA).
+*   **The Trade-off**: You choose between **Maximum Speed/Ease** (Ollama) and **Maximum Control** (Mellea + Alora).
+    *   *Recommendation*: Start with standard prompting (Ollama). Upgrade to Alora (LocalHF) only when you hit a accuracy wall that prompts can't fix.
+
 
 ## 6. Future Frontier: IDE Agents via MCP
 The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
