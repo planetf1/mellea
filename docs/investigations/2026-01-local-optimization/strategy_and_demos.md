@@ -70,6 +70,7 @@ You will watch the agent:
 2.  **Delete** the `PydanticOutputParser` (Mellea handles structure).
 3.  **Delete** the retry loop (Mellea supports `instruct-validate-repair` if needed, but `@generative` is usually enough).
 4.  **Produce** a clean, type-safe function in ~15 lines of code.
+5.  **Bonus**: Run it on a local 3B model (e.g. Granite/Llama) and see it work perfectly, whereas the regex approach fails.
 
 **Why Mellea Wins (vs The Tutorial)**
 The original tutorial solves `OutputParserException` by adding *more* complexity (Retry Parsers, Auto-Fixing Chains).
