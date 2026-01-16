@@ -146,6 +146,6 @@ def identify_fruit(text: str) -> str:
     """
 ```
 
-#### 10. Logic & Precision Tips
-*   **Deterministic Reasoning**: For math or logic-heavy tasks, always set **`temperature=0`** in your session or backend options.
-*   **Boilerplate Avoidance**: Before reaching for `m.instruct()` with complex requirements, ask: "Can I do this with one simple `@generative` function and a clean Pydantic model?" Use `@generative` first; escalation to `instruct` is for multi-step "repair" loops.
+#### 11. Testing & Validation
+*   **Fast Loop**: Use `uv run pytest -m "not qualitative"` to run core logic tests without waiting for long LLM generation cycles.
+*   **Verification**: Run `uv run pytest` (with no filter) before committing to ensure the prompts (docstrings) still produce the correct results.
