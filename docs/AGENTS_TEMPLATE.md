@@ -97,7 +97,7 @@ result = analyze_document(m, text="...")
 *   **Rule**: For complex generation with strict requirements, use `m.instruct()` instead of `@generative`.
 *   **Why**: Mellea automatically retries (loops) until the `requirements` are met or budget is exhausted.
 ```python
-from mellea.stdlib.requirement import req, simple_validate
+from mellea.stdlib.requirements import req, simple_validate
 from mellea.stdlib.sampling import RejectionSamplingStrategy
 
 requirements = [
