@@ -2,24 +2,30 @@
 
 **Goal**: Create a side-by-side comparison of a common "Agentic" task implemented in LangChain (The "Before") and Mellea (The "After").
 
-## The Scenario: "Structured Data Extraction & Validation"
-We will extract a structured `UserProfile` from an unstructured email, with specific validation rules (e.g., age >= 18).
+## The "Run Validation" (2026-01-16)
+Both scripts were executed against a local backend (`ibm/granite4:micro` via Ollama).
 
-### 1. The "Before" (LangChain)
-*   **Approach**: `PromptTemplate` + `LLMChain` + `PydanticOutputParser`
-*   **Pain Points**: 
-    *   Verbose setup.
-    *   Fragile regex parsing.
-    *   Handling "Retry" logic manually or opaquely.
+| Metric | LangChain | Mellea |
+| :--- | :--- | :--- |
+| **Lines of Code** | 52 | 30 |
+| **Dependencies** | 4 (`langchain`, `_core`, `_community`, `_openai`) | 1 (`mellea`) |
+| **Setup Struggle** | **High**. Required 3 attempts to fix `ModuleNotFoundError` and `DeprecationWarning` due to `langchain-ollama` split. | **Low**. Worked immediately after config update. |
+| **Result** | `name='Alice' age=30` | `name='Alice' age=30` |
 
-### 2. The "After" (Mellea)
-*   **Approach**: `@generative` function with Pydantic return type.
-*   **Benefits**:
-    *   Zero prompt engineering.
-    *   Guaranteed type safety.
-    *   Clean, Pythonic code.
+> **Key Observation**: Even for this "Hello World" example, LangChain required importing from `langchain`, `langchain_core`, AND `langchain_community` separately. Mellea just required `mellea`.
 
-## Setup
-1.  Use a virtual environment with `langchain` installed.
-2.  Run both scripts against the same backend (OpenAI or Local).
-3.  Measure: Lines of Code (LOC), Readability, and Correctness.
+## Setup: Clean Execution (IMPORTANT)
+To avoid polluting the main `mellea` development environment with `langchain` dependencies, we use `uv` for ephemeral execution.
+
+**Do NOT pip install langchain globally.**
+
+### Running the "Before" (LangChain)
+```bash
+uv run --with langchain --with langchain-openai --with langchain-community --with langchain-core python 1_langchain_implementation.py
+```
+
+### Running the "After" (Mellea)
+```bash
+# Runs in the standard mellea dev environment
+uv run python 2_mellea_implementation.py
+```
