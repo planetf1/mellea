@@ -1,6 +1,6 @@
 import os
 from typing import List
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_community.chat_models import ChatOllama
@@ -12,8 +12,9 @@ class UserProfile(BaseModel):
     age: int = Field(description="The user's age, must be >= 18")
     interests: List[str] = Field(description="List of user hobbies/interests")
 
-    @validator("age")
-    def validate_age(cls, v):
+    @field_validator("age")
+    @classmethod
+    def validate_age(cls, v: int) -> int:
         if v < 18:
             raise ValueError("User must be 18+")
         return v
