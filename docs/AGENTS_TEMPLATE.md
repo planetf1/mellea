@@ -97,7 +97,7 @@ result = analyze_document(m, text="...")
 *   **Rule**: For complex generation with strict requirements, use `m.instruct()` instead of `@generative`.
 *   **Why**: Mellea automatically retries (loops) until the `requirements` are met or budget is exhausted.
 ```python
-from mellea.stdlib.requirements import req, simple_validate
+from mellea.stdlib.requirement import req, simple_validate
 from mellea.stdlib.sampling import RejectionSamplingStrategy
 
 requirements = [
@@ -111,7 +111,6 @@ email = m.instruct(
     strategy=RejectionSamplingStrategy(loop_budget=3),
     user_variables={"name": "Alice"}
 )
-```
 #### 8. Hybrid Intelligence (The "Small Model" Fix)
 *   **Rule**: Small models (1B-8B) are bad at math. Do NOT ask them to calculate.
 *   **Pattern**: Use LLM to EXTRACT parameters + Python to EXECUTE logic.

@@ -18,6 +18,12 @@ with structured, maintainable, robust, and efficient AI workflows.
 
 
 
+## 👩‍💻 For AI Agents (Cursor, Roo, Cline)
+
+Are you an AI Agent trying to write Mellea code?
+*   **Refactoring User Code?**: Read [`docs/AGENTS_TEMPLATE.md`](docs/AGENTS_TEMPLATE.md) for patterns like "Hybrid Intelligence".
+*   **Contributing to Mellea?**: Read [`AGENTS.md`](AGENTS.md) for internal coding standards.
+
 ## Features
 
  * A standard library of opinionated prompting patterns.
@@ -43,7 +49,7 @@ with structured, maintainable, robust, and efficient AI workflows.
 
 You can get started with a local install, or by using Colab notebooks.
 
-### Getting Started with Local Inference
+### Getting Started with Local Infernece
 
 <img src="https://github.com/generative-computing/mellea/raw/main/docs/GetStarted_py.png" style="max-width:800px">
 
@@ -113,7 +119,7 @@ uv run --with mellea docs/examples/tutorial/example.py
 
 ### `uv`-based installation from source
 
-Fork and clone the repository:
+Fork and clone the repositoy:
 
 ```bash
 git clone ssh://git@github.com/<my-username>/mellea.git && cd mellea/
@@ -151,7 +157,7 @@ pre-commit install
 
 ### `conda`/`mamba`-based installation from source
 
-Fork and clone the repository:
+Fork and clone the repositoy:
 
 ```bash
 git clone ssh://git@github.com/<my-username>/mellea.git && cd mellea/
@@ -174,7 +180,7 @@ the output is checked against the constraints using (in this case) LLM-as-a-judg
 ```python
 # file: https://github.com/generative-computing/mellea/blob/main/docs/examples/instruct_validate_repair/101_email_with_validate.py
 from mellea import MelleaSession
-from mellea.backends import ModelOption
+from mellea.backends.types import ModelOption
 from mellea.backends.ollama import OllamaModelBackend
 from mellea.backends import model_ids
 from mellea.stdlib.sampling import RejectionSamplingStrategy
@@ -231,47 +237,9 @@ if __name__ == "__main__":
 
 See the [tutorial](docs/tutorial.md)
 
-## Contributing to Mellea
+## Contributing
 
-Not all Mellea code lives in this repository.
-There are three pathways for contributing to Mellea:
-1. Contributing applications, tools, and libraries. These can be hosted in
-   your own repository. For observability, use a `mellea-` prefix. Examples:
-   `github.com/my-company/mellea-legal-utils` or `github.com/my-username/mellea-swe-agent`.
-2. Contributing stand-alone and general purpose Components, Requirements, or
-   Sampling Strategies. Please **open an issue** describing your proposed
-   feature and get feedback from the core team on whether the contribution
-   should go in our standard library (this repository) or our
-   [mellea-contribs](https://github.com/generative-computing/mellea-contribs)
-   library. After your issue is triaged, open a PR on the relevant repository.
-3. Contributing new features to the Mellea core, or fixing bugs in the Mellea
-   core or standard library. Please **open an issue** describing the bug
-   or feature. After your issue is triaged, open a PR on this repository and follow the instructions in our
-   automated PR workflow.
-
-### Contributing to this repository
-
-If you are going to contribute to Mellea, it is important that you use our
-pre-commit hooks. Using these hooks -- or running our test suite -- 
-requires installing `[all]` optional dependencies and also the dev group.
-
-```
-git clone git@github.com:generative-computing/mellea.git && 
-cd mellea && 
-uv venv .venv && 
-source .venv/bin/activate &&
-uv pip install -e ".[all]" --group dev
-pre-commit install
-```
-
-You can then run all tests by running `pytest`, or only the CI/CD tests by
-running `CICD=1 pytest`. 
-
-Tip: you can bypass the hooks by passing the `-n` flag to `git commit`.
-This is sometimes helpful for intermediate commits that you intend to later
-squash.
-
-Please refer to the [Contributor Guide](docs/tutorial.md#appendix-contributing-to-mellea) for additional detailed instructions on how to contribute.
+Please refer to the [Contributor Guide](docs/tutorial.md#appendix-contributing-to-mellea) for detailed instructions on how to contribute.
 
 ### IBM ❤️ Open Source AI
 
