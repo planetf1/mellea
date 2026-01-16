@@ -73,3 +73,21 @@ To prepare for public consumption, we split the monolithic "Strategy" document i
 ### B. Strategic Refinements
 *   **"Pain-First" Messaging**: Updated all demo descriptions to explicitly start with **"The Confusion/Pain"**. We moved from "Showcasing Features" to "Solving Friction" (e.g., stopping retry loops, fixing broken JSON).
 *   **"Truth in Labeling"**: Added the **Innovation vs Commodity Audit** table. We explicitly classify standard wrappers (Ollama, Code Sandbox) as "Commodities" to build trust, reserving the term "Innovation" only for our core compiler tech.
+
+## 8. Documentation Consolidation (2026-01-15 16:10)
+**Decision**: Reverted the "Split" decision based on team feedback.
+*   *Feedback*: "Don't hide the technical details in a separate file. The team is technical."
+*   *Action*: Merged  back into  as **Section 5: The Architecture (Deep Dive)**.
+*   *Outcome*: A single, portable artifact that starts with the "Pitch" (Hooks) and flows naturally into the "Specs" (Alora/Intrinsics).
+
+## 8. Documentation Consolidation (2026-01-15 16:10)
+**Decision**: Reverted the "Split" decision based on team feedback.
+*   *Feedback*: "Don't hide the technical details in a separate file. The team is technical."
+*   *Action*: Merged `technical_reference.md` back into `strategy_and_demos.md` as **Section 5: The Architecture (Deep Dive)**.
+*   *Outcome*: A single, portable artifact that starts with the "Pitch" (Hooks) and flows naturally into the "Specs" (Alora/Intrinsics).
+
+## 9. Final Refinement: "Values-Based" Architecture (2026-01-15 16:15)
+**Correction**: The User (Product Owner) flagged that "Hooks" in Section 5.3 were defined too technically (as code interceptors).
+*   *Feedback*: "Hooks need to be about value/pain, just like the Demos."
+*   *Action*: Refactored Section 5.3 to frame "Specialist Judge" as a solution to a specific pain point: *"How do I trust a small model to grade a complex answer?"*
+*   *Result*: The document now consistently uses "Hook" to mean "User Motivation", ensuring a unified narrative voice.

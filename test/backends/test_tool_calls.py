@@ -15,6 +15,17 @@ from mellea.stdlib.session import MelleaSession
 
 @pytest.fixture(scope="module")
 def m() -> MelleaSession:
+    import os
+
+    if os.environ.get("USE_LMSTUDIO", "0") == "1":
+        from mellea.backends.openai import OpenAIBackend
+
+        backend = OpenAIBackend(
+            model_id="granite-4.0-h-tiny-mlx",
+            base_url="http://localhost:1234/v1",
+            api_key="lm-studio",
+        )
+        return MelleaSession(backend=backend, ctx=ChatContext())
     return MelleaSession(backend=OllamaModelBackend(), ctx=ChatContext())
 
 

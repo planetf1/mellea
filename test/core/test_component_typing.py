@@ -62,6 +62,16 @@ class ExceptionRaisingComp(Component[int]):
 @pytest.fixture(scope="module")
 def backend(gh_run: int):
     """Shared backend."""
+    import os
+    from mellea.backends.openai import OpenAIBackend
+
+    if os.environ.get("USE_LMSTUDIO", "0") == "1":
+        return OpenAIBackend(
+            model_id="granite-4.0-h-tiny-mlx",
+            base_url="http://localhost:1234/v1",
+            api_key="lm-studio",
+        )
+
     if gh_run == 1:
         return OllamaModelBackend(
             model_id=IBM_GRANITE_4_MICRO_3B.ollama_name  # type: ignore
