@@ -152,7 +152,7 @@ res = solve_math(..., strategy=MajorityVotingStrategy(n=8))
 *   **Validation-as-Types**: Replace post-hoc manual validation checks (e.g., `if confidence < 0.0`) with `Field` validators (e.g., `Field(ge=0.0)`).
 
 ### 5.2 The "RAG Toolkit" (Intrinsics)
-Mellea comes with a standard library of **RAG Intrinsics** (`m.stdlib.intrinsics.rag`) that replace complex prompt chains with simple function calls:
+Mellea comes with a standard library of **RAG Intrinsics** (`m.stdlib.components.intrinsic.rag`) that replace complex prompt chains with simple function calls:
 *   `check_answerability(q, docs) -> float`: Don't answer if the docs are empty.
 *   `find_citations(response, docs) -> List[Citation]`: Extract exact sentence-level citations.
 *   `flag_hallucinated_content(response, docs) -> float`: Detect "faithfulness" issues automatically.
@@ -181,7 +181,7 @@ While powerful, the Alora/Adapter pattern has a **Runtime cost**:
 Beyond `@generative` and RAG, Mellea has powerful "System 2" capabilities hidden in `m.stdlib`:
 
 *   **Code Interpreter**: `m.stdlib.tools.interpreter` includes a Docker-based **Safe Execution Environment** (`LLMSandboxEnvironment`). You can build agents that write *and run* Python code securely.
-*   **Majority Voting**: `m.stdlib.sampling.majority_voting` implements "Self-Consistency" decoding (generate 8 solutions, vote for the consensus). This is how models like AlphaCode achieve high math scores.
+*   **Majority Voting**: `m.stdlib.sampling.majority_voting` implements **Min-Bayes Risk Decoding** (e.g. `MajorityVotingStrategyForMath`). This is how models like AlphaCode achieve high math scores by generating 8 solutions and voting for the consensus.
 *   **Guardian**: `m.stdlib.safety.guardian` provides built-in risk detection (Harm, Jailbreak, Bias) using IBM's Granite Guardian models.
 
 ### 5.5 Technical Caveat: The "Granite" Dependency
