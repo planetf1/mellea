@@ -217,6 +217,28 @@ User: *"Why not just use OpenAI's `response_format`?"*
     *   On **Local (Llama/Granite)**: It translates your signature to `xgrammar` logits constraints.
     *   **Value**: You write the code *once*. You can switch from GPT-4 (Prototyping) to Llama 3 8B (Production/Local) without changing a single line of your validation logic.
 
+## 6. Learnings from Implementation (Agent Evolution Demo)
+*Added Jan 2026*
+
+The construction of the **[Agent Evolution Suite](../agent_evolution/README.md)** revealed critical insights about the "Better Together" strategy:
+
+### 6.1 The "Small Model Reality"
+We standardized on `llama3.2:1b` (a very small local model) to stress-test the architecture.
+*   **Finding**: Logic architectures (Loops/Graphs) cannot cure a model's inability to do arithmetic.
+*   **Solution**: **"Teacher Forcing" Prompts**. We found that providing *One-Shot Examples* in the docstring was the only way to get consistent reasoning.
+*   **Mellea Advantage**: Iterating on these prompts was trivial (edit the docstring) compared to LangChain (edit the graph node string).
+
+### 6.2 Hybrid Intelligence (The "Killer App")
+Phase 4 (Hybrid) emerged as the strongest value proposition.
+*   **Concept**: Use the LLM *only* for Extraction (Parsing natural language into `Pydantic` models). Use **Python** for the Execution (Logic/Math).
+*   **Why it wins**: It is 100% reliable, whereas "Chain of Thought" purely in the LLM is flaky on small models.
+*   **Strategy Update**: We should aggressively market **"Generative Extraction + Deterministic Execution"** as the default pattern for Local Agents.
+
+### 6.3 LangChain Strengths vs Weaknesses
+*   **Strength**: The explicit `StateGraph` visualization in LangGraph forces users to think about data flow, which can catch design errors early.
+*   **Weakness**: The overhead of defining Nodes, Edges, and State Schemas is massive. Mellea's "Just Write Python" approach was ~50% fewer lines for the same result.
+*   **Urgent Attention**: We need to ensure Mellea's `Context` object is robust enough to handle complex "Shared State" without becoming a global variable mess (Mellea Session Context handles this well so far).
+
 ## 7. Future Frontier: IDE Agents via MCP
 The next generation of IDE tools (Roo Code, Cline, Kilo) are **Autonomous Agents** that use the **Model Context Protocol (MCP)** to talk to tools.
 

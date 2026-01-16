@@ -112,3 +112,37 @@ email = m.instruct(
     user_variables={"name": "Alice"}
 )
 ```
+#### 8. Hybrid Intelligence (The "Small Model" Fix)
+*   **Rule**: Small models (1B-8B) are bad at math. Do NOT ask them to calculate.
+*   **Pattern**: Use LLM to EXTRACT parameters + Python to EXECUTE logic.
+*   **Example**:
+```python
+# 1. Define Extraction Model
+class PhysicsParams(BaseModel):
+    speed_a: float
+    speed_b: float
+    delay_hours: float
+
+# 2. Define Extraction Function
+@generative
+def extract_params(text: str) -> PhysicsParams:
+    """EXTRACT the raw numbers. Do not calculate."""
+    pass
+
+# 3. Define Python Logic
+def calculate_gap(params: PhysicsParams) -> float:
+    return params.speed_a * params.delay_hours
+```
+
+#### 9. Teacher Forcing (Prompting)
+*   **Rule**: If a model struggles with a definition, provide a "One-Shot Example" in the docstring.
+*   **Example**:
+```python
+@generative
+def identify_fruit(text: str) -> str:
+    """
+    Extract the fruit.
+    Ex: "I ate an apple" -> "apple"
+    Ex: "The sky is blue" -> "None"
+    """
+```
