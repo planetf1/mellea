@@ -29,6 +29,12 @@ The goal is not to replace your entire stack, but to show how Mellea can optimiz
 *   **Comparison**: LangGraph State Machine vs Python Functional Loop.
 *   **ROI**: Flatten complex graphs into readable, debuggable Python control flow.
 
+### [Phase 4: Hybrid Intelligence (Structure + Code)](./phase4_hybrid_intelligence)
+*Goal: Solve complex logic with small models by mixing Agents and Python.*
+*   **Concept**: Use LLM for Extraction (Parsing) and Python for Execution (Math).
+*   **ROI**: 100% Reliability on logic tasks where purely generative models fail.
+
+
 ## Running the Comparisons
 
 ### Setup

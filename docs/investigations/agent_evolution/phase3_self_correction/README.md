@@ -48,17 +48,14 @@ Final Answer: 6 hours
 Draft Answer: 2 hours
 
 --- System 2: Reflection ---
-Critique: INCORRECT. You need to calculate... to get 6 hours.
+Critique: INCORRECT. You need to calculate the gap and divide by relative speed.
 
 --- System 2: Refinement ---
-Refined Answer: 6 hours
+Refined Answer: 1 hour (Incorrect)
 ```
-*Note: Achieved with a simple Python `if/else` block and ~40 lines of code. Same result as LangChain, significantly less boilerplate.*
 
-## The "Prompt Engineering" Advantage
-During this experiment, we initially found the Llama 1B model struggled with the logic.
-**Fixing this behavior highlighted a key Mellea advantage:**
-*   **Mellea**: We iterated on the prompt by simply editing the **Function Docstring**. The prompt, logic, and types are co-located in one readable unit.
-*   **LangChain**: We had to locate the specific `critic_node` function and modify the string variable embedded within the graph node logic.
-
-Mellea encourages better prompting by treating the "Prompt" as the "Function Specification" (Docstring), which feels natural to Python developers.
+## The Verification & Integrity Insight
+**Honest Analysis**: With an abstract prompt ("Calculate Gap / Relative Speed"), the Llama 1B model *understood* the critique but failed the *execution* (arithmetic).
+To get the "6 hours" result, we had to provide a **Few-Shot Example** in the prompt containing the specific calculation path.
+*   **Lesson**: Architecture (Reflection) helps, but for small models (`1B`), you often need "Teacher Forcing" (explicit examples) in the prompts to bridge the reasoning gap.
+*   **Mellea Advantage**: Mellea made this Prompt Engineering iteration trivial (edit the docstring), whereas LangGraph required graph updates.

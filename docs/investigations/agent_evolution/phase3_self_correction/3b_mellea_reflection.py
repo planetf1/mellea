@@ -21,16 +21,17 @@ def critique_answer(question: str, answer: str) -> str:
     Review the answer to the question.
 
     CRITICAL CHECKLIST:
-    1. Did the student use RELATIVE SPEED? (80mph - 60mph = 20mph)
-    2. Did the student calculate the GAP DISTANCE? (60mph * 2hrs = 120 miles)
-    3. Did they divide GAP / RELATIVE SPEED? (120 / 20 = 6 hours)
+    1. Did the student use RELATIVE SPEED?
+       (e.g., if Train A is 100mph and Train B is 50mph, Relative Speed is 50mph).
+    2. Did the student calculate the GAP DISTANCE?
+       (e.g., Distance Train A traveled before Train B started).
+    3. Did they divide GAP / RELATIVE SPEED to get the time?
 
-    If the answer is '1 hour', it is WRONG (classic mistake).
-    If the answer is '2 hours', it is WRONG.
+    If the answer ignores relative speed, it is WRONG (classic mistake).
 
-    If the answer is correct (6 hours), say 'CORRECT'.
-    If wrong, say 'INCORRECT' and YOU MUST EXPLAIN THE RELATIVE SPEED CALCULATION.
-    Example: "INCORRECT. You need to calculate the gap (120 miles) and divide by relative speed (20 mph) to get 6 hours."
+    If the answer is correct, say 'CORRECT'.
+    If wrong, say 'INCORRECT' and YOU MUST EXPLAIN THE RELATIVE SPEED CALCULATION using the specific numbers from the problem.
+    Example: "INCORRECT. You need to calculate the gap and divide by relative speed."
     """
     pass
 
