@@ -8,7 +8,8 @@
 ```bash
 # Standard Dev Loop
 uv sync                     # Install dependencies & fix lockfile
-uv run pytest               # Run all tests
+uv run pytest -m "not qualitative" # Fast loop (Unit tests only)
+uv run pytest               # Full audit (Runs qualitative/slow tests)
 uv run pytest -m integration # Run tests requiring API keys
 ```
 
