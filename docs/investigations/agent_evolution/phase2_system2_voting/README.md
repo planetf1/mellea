@@ -19,19 +19,30 @@ In LangChain, "Parallelism" is architectural. You must explicitly construct a gr
 In Mellea, "Parallelism" is a **Sampling Strategy**.
 *   **Simplicity**: One line of config: `strategy=MajorityVotingStrategyForMath(n=5)`.
 
-## Execution Results
+## Side-by-Side Execution Results
 
-### Mellea Output (`2b`)
+### Option A: LangChain Output (`2a`)
+```
+--- Phase 2a: System 2 w/ LangChain (The Manual Way) ---
+Running 5 parallel chains (Manual Architecture)...
+Aggregating results...
+Extracted Answers: [6, 8, 6, 2.25, 4]
+Winner: 6 (Confidence: 2/5)
+```
+*Note: While it correctly identified '6' as a plurality, the 40% confidence shows the instability of forcing logic via manual graphs on small models. Configuration is high-overhead.*
+
+### Option B: Mellea Output (`2b`)
 ```
 --- System 2: Majority Voting (n=5) ---
 ...
 Majority Vote Result: 1.0 (4/5 votes)
 Winner: 1.0
 ```
+*Note: In this specific run, Mellea's `MajorityVotingStrategy` converged on the common trap answer '1.0'.*
 
-### Analysis of the "Failure"
-Note that the model answered **1.0**, which is **incorrect** (Systematic Error).
-Because the model has a fundamental logical flaw in its reasoning path, it consistently votes for the wrong answer.
+## Analysis of the "Failure"
+Note that the models often converge on the trap answer **1.0**, which is **incorrect** (Systematic Error).
+Because the model has a fundamental logical flaw in its reasoning path, simple voting often just amplifies the common mistake.
 *   **What Voting Fixes**: Random slips (e.g., $2+2=5$).
 *   **What Voting Misses**: Logical Flaws (e.g., trains problem).
 

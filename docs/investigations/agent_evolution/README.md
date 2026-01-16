@@ -60,6 +60,11 @@ uv run --with langchain --with langchain-ollama --with langgraph python docs/inv
 uv run python docs/investigations/agent_evolution/phase3_self_correction/3b_mellea_reflection.py
 ```
 
+### Run Phase 4
+```bash
+uv run python docs/investigations/agent_evolution/phase4_hybrid_intelligence/4_mellea_hybrid.py
+```
+
 ## Value Summary
 
 | Metric | Legacy (LangChain) | Modern (Mellea) |
