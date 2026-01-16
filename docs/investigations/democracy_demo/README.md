@@ -25,10 +25,29 @@ Model: `llama3.2:1b`.
 | **PEMDAS** (Arithmetic) | $\boxed{24}$ | $\boxed{24}$ | **Both Correct**. |
 
 ## 4. Conclusion
-Even 1B models are surprisingly robust at arithmetic.
-The **Trains** example highlights the "Edge of Capability":
+Even 1B models are surprisingly robust at arithmetic (Money/PEMDAS). but the **Trains** example highlights the "Edge of Capability":
 1.  **System 1**: Hallucinated a simple division ($120/80=1.5$).
 2.  **System 2**: Spent more time thinking, realized 180 miles was the gap, but failed to convert back to time effectively in the final "box".
 
-**Demo Value**:
-This proves Mellea's Voting Strategy runs successfully on local hardware, generating parallel chains and computing consensus. While it didn't magically fix the 1B model's physics reasoning, it faithfully executed the "System 2" process.
+## 5. Failure Analysis: Why Voting Didn't Fix It
+Majority Voting assumes **independent errors** (noise). If the model has a **systematic bias** (e.g. fundamentally misunderstanding "catch up time" as "catch up distance"), all voters will agree on the wrong logic.
+> "A consensus of errors is still an error."
+
+### The "System 2" Fix: Sampling vs Reflection
+To fix this, we need a different *Strategy*, not different prompts.
+
+**Mellea Approach** (Strategy Pattern):
+Swap `MajorityVotingStrategy` for a Reflective Strategy (like `MultiTurnStrategy` or `TreeOfThoughts` which are available in `m.stdlib.sampling`).
+```python
+# The Fix: Force the model to "Critique" its own answer 3 times before returning.
+# Requires 0 changes to your business logic, just a config swap.
+m.instruct(question, strategy=MultiTurnStrategy(loop_budget=3))
+```
+
+**LangChain Approach** (Graph Rewrite):
+To implement this "Reflection Loop" in LangChain, you cannot just change a config. You must:
+1.  Migrate from `Chain` to `LangGraph`.
+2.  Define `node_generate`, `node_critique`, and `conditional_edges`.
+3.  Rewrite your application logic to handle the graph state.
+**Estimated Refactor Cost**: +50-100 lines of complex graph code.
+**Mellea Cost**: 1 line.
