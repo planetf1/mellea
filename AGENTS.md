@@ -38,6 +38,8 @@ class ReceiptParserAgent:
 ```
 *   **Type Hints**: ALL arguments and return types must be fully typed. This is how Mellea ensures reliability.
 *   **Docstrings**: The docstring is the prompt. Be specific.
+*   **Hybrid Intelligence**: If a task involves arithmetic or exact logic, use the LLM to *Extract* parameters into a Pydantic model, then use a standard Python function to *Execute* the logic. Do not ask the LLM to do math.
+*   **Small Model Support**: Mellea targets 1B-8B local models. Use "Teacher Forcing" (One-Shot examples in docstrings) for complex reasoning tasks.
 
 ### 2.2 Testing & Validation
 *   **Run Tests Locally**: `uv run pytest`.

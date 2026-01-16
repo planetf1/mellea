@@ -18,6 +18,12 @@ with structured, maintainable, robust, and efficient AI workflows.
 
 
 
+## 👩‍💻 For AI Agents (Cursor, Roo, Cline)
+
+Are you an AI Agent trying to write Mellea code?
+*   **Refactoring User Code?**: Read [`docs/AGENTS_TEMPLATE.md`](docs/AGENTS_TEMPLATE.md) for patterns like "Hybrid Intelligence".
+*   **Contributing to Mellea?**: Read [`AGENTS.md`](AGENTS.md) for internal coding standards.
+
 ## Features
 
  * A standard library of opinionated prompting patterns.
