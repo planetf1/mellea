@@ -32,17 +32,13 @@ From our research, these are the high-traffic queries where Mellea is the perfec
 ## 3. The Showcase: 4 Targeted Demos
 *Note to Agent: These are the priority demos to build. Use the `mellea.generative` decorator as the primary wedge.*
 
-### Demo A: The "Extraction" Fix (Targeting `gkamradt`)
-*   **Community**: LangChain / Data Extraction
-*   **The Hook**: "Stop writing regex for JSON. Stop handling `OutputParserException`."
-*   **The Code Reference**: [Mellea README](https://github.com/planetf1/mellea#quickstart)
+### Demo A: The "Agent Evolution" (Unified)
+**Location**: `docs/investigations/agent_evolution/`
+**Goal**: The canonical progression from LangChain Scripts to Mellea Agents to System 2 Architectures.
 
-**The "Before" (LangChain)**:
-```python
-parser = PydanticOutputParser(pydantic_object=JobInfo)
-prompt = PromptTemplate(template="... {format_instructions} ...", ...)
-# "OutputParserException: Expected JSON, got 'Here is the data...'"
-```
+*   **Phase A (Legacy)**: `A_langchain_legacy.py`. Shows the boilerplate of `PydanticOutputParser`.
+*   **Phase B (Clean)**: `B_mellea_clean.py`. Shows the "One-Liner" fix using `@generative`.
+*   **Phase C (System 2)**: `C_mellea_system2.py`. Shows advanced reasoning (Majority Voting) on top of local models.
 
 **The "After" (Mellea)**:
 ```python
