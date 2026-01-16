@@ -111,6 +111,8 @@ email = m.instruct(
     strategy=RejectionSamplingStrategy(loop_budget=3),
     user_variables={"name": "Alice"}
 )
+```
+
 #### 8. Hybrid Intelligence (The "Small Model" Fix)
 *   **Rule**: Small models (1B-8B) are bad at math. Do NOT ask them to calculate.
 *   **Pattern**: Use LLM to EXTRACT parameters + Python to EXECUTE logic.
@@ -126,7 +128,7 @@ class PhysicsParams(BaseModel):
 @generative
 def extract_params(text: str) -> PhysicsParams:
     """EXTRACT the raw numbers. Do not calculate."""
-    pass
+    ...
 
 # 3. Define Python Logic
 def calculate_gap(params: PhysicsParams) -> float:
@@ -146,6 +148,18 @@ def identify_fruit(text: str) -> str:
     """
 ```
 
-#### 11. Testing & Validation
+#### 10. Debugging & Logging
+*   **Verbose Logging**: If you aren't sure why a requirement is failing, enable the fancy logger:
+```python
+from mellea.helpers.fancy_logger import FancyLogger
+FancyLogger.get_logger().setLevel("DEBUG")
+```
+*   **Inspect Prompts**: Use `session.last_prompt()` to see the exact string sent to the LLM (including the auto-generated JSON schema).
+
+#### 11. Migrating from LangChain
+*   **Node Replacement**: Don't rewrite the whole app. Identify the `PydanticOutputParser` node in your LangChain/LangGraph and replace it with a single `@generative` function.
+*   **State Management**: Instead of complex `TypedDict` schemas in LangGraph, pass your data directly as arguments to Mellea functions.
+
+#### 12. Testing & Validation
 *   **Fast Loop**: Use `uv run pytest -m "not qualitative"` to run core logic tests without waiting for long LLM generation cycles.
 *   **Verification**: Run `uv run pytest` (with no filter) before committing to ensure the prompts (docstrings) still produce the correct results.
