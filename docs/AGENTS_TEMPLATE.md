@@ -147,6 +147,7 @@ def identify_fruit(text: str) -> str:
     Ex: "I ate an apple" -> "apple"
     Ex: "The sky is blue" -> "None"
     """
+    ...
 ```
 
 #### 10. Debugging & Logging
