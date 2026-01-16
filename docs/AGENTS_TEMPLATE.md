@@ -27,11 +27,12 @@ age = int(re.search(r"\d+", response).group())
 
 **GOOD (Mellea Style):**
 ```python
-from mellea import generative
+from mellea import generative, start_session
 
 @generative
 def extract_age(text: str) -> int:
     """Extract the age of the user mentioned in the text."""
+    ...
 
 # Usage
 m = start_session()
@@ -56,10 +57,10 @@ def parse_profile(bio: str) -> UserProfile: ...
 *   **Reasoning**: Mellea treats LLM functions as standard Python functions.
 *   **Example**:
 ```python
-if analyze_sentiment(email) == "negative":
-    draft = draft_apology(email)
+if analyze_sentiment(m, email) == "negative":
+    draft = draft_apology(m, email)
 else:
-    draft = draft_response(email)
+    draft = draft_response(m, email)
 ```
 
 #### 4. Chain-of-Thought via "Reasoning Fields"
@@ -85,7 +86,7 @@ m = start_session()
 # m = MelleaSession(backend=OpenAIModelBackend(model_id="gpt-4o"))
 
 # The logic remains identical:
-result = analyze_document(m, text="...")
+result = analyze_document(m, doc="...")
 ```
 
 #### 6. Anti-Patterns (What NOT to do)

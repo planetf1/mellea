@@ -15,6 +15,7 @@ uv run ruff check .         # Linting
 uv run ruff format .        # Formatting
 uv run pytest -m "not qualitative" # Fast loop (Unit tests only)
 uv run pytest               # Full audit (Runs qualitative/slow tests)
+uv run pytest -m integration # Run tests requiring API keys
 ```
 
 ## 2. Coding Standards (Internal Contributors)
