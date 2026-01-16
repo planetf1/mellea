@@ -145,3 +145,7 @@ def identify_fruit(text: str) -> str:
     Ex: "The sky is blue" -> "None"
     """
 ```
+
+#### 10. Logic & Precision Tips
+*   **Deterministic Reasoning**: For math or logic-heavy tasks, always set **`temperature=0`** in your session or backend options.
+*   **Boilerplate Avoidance**: Before reaching for `m.instruct()` with complex requirements, ask: "Can I do this with one simple `@generative` function and a clean Pydantic model?" Use `@generative` first; escalation to `instruct` is for multi-step "repair" loops.

@@ -23,14 +23,10 @@ uv run pytest -m integration # Run tests requiring API keys
 
 ## 3. The "Feedback Loop" Rule
 > [!TIP]
-> If you encounter a recurring failure mode (e.g., "Small models keep missing JSON tags") or discover a new coding pattern, **UPDATE THIS FILE** or add a tip to the `docs/`. This ensures the next AI/Human collaborator benefits from your "pain".
-
-### 3.1 Lessons from Demos (Gotchas & Tips)
-*   **Small Model Reality**: Models like `llama3.2:1b` often fail at logic/math.
-    *   *Tip*: Use **"Teacher Forcing"** (one-shot examples in the docstring) to guide reasoning.
-    *   *Tip*: Use **"Hybrid Intelligence"** (LLM for extraction, Python for calculation). Avoid asking 1B models to solve math.
-    *   *Tip*: Set **`temperature=0`** for logic puzzles to ensure deterministic reasoning paths.
-*   **Boilerplate Avoidance**: Before writing a complex class, ask: "Can I do this with one `@generative` function and two `Requirement` objects?"
+> * **Developing Mellea?** If you improve the core engine or find a bug, update **THIS FILE**.
+> * **Building Agents?** If you discover a prompting trick or a new pattern (e.g., "Small models need X"), update [`docs/AGENTS_TEMPLATE.md`](docs/AGENTS_TEMPLATE.md).
+>
+> This ensures all future AI/Human collaborators benefit from your experience.
 
 ## 4. Strategic Position: "The Surgical Injection"
 Mellea's primary goal is not to be a standalone "Agent Framework" but an **enhancement layer**.
