@@ -12,11 +12,11 @@ Our goal is to drive adoption by offering **surgical replacements** for the most
 
 ## 2. Evidence of Pain (The "Why")
 *   **LangChain**: "OutputParserException" is a meme. Users hate retry loops.
-    *   *Evidence*: [Reddit: "PydanticOutputParser is a nightmare"](https://www.reddit.com/r/LangChain/comments/1X...), [GitHub Issues](https://github.com/langchain-ai/langchain/issues?q=OutputParserException).
+    *   *Evidence*: [Reddit: "I just had the displeasure..."](https://www.reddit.com/r/LangChain/comments/18eukhc/i_just_had_the_displeasure_of_implementing/), [LangChain Official Error Docs](https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE) (Admitting the failure).
 *   **Local LLMs**: "Llama 3 won't stop yapping."
-    *   *Evidence*: [r/LocalLLaMA: "How to force JSON?"](https://www.reddit.com/r/LocalLLaMA/comments/1Y...). Mellea solves this via `xgrammar` constraint.
-*   **Evaluators**: "Who judges the judge?"
-    *   *Evidence*: [Discussion on flaky Eval scores](https://www.reddit.com/r/Rag/comments/...).
+    *   *Evidence*: [r/LocalLLaMA: "Specifying json_object makes Llama more dumb"](https://www.reddit.com/r/LocalLLaMA/comments/1cj57zf/has_anyone_gotten_json_working_with_llamacpp/). Mellea solves this via `xgrammar` constraint.
+*   **Evaluators**: "The Confident Idiot Judge."
+    *   *Evidence*: [Research: "LLM-as-a-Judge models are bad at scores"](https://www.reddit.com/r/LocalLLaMA/comments/19dl947/llms_as_a_judge_models_are_bad_at_giving_scores/).
 
 ### 2.1 The "Hooks" (Search Terms to Target)
 From our research, these are the high-traffic queries where Mellea is the perfect answer:
@@ -82,9 +82,11 @@ You will watch the agent:
 5.  **Bonus**: Run it on a local 3B model (e.g. Granite/Llama) and see it work perfectly, whereas the regex approach fails.
 
 **Why Mellea Wins (vs The Tutorial)**
+**Why Mellea Wins (vs The Tutorial)**
 The original tutorial solves `OutputParserException` by adding *more* complexity (Retry Parsers, Auto-Fixing Chains).
-*   **LangChain (Reactive)**: LLM guesses -> Parser fails -> Retry Loop catches error -> LLM tries again. (Slow, expensive).
-*   **Mellea (Proactive)**: Type signature -> Backend *forces* valid JSON tokens. (Fast, correct by design).
+*   **LangChain (Reactive)**: LLM guesses -> Parser fails -> Retry Loop catches error -> LLM tries again. cost = 3x.
+*   **Mellea (Proactive)**: Type signature -> Backend *forces* valid JSON tokens. Cost = 1x.
+*   **The "Leaf Node" Thesis**: You don't have to rip out LangChain. Just replace the *brittle leaf nodes* (Parsers) with Mellea functions. Keep your `StateGraph`, but make it reliable.
 *   **Small Model Viability**: Because formatting is enforced by the engine (xgrammar), you don't need a "smart" model (GPT-4) just to get valid JSON. You can run reliable extraction on 8B or even 3B local models.
 
 
@@ -140,7 +142,7 @@ res = solve_math(..., strategy=MajorityVotingStrategy(n=8))
 2.  Create `examples/rag_evaluation.py` (Demo B).
 3.  Create `examples/local_llama_json.py` (Demo C).
 4.  Create `examples/math_solver.py` (Demo E).
-5.  Write `docs/integrations/langchain.md` explaining the "Injection" pattern.
+5.  Create `examples/fastapi_integration.py` (The "Leaf Node" Bridge).
 
 ## 5. The Architecture: How It Works (Deep Dive)
 **Context**: Details of the architectural patterns and internal mechanics of Mellea's advanced features.
