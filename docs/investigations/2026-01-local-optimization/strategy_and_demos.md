@@ -60,7 +60,7 @@ def extract_job_info(description: str) -> JobInfo:
 Create a folder `mellea_migration_experiment/` with two files:
 
 *   **File A: `legacy_extraction.py`** (The "Before" state)
-    *   *Source*: Based on Greg Kamradt's popular [Data Extraction Tutorial](https://github.com/gkamradt/langchain-tutorials/blob/main/data_generation/Data%20Extraction%20-%20PydanticOutputParser.ipynb).
+    *   *Source*: Based on Greg Kamradt's popular [Data Extraction Tutorial](https://github.com/gkamradt/langchain-tutorials/tree/main/data_generation).
     *   *Content*: A script using `PydanticOutputParser`, `PromptTemplate`, and a `try/except` loop for `OutputParserException`.
 *   **File B: `AGENTS.md`** (The Instructions)
     *   *Content*: Copy-paste from [mellea/docs/AGENTS_TEMPLATE.md](https://github.com/planetf1/mellea/blob/main/docs/AGENTS_TEMPLATE.md).
@@ -106,7 +106,7 @@ def grade_answer(q: str, a: str) -> Grade: ...
 ```
 
 ### Demo C: The "Local Llama 3" JSON Fix (Targeting r/LocalLLaMA)
-*   **Source Material**: [Reddit: "Llama 3 won't stop yapping"](https://www.reddit.com/r/LocalLLaMA/comments/1cgxz2m/llama_3_refuses_to_output_only_json/)
+*   **Source Material**: [Reddit: "Llama 3 won't stop yapping"](https://www.reddit.com/r/LocalLLaMA/search/?q=Llama+3+json+output)
 *   **The Pain**: "I set `format='json'`, but Llama 3 still says 'Here is your JSON...'". This breaks `json.loads()`.
 *   **The Fix**: Mellea + `xgrammar` forces the backend to *only* emit valid JSON tokens. No "yapping" possible.
 
