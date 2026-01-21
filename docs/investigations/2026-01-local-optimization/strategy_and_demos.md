@@ -11,10 +11,10 @@ Mellea is not just another Agent Framework. It is a **Reasoning Compiler**.
 Our goal is to drive adoption by offering **surgical replacements** for the most brittle parts of the stack.
 
 ## 2. Evidence of Pain (The "Why")
-*   **LangChain**: "OutputParserException" is a meme. Users hate retry loops.
-    *   *Evidence*: [Reddit: "I just had the displeasure..."](https://www.reddit.com/r/LangChain/comments/18eukhc/i_just_had_the_displeasure_of_implementing/), [LangChain Official Error Docs](https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE) (Admitting the failure).
-*   **Local LLMs**: "Llama 3 won't stop yapping."
-    *   *Evidence*: [r/LocalLLaMA: "Specifying json_object makes Llama more dumb"](https://www.reddit.com/r/LocalLLaMA/comments/1cj57zf/has_anyone_gotten_json_working_with_llamacpp/). Mellea solves this via `xgrammar` constraint.
+*   **LangChain (Legacy)**: `PydanticOutputParser` is a meme. Users hate retry loops.
+    *   *Evidence*: [Reddit: "I just had the displeasure..."](https://www.reddit.com/r/LangChain/comments/18eukhc/i_just_had_the_displeasure_of_implementing/), [LangChain Official Error Docs](https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE).
+*   **LangChain (Modern)**: Even `with_structured_output` (tool calling) fails on local models.
+    *   *Evidence*: [Llama 3 "Yapping" Thread](https://www.reddit.com/r/LocalLLaMA/comments/1cj57zf/has_anyone_gotten_json_working_with_llamacpp/). The model refuses to call the tool or wraps it in "Here is your JSON...".
 *   **Evaluators**: "The Confident Idiot Judge."
     *   *Evidence*: [Research: "LLM-as-a-Judge models are bad at scores"](https://www.reddit.com/r/LocalLLaMA/comments/19dl947/llms_as_a_judge_models_are_bad_at_giving_scores/).
 
@@ -86,7 +86,7 @@ You will watch the agent:
 The original tutorial solves `OutputParserException` by adding *more* complexity (Retry Parsers, Auto-Fixing Chains).
 *   **LangChain (Reactive)**: LLM guesses -> Parser fails -> Retry Loop catches error -> LLM tries again. cost = 3x.
 *   **Mellea (Proactive)**: Type signature -> Backend *forces* valid JSON tokens. Cost = 1x.
-*   **The "Leaf Node" Thesis**: You don't have to rip out LangChain. Just replace the *brittle leaf nodes* (Parsers) with Mellea functions. Keep your `StateGraph`, but make it reliable.
+*   **The "Leaf Node" Thesis**: You don't have to rip out LangChain. Just replace the *brittle leaf nodes* (Parsers) with Mellea functions. Keep your `StateGraph` for orchestration, but use Mellea for the actual "work" (execution).
 *   **Small Model Viability**: Because formatting is enforced by the engine (xgrammar), you don't need a "smart" model (GPT-4) just to get valid JSON. You can run reliable extraction on 8B or even 3B local models.
 
 
