@@ -18,7 +18,12 @@ Our goal is to drive adoption by offering **surgical replacements** for the most
 *   **Evaluators**: "The Confident Idiot Judge."
     *   *Evidence*: [Research: "LLM-as-a-Judge models are bad at scores"](https://www.reddit.com/r/LocalLLaMA/comments/19dl947/llms_as_a_judge_models_are_bad_at_giving_scores/).
 
-### 2.1 The "Hooks" (Search Terms to Target)
+### 2.1 The "Smoking Gun" Evidences (Forensic Analysis)
+*   **The OutputParser Trap**: Canonical tutorials (e.g. [Greg Kamradt's Data Extraction](https://github.com/gkamradt/langchain-tutorials/tree/main/data_generation)) teach users to catch `OutputParserException` with retry loops. This trains developers to write buggy code.
+*   **The Regex Hell**: Articles like ["Stop Parsing LLMs with Regex"](https://dev.to/dthompsondev/llm-structured-json-building-production-ready-ai-features-with-schema-enforced-outputs-4j2j) highlight that regex breaks whenever the model adds polite conversational filler.
+*   **The "Why I Left LangChain" Movement**: A growing market sentiment (seen on [Hacker News](https://news.ycombinator.com/item?id=40739982)) that abstractions have become too complex to debug.
+
+### 2.2 The "Hooks" (Search Terms to Target)
 From our research, these are the high-traffic queries where Mellea is the perfect answer:
 1.  **"LangChain OutputParserException fix"**: Users are looking for a way out of retry loops.
     *   *Mellea Pitch*: "Don't catch the error. Prevent it. Zero-shot JSON."
@@ -266,6 +271,14 @@ To drive adoption, we must lower the friction to try these demos.
 uvx --from mellea mellea-demo langchain-extraction
 ```
 *(Note: We need to expose a `mellea-demo` entrypoint in `pyproject.toml` to enable this)*.
+
+### 8.1 Targeted Communities (Where to Post)
+*   **Engineers**: **Latent Space Discord** (The "AI Engineer" crowd).
+*   **Makers**: **OpenInterpreter Discord** & **r/LocalLLaMA**.
+    *   *Angle*: "Physical Safety". A 'yapping' LLM on a drone causes a crash. Mellea guarantees strict JSON commands (`{"move": "up"}`).
+*   **API Devs**: **FastAPI** users.
+    *   *Angle*: "Bridge the gap between messy LLMs and strict Pydantic endpoints."
+*   **Conferences**: **AI Engineer Summit**, **PyCon** (The Pydantic tracking).
 
 ## 9. Strategic Artifacts (Created)
 We have established the "Rules of the Road" for both contributors and users.
