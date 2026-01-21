@@ -77,12 +77,6 @@ To prepare for public consumption, we split the monolithic "Strategy" document i
 ## 8. Documentation Consolidation (2026-01-15 16:10)
 **Decision**: Reverted the "Split" decision based on team feedback.
 *   *Feedback*: "Don't hide the technical details in a separate file. The team is technical."
-*   *Action*: Merged  back into  as **Section 5: The Architecture (Deep Dive)**.
-*   *Outcome*: A single, portable artifact that starts with the "Pitch" (Hooks) and flows naturally into the "Specs" (Alora/Intrinsics).
-
-## 8. Documentation Consolidation (2026-01-15 16:10)
-**Decision**: Reverted the "Split" decision based on team feedback.
-*   *Feedback*: "Don't hide the technical details in a separate file. The team is technical."
 *   *Action*: Merged `technical_reference.md` back into `strategy_and_demos.md` as **Section 5: The Architecture (Deep Dive)**.
 *   *Outcome*: A single, portable artifact that starts with the "Pitch" (Hooks) and flows naturally into the "Specs" (Alora/Intrinsics).
 
@@ -91,3 +85,22 @@ To prepare for public consumption, we split the monolithic "Strategy" document i
 *   *Feedback*: "Hooks need to be about value/pain, just like the Demos."
 *   *Action*: Refactored Section 5.3 to frame "Specialist Judge" as a solution to a specific pain point: *"How do I trust a small model to grade a complex answer?"*
 *   *Result*: The document now consistently uses "Hook" to mean "User Motivation", ensuring a unified narrative voice.
+
+## 10. Deep Research Synthesis (2026-01-21)
+**Goal**: Transform raw research into a validated "Go-to-Market" strategy.
+
+### A. Market Validation (Forensic Analysis)
+We created [`market_validation.md`](./market_validation.md) to serve as the "Evidence Locker".
+*   **"Smoking Gun" Strategy**: Instead of generic claims, we linked to specific failures:
+    *   **The OutputParser Trap**: Linked to Greg Kamradt's tutorials that rely on brittle retry loops.
+    *   **The "Yapping" Crisis**: Cited Reddit threads proving Llama 3 refuses strict JSON.
+    *   **The "Leaf Node" Thesis**: Positioned Mellea not as a "Framework Replacement" but as a "Reliable Execution Node" inside LangGraph/CrewAI.
+
+### B. Strategy Refinement
+*   **Legacy vs Modern**: Updated `strategy_and_demos.md` to distinguish between "Legacy" failures (`PydanticOutputParser` Exceptions) and "Modern" failures (Tool Calling refusal). This ensures technical accuracy.
+*   **Cooperative Positioning**: Explicitly framed Mellea as a partner to LangChain: *"Use LangGraph for State, Mellea for Execution."*
+*   **New Targets**: Added specific sections for **Makers/Robotics** (Safety critical inputs) and **API Developers** (FastAPI integration).
+
+### C. Verification
+*   **Link Audit**: Verified all research links live. Replaced the dead Octomind blog with the active Hacker News discussion thread to ensure durable social proof.
+*   **Artifact Status**: All documents committed to `docs/research-analysis` (Hash: `169aada`).
