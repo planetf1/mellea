@@ -7,8 +7,8 @@ import openai
 import pydantic
 import pytest
 
-# Mark all tests in this module as requiring Ollama via OpenAI-compatible API
-pytestmark = [pytest.mark.openai, pytest.mark.ollama, pytest.mark.llm]
+# Tests use OpenAI client to talk to Ollama
+pytestmark = [pytest.mark.ollama, pytest.mark.llm]
 
 from mellea import MelleaSession
 from mellea.backends import ModelOption

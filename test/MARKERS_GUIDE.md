@@ -9,7 +9,7 @@ This guide explains the pytest marker system for categorizing and running mellea
 ### ✅ Automatic (No Configuration Needed)
 When you run `pytest`, the system **automatically detects** and skips tests based on:
 - **Ollama availability** - Checks if port 11434 is listening
-- **API keys** - Checks environment variables (`OPENAI_API_KEY`, `WATSONX_API_KEY`, etc.)
+- **API keys** - Checks environment variables (`WATSONX_API_KEY`, `WATSONX_URL`, `WATSONX_PROJECT_ID`)
 - **GPU availability** - Checks for CUDA (NVIDIA) or MPS (Apple Silicon) via torch
 - **System RAM** - Checks via `psutil.virtual_memory()` (if psutil installed)
 
@@ -43,7 +43,7 @@ pytest --ignore-ram-check test/backends/test_huggingface.py
 pytest --ignore-ollama-check test/backends/test_ollama.py
 
 # Try without API keys (will fail at API call)
-pytest --ignore-api-key-check test/backends/test_openai.py
+pytest --ignore-api-key-check test/backends/test_watsonx.py
 
 # Ignore all checks at once (convenience flag)
 pytest --ignore-all-checks
@@ -92,12 +92,6 @@ Specify which backend the test uses:
   - Light resources (CPU, ~2-4GB RAM)
   - No API key required
   - Example: `test/backends/test_ollama.py`
-
-- **`@pytest.mark.openai`**: Tests requiring OpenAI API
-  - Requires `OPENAI_API_KEY` environment variable
-  - Light resources (API calls only)
-  - Incurs API costs
-  - Example: `test/backends/test_vision_openai.py`
 
 - **`@pytest.mark.watsonx`**: Tests requiring Watsonx API
   - Requires `WATSONX_API_KEY`, `WATSONX_URL`, and `WATSONX_PROJECT_ID` environment variables
@@ -156,8 +150,7 @@ The test suite automatically detects your system capabilities and skips tests th
 ### API Key Detection
 ```python
 # Automatically checks for:
-OPENAI_API_KEY          # For OpenAI tests
-WATSONX_API_KEY         # For Watsonx tests
+WATSONX_API_KEY         # For Watsonx tests (all 3 required)
 WATSONX_URL             # For Watsonx tests
 WATSONX_PROJECT_ID      # For Watsonx tests
 ```
@@ -182,7 +175,7 @@ When a test is skipped, you'll see helpful messages (use `-rs` flag to show skip
 pytest -rs
 
 # Output:
-SKIPPED [1] test/conftest.py:120: Skipping test: OPENAI_API_KEY not found in environment
+SKIPPED [1] test/conftest.py:120: Skipping test: Watsonx API credentials not found in environment
 SKIPPED [1] test/conftest.py:125: Skipping test: GPU not available
 SKIPPED [1] test/conftest.py:130: Skipping test: Insufficient RAM (16.0GB < 32GB)
 SKIPPED [1] test/conftest.py:165: Skipping test: Ollama not available (port 11434 not listening)

@@ -75,17 +75,11 @@ def get_system_capabilities():
         capabilities["ram_gb"] = psutil.virtual_memory().total / (1024**3)
 
     # Detect API keys
-    api_key_vars = {
-        "openai": "OPENAI_API_KEY",
-        "watsonx": ["WATSONX_API_KEY", "WATSONX_URL", "WATSONX_PROJECT_ID"],
-    }
-
-    for backend, env_vars in api_key_vars.items():
-        if isinstance(env_vars, str):
-            env_vars = [env_vars]
-        capabilities["has_api_keys"][backend] = all(
-            os.environ.get(var) for var in env_vars
-        )
+    # Watsonx requires all three environment variables
+    capabilities["has_api_keys"]["watsonx"] = all(
+        os.environ.get(var)
+        for var in ["WATSONX_API_KEY", "WATSONX_URL", "WATSONX_PROJECT_ID"]
+    )
 
     # Detect Ollama availability
     capabilities["has_ollama"] = _check_ollama_available()
@@ -150,9 +144,6 @@ def pytest_configure(config):
         "markers", "ollama: Tests requiring Ollama backend (local, light)"
     )
     config.addinivalue_line(
-        "markers", "openai: Tests requiring OpenAI API (requires API key)"
-    )
-    config.addinivalue_line(
         "markers", "watsonx: Tests requiring Watsonx API (requires API key)"
     )
     config.addinivalue_line(
@@ -212,16 +203,6 @@ def pytest_runtest_setup(item):
             reason="Skipping qualitative test: got env variable CICD == 1. Used only in gh workflows."
         )
 
-    # Skip tests requiring API keys if not available (unless override)
-    if item.get_closest_marker("requires_api_key") and not ignore_api_key:
-        # Check specific backend markers
-        for backend in ["openai", "watsonx"]:
-            if item.get_closest_marker(backend):
-                if not capabilities["has_api_keys"].get(backend):
-                    pytest.skip(
-                        f"Skipping test: {backend} API key not found in environment"
-                    )
-
     # Skip tests requiring GPU if not available (unless override)
     if item.get_closest_marker("requires_gpu") and not ignore_gpu:
         if not capabilities["has_gpu"]:
@@ -242,10 +223,6 @@ def pytest_runtest_setup(item):
             )
 
     # Backend-specific skipping
-    if item.get_closest_marker("openai") and not ignore_api_key:
-        if not capabilities["has_api_keys"].get("openai"):
-            pytest.skip("Skipping test: OPENAI_API_KEY not found in environment")
-
     if item.get_closest_marker("watsonx") and not ignore_api_key:
         if not capabilities["has_api_keys"].get("watsonx"):
             pytest.skip(

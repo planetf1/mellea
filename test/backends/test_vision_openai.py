@@ -6,8 +6,8 @@ import numpy as np
 import pytest
 from PIL import Image
 
-# Mark all tests in this module as requiring OpenAI API with vision support
-pytestmark = [pytest.mark.openai, pytest.mark.llm, pytest.mark.ollama]
+# Tests use OpenAI client to talk to Ollama (vision support)
+pytestmark = [pytest.mark.ollama, pytest.mark.llm]
 
 from mellea import MelleaSession, start_session
 from mellea.backends import ModelOption
