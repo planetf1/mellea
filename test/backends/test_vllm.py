@@ -18,19 +18,12 @@ pytestmark = [
     ),
 ]
 
-# Try to import vLLM backend - skip all tests if not available
-try:
-    import mellea.backends.model_ids as model_ids
-    from mellea import MelleaSession
-    from mellea.backends import ModelOption
-    from mellea.backends.vllm import LocalVLLMBackend
-    from mellea.core import CBlock
-    from mellea.stdlib.context import ChatContext, SimpleContext
-except ImportError as e:
-    pytest.skip(
-        f"vLLM backend not available: {e}. Install with: pip install mellea[vllm]",
-        allow_module_level=True,
-    )
+import mellea.backends.model_ids as model_ids
+from mellea import MelleaSession
+from mellea.backends import ModelOption
+from mellea.backends.vllm import LocalVLLMBackend
+from mellea.core import CBlock
+from mellea.stdlib.context import ChatContext, SimpleContext
 
 
 @pytest.fixture(scope="module")
@@ -50,7 +43,12 @@ def backend():
             "max_num_seqs": 8,
         },
     )
-    return backend
+    yield backend
+
+    # Cleanup: Use shared cleanup function from conftest.py
+    from test.conftest import cleanup_vllm_backend
+
+    cleanup_vllm_backend(backend)
 
 
 @pytest.fixture(scope="function")
@@ -141,6 +139,7 @@ async def test_generate_from_raw_with_format(session) -> None:
         actions=[CBlock(value=prompt) for prompt in prompts],
         ctx=session.ctx,
         format=Answer,
+        model_options={ModelOption.MAX_NEW_TOKENS: 100},
     )
 
     assert len(results) == len(prompts)
@@ -210,3 +209,5 @@ if __name__ == "__main__":
     import pytest
 
     pytest.main([__file__])
+
+# Made with Bob

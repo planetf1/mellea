@@ -264,6 +264,55 @@ def pytest_runtest_setup(item):
             )
 
 
+def cleanup_vllm_backend(backend):
+    """Cleanup vLLM backend and release GPU memory.
+
+    This function performs aggressive GPU memory cleanup for vLLM backends.
+    It should be called in fixture teardown (after yield) to ensure GPU
+    memory is fully released.
+
+    Args:
+        backend: The vLLM backend instance to cleanup
+    """
+    # Import cleanup dependencies here to avoid module-level import errors
+    # when torch/vLLM are not available
+    import gc
+    import time
+
+    import torch
+
+    # Shutdown the background loop
+    backend._underlying_model.shutdown_background_loop()
+
+    # Delete the model and clear references
+    del backend._underlying_model
+    del backend
+
+    # Force garbage collection and clear CUDA cache
+    gc.collect()
+
+    if torch.cuda.is_available():
+        # Synchronize to ensure all CUDA operations complete
+        torch.cuda.synchronize()
+        # Empty the cache multiple times to ensure memory is released
+        torch.cuda.empty_cache()
+
+        # Set environment variable to help with memory fragmentation
+        # This tells PyTorch to use expandable memory segments
+        os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+
+        # Reset peak memory stats
+        torch.cuda.reset_peak_memory_stats()
+        # Reset accumulated memory stats
+        torch.cuda.reset_accumulated_memory_stats()
+
+        # Multiple cleanup passes with delays to allow CUDA runtime to release memory
+        for _ in range(3):
+            gc.collect()
+            torch.cuda.empty_cache()
+            time.sleep(1)
+
+
 def memory_cleaner():
     """Aggressive memory cleanup function."""
     yield
