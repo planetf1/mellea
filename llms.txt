@@ -1,0 +1,52 @@
+# Mellea
+
+> Mellea is an open-source Python library for writing generative programs -- structured, maintainable, robust AI workflows expressed as ordinary Python.
+
+Mellea turns typed Python functions into LLM-powered specifications using the `@generative` decorator. Docstrings become prompts, type hints become schemas, Pydantic return types become guaranteed structured output. It supports 7 backends (Ollama, OpenAI, HuggingFace, vLLM, LiteLLM, Bedrock, Watsonx) through a uniform API.
+
+## Key features
+
+- `@generative` decorator: typed function -> structured LLM output, no parsers needed
+- Pluggable sampling strategies: rejection sampling, majority voting, budget forcing, process reward models
+- Constrained decoding for local models via Outlines/xgrammar (guaranteed valid JSON at token level)
+- Instruct-validate-repair loop with composable Requirements
+- Works standalone or as a drop-in execution layer inside LangChain/DSPy/CrewAI pipelines
+
+## Install
+
+```
+pip install mellea
+```
+
+## Quick start
+
+```python
+from mellea import generative, start_session
+from pydantic import BaseModel
+
+class UserProfile(BaseModel):
+    name: str
+    age: int
+    interests: list[str]
+
+@generative
+def extract_profile(bio: str) -> UserProfile:
+    """Extract a user profile from the given biography text."""
+    ...
+
+m = start_session()  # defaults to Ollama
+profile = extract_profile(m, bio="Alice is 30 and loves hiking and Python.")
+# Returns UserProfile(name='Alice', age=30, interests=['hiking', 'Python'])
+```
+
+## Links
+
+- PyPI: https://pypi.org/project/mellea/
+- GitHub: https://github.com/generative-computing/mellea
+- Docs: https://docs.mellea.ai/
+- Website: https://mellea.ai/
+- Examples: https://github.com/generative-computing/mellea/tree/main/docs/examples
+
+## Detailed usage
+
+For complete API patterns and code examples, see: https://github.com/generative-computing/mellea/blob/main/docs/AGENTS_TEMPLATE.md
