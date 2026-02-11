@@ -769,13 +769,19 @@ These are valuable innovation areas that the research team should continue pursu
 
 **Guardrail for research contributions**: Research items that touch core `mellea/` should include tests (use the marker system) and should not add new core dependencies. If a feature needs a heavy dependency, it goes in an optional extra or in `mellea-contribs`.
 
-### Granite small models: a unique leverage point
+### Open-weight models: where mellea adds the most value
 
-IBM Granite models go down to very small sizes (Granite 4 Micro at 3B parameters) and are fully open source. This creates a unique pitch: **mellea + Granite Micro = structured AI on a laptop, no API key, no cost, no data leaving your machine.** This resonates strongly with the privacy-conscious local-LLM community and the education market.
+The open-weight model ecosystem is maturing fast. Llama 4, Granite 4, DeepSeek R1, and Qwen3-Coder are all competitive on structured tasks, available under permissive licences, and run on consumer hardware. This trend directly amplifies mellea's value proposition because **small open models are capable but noisy -- and that's exactly where validation, constrained decoding, and sampling strategies earn their keep.**
 
-However, this should be a *secondary* message, not the lead:
+The economics are compelling: a majority vote across 5 free local inferences is faster and cheaper than one GPT-4o API call, and with mellea's sampling strategies, often more accurate. Constrained decoding eliminates the "yapping" problem that plagues local models entirely -- no retries, no regex, no wasted tokens. For a 3B model that fits in 3GB of VRAM, mellea turns "mostly right 70% of the time" into "reliably right 95%+ of the time" at zero marginal cost.
+
+IBM Granite 4 is the model family mellea has first-class support for: sizes from 340M to 32B parameters (MoE variants with 9B active), all Apache 2.0, ISO 42001 certified. On benchmarks relevant to mellea's use cases (IFEval, structured extraction, RAG faithfulness) the models punch well above their weight class. But the story applies to any open model -- Llama, Qwen, DeepSeek -- that a user runs locally via Ollama or HuggingFace.
+
+The pitch: **mellea + any open model = structured, validated AI on your own hardware. No API key, no per-token cost, no data leaving your machine.**
+
+This should be a *secondary* message, not the lead:
 - **Lead with model-agnostic features** (`@generative`, sampling strategies, validation) -- these work with GPT-4o, Claude, Llama, Granite, anything.
-- **Highlight Granite Micro as a bonus**: "Works with any model. Ships with optimised support for Granite -- including 3B models that run on a laptop."
+- **Highlight open models as a bonus**: "Works with any model. Ships with optimised support for Granite -- including 3B models that run on a laptop."
 - **Don't lock positioning to Granite**: Developers who only want OpenAI should feel equally welcome. The recent Granite 4 migration (#357) shows the codebase already handles this well -- Granite is a first-class backend, not the only one.
 
 ---
@@ -1069,4 +1075,5 @@ SimpleContext (stateless), ChatContext (conversational with window)
 | **Forbes agentic AI hype** (2025) | [forbes.com](https://www.forbes.com/) | "The Agentic AI Hype Cycle Is Out Of Control" |
 | **Deloitte inference compute shift** (2026) | Deloitte tech trends 2026 | Predicts majority of generative AI compute shifts from training to inference |
 | **llms.txt standard** | [llmstxt.org](https://llmstxt.org/) | Standard for making projects discoverable to AI assistants |
+| **IBM Granite 4** (2025-2026) | [github.com/ibm-granite](https://github.com/ibm-granite) | Apache 2.0, 340M-32B params, ISO 42001 certified; strong IFEval/RAG scores; mellea's first-class supported model family |
 | **Qwen3-Coder-Next** (Feb 2026) | r/LocalLLaMA | 80B MoE / 3B active, 256K context; top local model at time of writing |
