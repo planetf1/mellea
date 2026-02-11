@@ -1,11 +1,13 @@
 # Mellea Focus Research: DevRel, Adoption, and the Path to Users
 
-**Date**: February 2026
-**Status**: Draft -- open for collaboration
-**Repository**: [github.com/generative-computing/mellea](https://github.com/generative-computing/mellea) (v0.3.0)
-**Branch**: `dev/focus`
-**Audience**: Leadership (strategic direction), DevRel/adoption team (execution plan), core contributors (context for how research connects to users)
-**Scope**: This document focuses on developer relations and adoption. It is not a roadmap for research features. Core research and innovation will continue in parallel -- this document is about making sure that innovation reaches people.
+| | |
+|:---|:---|
+| **Date** | February 2026 |
+| **Status** | Draft -- open for collaboration |
+| **Repository** | [github.com/generative-computing/mellea](https://github.com/generative-computing/mellea) (v0.3.0) |
+| **Branch** | `dev/focus` |
+| **Audience** | Leadership (strategic direction), DevRel/adoption team (execution plan), core contributors (context for how research connects to users) |
+| **Scope** | This document focuses on developer relations and adoption. It is not a roadmap for research features. Core research and innovation will continue in parallel -- this document is about making sure that innovation reaches people. |
 
 ### What is mellea?
 
@@ -202,6 +204,7 @@ find us?     README/docs   a working example  solve their   recommend it
 This is the core of the discoverability problem: people who already know mellea can find it, but people searching for solutions to the exact problems mellea solves will never encounter it.
 
 **Scale context** (monthly PyPI downloads, GitHub stars):
+
 | Package | Downloads/month | GitHub stars | Context |
 |:---|:---|:---|:---|
 | LangChain | ~200M | 100K+ | Ecosystem incumbent |
@@ -872,6 +875,7 @@ The `generative-computing` GitHub org contains 5 repositories. Understanding the
 These issues would track the adoption work described in this document. Each is scoped to be a single allocatable work item or discussion.
 
 ### Code / Infrastructure
+
 | Proposed issue | Type | Phase | Notes |
 |:---|:---|:---|:---|
 | Slim core dependencies: move llm-sandbox, math_verify, rouge_score, granite-common, fastapi to optional extras | Engineering | Phase 1 | Highest-impact structural change for adoption (Section 3.1) |
@@ -881,6 +885,7 @@ These issues would track the adoption work described in this document. Each is s
 | `@generative` as MCP tool endpoint (extend `m serve`) | Engineering | Phase 3 | Makes mellea's unique features available via MCP |
 
 ### Content / DevRel
+
 | Proposed issue | Type | Phase | Notes |
 |:---|:---|:---|:---|
 | Write "Fix Your OutputParser in 5 Lines" tutorial with runnable code | Content | Phase 2 | Gateway tutorial #1 |
@@ -891,6 +896,7 @@ These issues would track the adoption work described in this document. Each is s
 | Submit to Paul Simmering's structured output comparison | Outreach | Phase 2 | Fill the gap (Section 3.0) |
 
 ### Project Management
+
 | Proposed issue | Type | Phase | Notes |
 |:---|:---|:---|:---|
 | Issue triage pass: close stale issues, apply consistent labels | Ops | Phase 1 | See Section 9.8 for label scheme |
