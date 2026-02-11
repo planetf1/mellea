@@ -1,8 +1,10 @@
 # Mellea Adoption: Action Plan
 
-**Date**: February 2026
-**Context**: [research.md](research.md) (full analysis)
-**Tracking**: Create "Mellea Adoption" GitHub Project board with columns: Backlog | Phase 1 | Phase 2 | Phase 3 | Done
+| | |
+|:---|:---|
+| **Date** | February 2026 |
+| **Context** | [research.md](research.md) (full analysis, including industry trends in Section 16 and AI agent discoverability in Section 17) |
+| **Tracking** | Create "Mellea Adoption" GitHub Project board with columns: Backlog / Phase 1 / Phase 2 / Phase 3 / Done |
 
 ---
 
@@ -35,8 +37,11 @@ Goal: Time to Hello World (TTHW) under 5 minutes. Gated on blockers above.
 | 1.6 | Add coverage badge to README | -- | | |
 | 1.7 | Update docs.mellea.ai to match v0.3.0 | -- | | |
 | 1.8 | Create "Mellea Adoption" GitHub Project board | -- | | |
+| 1.9 | Add `llms.txt` to repo root and mellea.ai | -- | | |
+| 1.10 | Add `.github/copilot-instructions.md` and `.cursorrules` | -- | | |
+| 1.11 | Review PyPI long description (clear examples, keywords) | -- | | |
 
-**Exit gate**: New developer installs and succeeds on first attempt, consistently. Issue tracker looks healthy (labelled, triaged, project board visible).
+**Exit gate**: New developer installs and succeeds on first attempt, consistently. Issue tracker looks healthy (labelled, triaged, project board visible). AI coding agents can discover mellea via `llms.txt`.
 
 ---
 
@@ -57,6 +62,8 @@ Goal: Mellea appears in search results for pain-point queries. Gated on Phase 1.
 | 2.9 | Publish to r/LocalLLaMA | Local LLM community | | |
 | 2.10 | Submit to Simmering's structured output comparison | SEO | | |
 | 2.11 | Revive the blog for comparison content | -- | | |
+| 2.12 | Create `llms-full.txt` with complete API reference | AI agents | | |
+| 2.13 | Answer StackOverflow "structured output" questions with mellea | Training data / SEO | | |
 
 **Exit gate**: Searching "structured LLM output Python", "LangChain OutputParser alternative", or "Ollama JSON output" surfaces mellea content within first 2 pages. At least 3 tutorials runnable and linked from README.
 
@@ -76,6 +83,7 @@ Goal: Turn tryers into users into advocates. Gated on Phase 2.
 | 3.6 | Pre-built requirements catalog | #440 | | |
 | 3.7 | Streaming for sampling results | #403 | | |
 | 3.8 | Observability (structured logging, tracing) | #442, #443, #444 | | |
+| 3.9 | Package MCP server for `@generative` functions | #409 | | |
 
 **Exit gate**: At least one external "I migrated from X to mellea" story. Framework adapters allow `pip install mellea` and use as LangChain `BaseChatModel`.
 
@@ -90,6 +98,21 @@ These are settled. Don't re-litigate unless new evidence appears.
 3. **Honest comparisons.** Acknowledge where Instructor is simpler (pure API) and LangGraph is better (complex state machines). Our credibility depends on it.
 4. **Research continues in parallel.** Adoption work does not slow research. New sampling strategies, SoFAI, RL tuning (#405), self-repairing requirements (#454) continue on their own track. Key constraint: research features must not add core dependencies.
 5. **Tutorials before adapters.** Tutorials are smaller effort and prove the story. Framework adapters are larger effort and scale the story. Sequence accordingly.
+6. **"Agentic engineering" framing.** Position mellea as the engineering discipline that makes agents reliable, not as another agent framework. Lead with reliability and auditability in all content. (Section 16.1)
+7. **"Providers solved simple JSON. We solve the hard parts."** Don't lead with basic structured output -- lead with multi-step validation, cross-provider portability, and auditable pipelines. (Section 16.4)
+
+---
+
+## Trends to act on (Section 16)
+
+Time-sensitive items from the industry trends analysis:
+
+| Trend | Action | Timing |
+|:------|:-------|:-------|
+| **Agentic engineering backlash** | Frame all content around reliability/auditability, not features. Reference Klarna/Replit failures as context. | Now (influences all Phase 2 content) |
+| **EU AI Act (Aug 2, 2026)** | Consider a compliance-focused tutorial or whitepaper. Prioritise observability epics (#442-#444). | Urgent -- 6 months to enforcement |
+| **Reasoning model think-then-extract** | Add a tutorial showing reasoning model + mellea for structured extraction from chain-of-thought | Phase 2 (new tutorial candidate) |
+| **AI agent discoverability** | `llms.txt`, copilot-instructions, cursorrules, StackOverflow presence | Phase 1 (llms.txt) + Phase 2 (ongoing) |
 
 ---
 

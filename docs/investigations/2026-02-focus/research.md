@@ -99,7 +99,7 @@ The adoption work stream focus should be: **fix, document, demonstrate, distribu
 
 ---
 
-This document provides the detailed evidence behind these recommendations. The rest covers: landscape analysis (Section 2), adoption funnel assessment (Section 3), target audiences and entry point scenarios (Section 4), feature-to-pain mapping (Section 5), competitive differentiation (Section 6), tutorial proposals (Section 7), content strategy (Section 8), issue tracker analysis (Section 9), phased priorities (Section 10), key insights (Section 11), taglines (Section 12), open questions (Section 13), ecosystem overview (Section 14), and proposed new issues (Section 15).
+This document provides the detailed evidence behind these recommendations. The rest covers: landscape analysis (Section 2), adoption funnel assessment (Section 3), target audiences and entry point scenarios (Section 4), feature-to-pain mapping (Section 5), competitive differentiation (Section 6), tutorial proposals (Section 7), content strategy (Section 8), issue tracker analysis (Section 9), phased priorities (Section 10), key insights (Section 11), taglines (Section 12), open questions (Section 13), ecosystem overview (Section 14), proposed new issues (Section 15), industry trends to leverage (Section 16), and AI agent discoverability (Section 17).
 
 ---
 
@@ -903,6 +903,86 @@ These issues would track the adoption work described in this document. Each is s
 | Create "Mellea Adoption" GitHub Project board | Ops | Phase 1 | Track all adoption work |
 | Update docs site (docs.mellea.ai) to match v0.3.0 | Ops | Phase 1 | Site is 3 months stale |
 
+### AI Agent Discoverability
+
+| Proposed issue | Type | Phase | Notes |
+|:---|:---|:---|:---|
+| Add `llms.txt` to repo root and mellea.ai website | DX | Phase 1 | How AI assistants discover libraries (Section 17) |
+| Add `.github/copilot-instructions.md` and `.cursorrules` | DX | Phase 1 | Teach Copilot/Cursor mellea patterns |
+| Create `llms-full.txt` with complete API reference | DX | Phase 2 | Enables agents to write correct mellea code |
+| Package MCP server for `@generative` functions | Engineering | Phase 3 | Makes mellea callable from any MCP client (Section 17.2) |
+
+---
+
+## 16. Industry Trends to Leverage (February 2026)
+
+Four trends create specific, time-bound opportunities for mellea adoption. Each connects to existing capabilities and influences how we frame content and prioritise work.
+
+### 16.1 The "agentic engineering" backlash
+
+The hype cycle around AI agents is correcting. Klarna fired 700 employees to replace them with AI agents, then had to rehire humans after service quality declined. Replit's agentic coding tool wiped a user's database. Forbes called the hype cycle "out of control." McKinsey data: 39% of enterprises are experimenting with agents, but only 23% are scaling them even within a single function.
+
+The emerging narrative is not "agents are useless" but **"agents need engineering discipline."** The demand is for constrained agents with guardrails, structured validated outputs, observability, and deterministic components where possible.
+
+**What this means for mellea**: Position as the engineering discipline that makes agents reliable, not as another agent framework. The messaging shift: *"Agents fail because their outputs are unstructured and unvalidated. Generative programs give you type-safe, composable, auditable LLM operations."* This framing should influence all Phase 2 tutorials and comparison content -- lead with reliability and auditability, not features.
+
+### 16.2 EU AI Act enforcement (August 2, 2026)
+
+Full enforcement of high-risk AI system requirements begins in less than 6 months. Penalties: up to 35M EUR or 7% of global revenue. Finland activated national supervision on January 1, 2026. 26 major providers (including Microsoft, Google, OpenAI, Anthropic, Amazon) signed the GPAI Code of Practice. The Act has extraterritorial scope -- any AI system whose outputs are used in the EU must comply.
+
+Enterprises deploying AI in hiring, credit scoring, medical diagnostics, law enforcement, or education need: logging and audit trails, human oversight mechanisms, validated structured outputs that can be inspected, and conformity assessment documentation.
+
+**What this means for mellea**: Mellea's Pydantic-based validation, type-safe outputs, Requirements system, and OpenTelemetry integration are directly aligned with compliance needs. This is a time-sensitive marketing angle -- *"EU AI Act-ready LLM outputs"* -- that positions mellea for enterprise adoption. Consider a dedicated tutorial or whitepaper targeting compliance teams. The observability epics (#442, #443, #444) become more urgent.
+
+### 16.3 Reasoning models and the think-then-extract problem
+
+Reasoning models (o3, o4-mini, DeepSeek R1, Claude Opus 4.6) are now mainstream in production. They produce long chains of thought before structured output. This creates a fundamental tension: chain-of-thought reasoning is "creative, exploratory" while rigid JSON schema compliance is the opposite. Forcing a model to both reason AND produce structured output degrades both.
+
+The emerging pattern is **think-then-extract**: let the model reason freely first, then extract structure from the reasoning. This is a multi-step composition problem -- exactly the kind of thing single-shot structured output APIs don't handle well.
+
+**What this means for mellea**: Mellea's composable programs (reason -> decompose -> extract -> validate) are the right abstraction for this pattern. The `reasoning` field pattern already exists in `docs/AGENTS_TEMPLATE.md`. This should become a headline demo: *"Use reasoning models with mellea to think freely, then extract structured results."* Consider adding a specific tutorial to the Phase 2 gateway series targeting developers using o3/R1.
+
+### 16.4 "Simple JSON is solved" -- the positioning shift
+
+Major providers now claim 95-100% schema compliance for simple JSON extraction. OpenAI uses constrained decoding, Anthropic uses tool-calling, Google uses native enforcement. The basic "get JSON from an LLM" problem is largely solved for cloud APIs.
+
+**What this means for mellea**: Don't lead with "we do structured JSON" -- everyone does now. The opportunity has shifted upstream:
+- **Multi-step validated extraction** (generative programs, not single-shot JSON)
+- **Cross-provider portability** (same program, any backend -- local or cloud)
+- **Semantic validation beyond schema** (business logic, LLM-as-Judge, safety checks)
+- **Auditable extraction pipelines** (for regulatory compliance -- see 16.2)
+- **Local model constrained decoding** (providers solved it for APIs; local models still need Outlines/xgrammar)
+
+The messaging: *"Providers solved simple JSON. We solve the hard parts -- multi-step, validated, auditable generative programs that work everywhere."*
+
+---
+
+## 17. AI Agent Discoverability
+
+As AI coding agents (Claude Code, Cursor, GitHub Copilot, Codex, Windsurf) become the primary way developers discover and adopt libraries, mellea needs to be visible to these agents -- not just to human searchers.
+
+### 17.1 Current state
+
+The repo already has strong foundations:
+- **`AGENTS.md`**: Teaches AI agents how to contribute to mellea's codebase (testing, coding standards, directory structure)
+- **`docs/AGENTS_TEMPLATE.md`**: Teaches AI agents how to *use* mellea in user projects (the `@generative` pattern, sampling strategies, anti-patterns). Users can copy this into their own project's AGENTS.md.
+
+### 17.2 Gaps and recommendations
+
+| Item | What it is | Why it matters | Phase |
+|:---|:---|:---|:---|
+| **`llms.txt`** at repo root and on mellea.ai | [llms.txt standard](https://llmstxt.org) -- a markdown file that tells LLMs what the project is and how to use it | This is how AI assistants discover libraries they haven't been trained on. Cursor, Claude Code, and other tools fetch `llms.txt` from project websites. | Phase 1 |
+| **`llms-full.txt`** with complete API reference | Companion to `llms.txt` with full API docs | Agents that ingest this can write correct mellea code without web search | Phase 2 |
+| **`.github/copilot-instructions.md`** | GitHub Copilot project-specific instructions | Copilot reads this when working in the repo; teaches it mellea patterns | Phase 1 |
+| **`.cursorrules`** | Cursor project-specific instructions | Same as above, for Cursor users | Phase 1 |
+| **MCP server for mellea** | Package `m serve` or a dedicated MCP server that exposes `@generative` functions as MCP tools | Makes mellea callable from Claude, ChatGPT, Cursor, any MCP client. The existing `docs/examples/mcp/mcp_example.py` is a prototype. | Phase 3 |
+| **StackOverflow presence** | Answer "structured output Python" questions with mellea solutions | Gets into training data for future model generations; also helps human discoverability | Phase 2 (ongoing) |
+| **PyPI long description** | Ensure the PyPI page has clear code examples and keywords | AI agents recommend packages based on PyPI descriptions when users ask "what library should I use for X?" | Phase 1 |
+
+### 17.3 The meta-opportunity
+
+The narrative of February 2026 is that **models are good enough that workflow design, tool choice, and harness quality dominate outcomes.** Developers are increasingly using AI agents to write code, and those agents recommend libraries they know about. If mellea is invisible to AI agents, it is invisible to the next generation of developers. The `llms.txt` standard, agent instruction files, and MCP integration are not nice-to-haves -- they are the new SEO.
+
 ---
 
 ## Appendix A: Feature Inventory (v0.3.0)
@@ -967,3 +1047,9 @@ SimpleContext (stateless), ChatContext (conversational with window)
 | **LangChain criticism / post-framework fatigue** | [analyticsindiamag.com](https://analyticsindiamag.com/ai-features/why-developers-are-quitting-langchain/), [designveloper.com](https://www.designveloper.com/blog/is-langchain-bad/) | Multiple industry analyses of LangChain drop-off |
 | **Sebastian Raschka inference scaling survey** (2025) | [sebastianraschka.com](https://sebastianraschka.com/blog/2025/state-of-llm-reasoning-and-inference-scaling.html) | Comprehensive taxonomy of inference-time compute methods |
 | **Microsoft inference-time scaling survey** (Mar 2025) | [microsoft.com/research](https://www.microsoft.com/en-us/research/wp-content/uploads/2025/03/Inference-Time-Scaling-for-Complex-Tasks-Where-We-Stand-and-What-Lies-Ahead.pdf) | "Where We Stand and What Lies Ahead" |
+| **EU AI Act enforcement timeline** | [artificialintelligenceact.eu](https://artificialintelligenceact.eu/high-level-summary/) | Full high-risk requirements enforce Aug 2, 2026; penalties up to 35M EUR / 7% revenue |
+| **Klarna AI agent reversal** (2025-2026) | Industry press (Forbes, BBC, multiple outlets) | Hired back humans after AI agents degraded service quality; cautionary tale for unvalidated agent outputs |
+| **Forbes agentic AI hype** (2025) | [forbes.com](https://www.forbes.com/) | "The Agentic AI Hype Cycle Is Out Of Control" |
+| **Deloitte inference compute shift** (2026) | Deloitte tech trends 2026 | Predicts majority of generative AI compute shifts from training to inference |
+| **llms.txt standard** | [llmstxt.org](https://llmstxt.org/) | Standard for making projects discoverable to AI assistants |
+| **Qwen3-Coder-Next** (Feb 2026) | r/LocalLLaMA | 80B MoE / 3B active, 256K context; top local model at time of writing |
