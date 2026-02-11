@@ -99,7 +99,24 @@ The adoption work stream focus should be: **fix, document, demonstrate, distribu
 
 ---
 
-This document provides the detailed evidence behind these recommendations. The rest covers: landscape analysis (Section 2), adoption funnel assessment (Section 3), target audiences and entry point scenarios (Section 4), feature-to-pain mapping (Section 5), competitive differentiation (Section 6), tutorial proposals (Section 7), content strategy (Section 8), issue tracker analysis (Section 9), phased priorities (Section 10), key insights (Section 11), taglines (Section 12), open questions (Section 13), ecosystem overview (Section 14), proposed new issues (Section 15), industry trends to leverage (Section 16), and AI agent discoverability (Section 17).
+This document provides the detailed evidence behind these recommendations. The rest covers:
+
+- Landscape analysis (Section 2)
+- Adoption funnel assessment (Section 3)
+- Target audiences and entry point scenarios (Section 4)
+- Feature-to-pain mapping (Section 5)
+- Competitive differentiation (Section 6)
+- Tutorial proposals (Section 7)
+- Content strategy (Section 8)
+- Issue tracker analysis (Section 9)
+- Phased priorities (Section 10)
+- Key insights (Section 11)
+- Taglines (Section 12)
+- Open questions (Section 13)
+- Ecosystem overview (Section 14)
+- Proposed new issues (Section 15)
+- Industry trends to leverage (Section 16)
+- AI agent discoverability (Section 17)
 
 ---
 
