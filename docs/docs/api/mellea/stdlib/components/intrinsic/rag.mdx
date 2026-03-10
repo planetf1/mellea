@@ -4,6 +4,9 @@ sidebarTitle: "mellea.stdlib.components.intrinsic.rag"
 description: "Intrinsic functions related to retrieval-augmented generation."
 ---
 
+The `mellea.stdlib` module provides high-level components for common LLM patterns. It includes sessions for conversation management, context handling, and reusable components for building complex workflows.
+
+
 
 
 
@@ -17,7 +20,10 @@ import { SidebarFix } from "/snippets/SidebarFix.mdx";
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `check_answerability` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/intrinsic/rag.py#L81" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `check_answerability` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/intrinsic/rag.py#L81" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 check_answerability(question: str, documents: collections.abc.Iterable[Document], context: ChatContext, backend: AdapterMixin) -> float
@@ -42,7 +48,8 @@ chat can be answered by a provided set of RAG documents.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `rewrite_question` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/intrinsic/rag.py#L110" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `rewrite_question` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/intrinsic/rag.py#L110" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 rewrite_question(question: str, context: ChatContext, backend: AdapterMixin) -> float
@@ -64,7 +71,34 @@ self-contained query that can be passed to the retriever.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `find_citations` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/intrinsic/rag.py#L131" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `clarify_query` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/intrinsic/rag.py#L131" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+clarify_query(question: str, documents: collections.abc.Iterable[Document], context: ChatContext, backend: AdapterMixin) -> str
+```
+
+
+Generate clarification for an ambiguous query.
+
+Intrinsic function that determines if a user's question requires clarification
+based on the retrieved documents and conversation context, and generates an
+appropriate clarification question if needed.
+
+:param context: Chat context containing the conversation thus far
+:param question: Question that the user has posed
+:param documents: Document snippets retrieved for the question
+:param backend: Backend instance that supports the adapters that implement
+    this intrinsic
+
+:return: Clarification question string (e.g., "Do you mean A or B?"), or
+    the string "CLEAR" if no clarification is needed
+
+
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `find_citations` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/intrinsic/rag.py#L160" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 find_citations(response: str, documents: collections.abc.Iterable[Document], context: ChatContext, backend: AdapterMixin) -> list[dict]
@@ -97,7 +131,8 @@ Begin and end offsets are character offsets into their respective UTF-8 strings.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `check_context_relevance` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/intrinsic/rag.py#L168" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `check_context_relevance` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/intrinsic/rag.py#L197" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 check_context_relevance(question: str, document: Document, context: ChatContext, backend: AdapterMixin) -> float
@@ -121,7 +156,8 @@ question was asked.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `flag_hallucinated_content` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/intrinsic/rag.py#L195" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `flag_hallucinated_content` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/intrinsic/rag.py#L224" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 flag_hallucinated_content(response: str, documents: collections.abc.Iterable[Document], context: ChatContext, backend: AdapterMixin) -> float
@@ -151,7 +187,8 @@ align with the retrieved snippets are flagged as potential hallucinations.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `rewrite_answer_for_relevance` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/intrinsic/rag.py#L229" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `rewrite_answer_for_relevance` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/intrinsic/rag.py#L258" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 rewrite_answer_for_relevance(rewrite_threshold: float = 0.5) -> str

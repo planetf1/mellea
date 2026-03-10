@@ -4,6 +4,9 @@ sidebarTitle: "mellea.stdlib.requirements.tool_reqs"
 description: "Requirements for tool-use workflows."
 ---
 
+The `mellea.stdlib` module provides high-level components for common LLM patterns. It includes sessions for conversation management, context handling, and reusable components for building complex workflows.
+
+
 
 
 
@@ -17,7 +20,10 @@ import { SidebarFix } from "/snippets/SidebarFix.mdx";
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `uses_tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/requirements/tool_reqs.py#L18" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `uses_tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/requirements/tool_reqs.py#L18" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 uses_tool(tool_name: str | Callable, check_only = False)
@@ -35,7 +41,8 @@ Use `tool_choice` if the OpenAI `tool_choice` model option is supported by your 
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `tool_arg_validator` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/requirements/tool_reqs.py#L43" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `tool_arg_validator` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/requirements/tool_reqs.py#L43" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 tool_arg_validator(description: str, tool_name: str | Callable | None, arg_name: str, validation_fn: Callable, check_only: bool = False) -> Requirement

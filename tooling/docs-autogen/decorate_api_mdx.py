@@ -13,13 +13,17 @@ Merges the two behaviors you were running back-to-back:
        import { SidebarFix } from "/snippets/SidebarFix.mdx";
        <SidebarFix />
 
+3) GitHub source link fixing:
+   - Corrects GitHub URLs to point to ibm-granite/mellea repository
+   - Uses version tags instead of branch names
+
 Usage examples:
 
 # (Recommended) Point at the Mintlify docs root (the folder that contains api/ and snippets/)
-python3 decorate_api_mdx_merged.py --docs-root /path/to/docs/docs
+python3 decorate_api_mdx_merged.py --docs-root /path/to/docs/docs --version 0.5.0
 
 # Or point directly at api directory
-python3 decorate_api_mdx_merged.py --api-dir /path/to/docs/docs/api
+python3 decorate_api_mdx_merged.py --api-dir /path/to/docs/docs/api --version 0.5.0
 """
 
 from __future__ import annotations
@@ -70,6 +74,112 @@ def inject_sidebar_fix(mdx_text: str) -> str:
         )
 
     return SIDEBAR_BLOCK + mdx_text.lstrip("\n")
+
+
+# =========================
+# GitHub source link fixing
+# =========================
+
+
+def fix_source_links(content: str, version: str) -> str:
+    """Fix GitHub source links to point to correct repository and version.
+
+    Args:
+        content: MDX file content
+        version: Package version (e.g., "0.5.0")
+
+    Returns:
+        Content with corrected GitHub links
+
+    Example:
+        Input:  [View source](https://github.com/pypa/pip/blob/main/src/pip/_internal/cli/base_command.py#L123)
+        Output: [View source](https://github.com/ibm-granite/mellea/blob/v0.5.0/src/pip/_internal/cli/base_command.py#L123)
+    """
+    # Pattern: [View source](https://github.com/OWNER/REPO/blob/BRANCH/PATH#LINE)
+    pattern = r"\[View source\]\(https://github\.com/[^/]+/[^/]+/blob/[^/]+/([^)]+)\)"
+
+    def replace_link(match):
+        path = match.group(1)
+        # Extract just the file path and line number
+        # path might be like "src/pip/_internal/cli/base_command.py#L123"
+        # We need to map this to the actual mellea path
+
+        # For mellea, the source is in mellea/ or cli/ directories
+        # The mdxify tool should have preserved the correct path
+        # We just need to fix the repository URL
+
+        return f"[View source](https://github.com/ibm-granite/mellea/blob/v{version}/{path})"
+
+    return re.sub(pattern, replace_link, content)
+
+
+# =========================
+# Preamble injection
+# =========================
+
+
+def inject_preamble(content: str, module_path: str) -> str:
+    """Inject preamble text after frontmatter.
+
+    Args:
+        content: MDX file content
+        module_path: Module path (e.g., "mellea.core.base")
+
+    Returns:
+        Content with preamble injected
+    """
+    # Define preambles for key modules
+    preambles = {
+        "mellea.core": (
+            "The `mellea.core` module provides the foundational abstractions for building "
+            "LLM-powered applications. It includes the base classes for backends, formatters, "
+            "and the `@generative` decorator for creating LLM-powered functions.\n\n"
+        ),
+        "mellea.backends": (
+            "The `mellea.backends` module provides integrations with various LLM providers. "
+            "Each backend implements the `Backend` interface and handles provider-specific "
+            "authentication, API calls, and response formatting.\n\n"
+        ),
+        "mellea.formatters": (
+            "The `mellea.formatters` module provides output formatters that parse and validate "
+            "LLM responses into structured Python types. Formatters handle JSON parsing, "
+            "type validation, and error recovery.\n\n"
+        ),
+        "mellea.stdlib": (
+            "The `mellea.stdlib` module provides high-level components for common LLM patterns. "
+            "It includes sessions for conversation management, context handling, and reusable "
+            "components for building complex workflows.\n\n"
+        ),
+        "cli": (
+            "The `cli` module provides command-line tools for working with Mellea. "
+            "It includes commands for serving models, generating documentation, and "
+            "running evaluations.\n\n"
+        ),
+    }
+
+    # Find matching preamble (exact match or parent module)
+    preamble_text = None
+    for key, text in preambles.items():
+        if module_path == key or module_path.startswith(key + "."):
+            preamble_text = text
+            break
+
+    if not preamble_text:
+        return content
+
+    # Find end of frontmatter
+    if not content.startswith("---\n"):
+        return content
+
+    frontmatter_end = content.find("\n---\n", 4)
+    if frontmatter_end == -1:
+        return content
+
+    # Inject preamble after frontmatter
+    before = content[: frontmatter_end + 5]  # Include closing ---\n
+    after = content[frontmatter_end + 5 :]
+
+    return f"{before}\n{preamble_text}{after}"
 
 
 # =========================
@@ -248,6 +358,161 @@ def decorate_mdx_body(full_text: str) -> str:
 
 
 # =========================
+# Cross-reference functions
+# =========================
+
+
+def extract_type_references(content: str) -> set[str]:
+    """Extract type references from docstrings and signatures.
+
+    Looks for:
+    - Type annotations: Backend, Optional[Backend], List[str]
+    - Docstring references: See `Backend` for details
+    - Return types: Returns Backend instance
+
+    Args:
+        content: MDX file content
+
+    Returns:
+        Set of type names referenced (e.g., {"Backend", "Session"})
+    """
+    refs = set()
+
+    # Pattern 1: Type annotations in code blocks
+    # Example: def foo(backend: Backend) -> Session:
+    type_pattern = r":\s*([A-Z][a-zA-Z0-9_]*)"
+    refs.update(re.findall(type_pattern, content))
+
+    # Pattern 2: Backtick references in text
+    # Example: See `Backend` for details
+    backtick_pattern = r"`([A-Z][a-zA-Z0-9_]*)`"
+    refs.update(re.findall(backtick_pattern, content))
+
+    # Pattern 3: Generic types
+    # Example: Optional[Backend], List[Session]
+    generic_pattern = r"\[([A-Z][a-zA-Z0-9_]*)\]"
+    refs.update(re.findall(generic_pattern, content))
+
+    return refs
+
+
+def resolve_symbol_path(symbol_name: str, source_dir: Path) -> str | None:
+    """Resolve symbol name to module path using Griffe.
+
+    Args:
+        symbol_name: Symbol to resolve (e.g., "Backend")
+        source_dir: Project source directory
+
+    Returns:
+        Module path if found (e.g., "mellea.core.backend"), None otherwise
+    """
+    try:
+        import griffe
+    except ImportError:
+        return None
+
+    # Load mellea package
+    try:
+        package = griffe.load("mellea", search_paths=[str(source_dir.parent)])
+    except Exception:
+        return None
+
+    # Search for symbol in all modules
+    for module_path, module in package.modules.items():
+        if symbol_name in module.members:
+            return module_path
+
+    return None
+
+
+def add_cross_references(content: str, module_path: str, source_dir: Path) -> str:
+    """Add cross-reference links to type mentions.
+
+    Args:
+        content: MDX file content
+        module_path: Current module path (e.g., "mellea.core.base")
+        source_dir: Project source directory
+
+    Returns:
+        Content with cross-reference links added
+    """
+    # Import mintlify_anchor from test file
+    import sys
+
+    test_anchors_path = Path(__file__).parent / "test_mintlify_anchors.py"
+    if test_anchors_path.exists():
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(
+            "test_mintlify_anchors", test_anchors_path
+        )
+        if spec and spec.loader:
+            test_anchors = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(test_anchors)
+            mintlify_anchor = test_anchors.mintlify_anchor
+        else:
+            # Fallback if import fails
+            def mintlify_anchor(heading: str) -> str:
+                anchor = heading.lower().replace(" ", "-")
+                anchor = re.sub(r"[^a-z0-9-]", "", anchor)
+                anchor = re.sub(r"-+", "-", anchor)
+                return anchor.strip("-")
+    else:
+        # Fallback if file doesn't exist
+        def mintlify_anchor(heading: str) -> str:
+            anchor = heading.lower().replace(" ", "-")
+            anchor = re.sub(r"[^a-z0-9-]", "", anchor)
+            anchor = re.sub(r"-+", "-", anchor)
+            return anchor.strip("-")
+
+    # Extract type references
+    refs = extract_type_references(content)
+
+    # Resolve each reference to a module path
+    resolved = {}
+    for ref in refs:
+        target_module = resolve_symbol_path(ref, source_dir)
+        if target_module and target_module != module_path:
+            # Convert module path to relative MDX path
+            # e.g., mellea.core.backend -> ../core/backend
+            resolved[ref] = target_module
+
+    # Replace backtick references with links
+    # Example: `Backend` -> [`Backend`](../core/backend#class-backend)
+    def replace_ref(match):
+        symbol = match.group(1)
+        if symbol in resolved:
+            target_module = resolved[symbol]
+            # Calculate relative path
+            current_parts = module_path.split(".")
+            target_parts = target_module.split(".")
+
+            # Find common prefix
+            common = 0
+            for i in range(min(len(current_parts), len(target_parts))):
+                if current_parts[i] == target_parts[i]:
+                    common += 1
+                else:
+                    break
+
+            # Build relative path
+            up_levels = len(current_parts) - common - 1
+            rel_path = "../" * up_levels + "/".join(target_parts[common:])
+
+            # Generate anchor
+            anchor = mintlify_anchor(f"class {symbol}")
+
+            return f"[`{symbol}`]({rel_path}#{anchor})"
+        return match.group(0)
+
+    # Only replace backtick references, not type annotations
+    pattern = r"`([A-Z][a-zA-Z0-9_]*)`"
+    content = re.sub(pattern, replace_ref, content)
+
+    return content
+
+
+# =========================
 # Path resolution + processing
 # =========================
 
@@ -266,13 +531,51 @@ def resolve_api_dir(docs_root: Path | None, api_dir: Path | None) -> Path:
     return candidates[0]
 
 
-def process_mdx_file(path: Path) -> bool:
+def process_mdx_file(
+    path: Path,
+    version: str,
+    api_dir: Path | None = None,
+    source_dir: Path | None = None,
+) -> bool:
+    """Process a single MDX file.
+
+    Args:
+        path: Path to MDX file
+        version: Package version for GitHub links
+        api_dir: API directory (for extracting module path)
+        source_dir: Project source directory (for cross-reference resolution)
+
+    Returns:
+        True if file was modified, False otherwise
+    """
     original = path.read_text(encoding="utf-8")
 
-    # Step 1: inject SidebarFix
-    text = inject_sidebar_fix(original)
+    # Extract module path from filepath
+    # e.g., docs/docs/api/mellea/core/base.mdx -> mellea.core.base
+    if api_dir:
+        try:
+            rel_path = path.relative_to(api_dir)
+            module_path = str(rel_path.with_suffix("")).replace("/", ".")
+        except ValueError:
+            # If path is not relative to api_dir, use filename
+            module_path = path.stem
+    else:
+        module_path = path.stem
 
-    # Step 2: decorate headings/dividers
+    # Step 1: Fix GitHub source links
+    text = fix_source_links(original, version)
+
+    # Step 2: Inject preamble
+    text = inject_preamble(text, module_path)
+
+    # Step 3: inject SidebarFix
+    text = inject_sidebar_fix(text)
+
+    # Step 4: Add cross-references (if source_dir provided)
+    if source_dir:
+        text = add_cross_references(text, module_path, source_dir)
+
+    # Step 5: decorate headings/dividers
     text = decorate_mdx_body(text)
 
     if text != original:
@@ -282,9 +585,24 @@ def process_mdx_file(path: Path) -> bool:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--docs-root", type=Path, default=None)
-    parser.add_argument("--api-dir", type=Path, default=None)
+    parser = argparse.ArgumentParser(description="Decorate API MDX files")
+    parser.add_argument(
+        "--docs-root", type=Path, default=None, help="Mintlify docs root directory"
+    )
+    parser.add_argument(
+        "--api-dir", type=Path, default=None, help="API directory containing MDX files"
+    )
+    parser.add_argument(
+        "--version",
+        required=True,
+        help="Package version for GitHub links (e.g., 0.5.0)",
+    )
+    parser.add_argument(
+        "--source-dir",
+        type=Path,
+        default=None,
+        help="Project source directory for cross-reference resolution",
+    )
     args = parser.parse_args()
 
     api_dir = resolve_api_dir(args.docs_root, args.api_dir)
@@ -292,10 +610,17 @@ def main() -> None:
         raise SystemExit(
             f"❌ API directory not found: {api_dir}\n"
             "Try:\n"
-            "  python3 decorate_api_mdx_merged.py --docs-root /path/to/docs/docs\n"
+            "  python3 decorate_api_mdx_merged.py --docs-root /path/to/docs/docs --version 0.5.0\n"
             "or\n"
-            "  python3 decorate_api_mdx_merged.py --api-dir /path/to/docs/docs/api\n"
+            "  python3 decorate_api_mdx_merged.py --api-dir /path/to/docs/docs/api --version 0.5.0\n"
         )
+
+    # Resolve source directory (default to mellea/ in current directory)
+    source_dir = args.source_dir
+    if source_dir is None:
+        source_dir = Path.cwd() / "mellea"
+        if not source_dir.exists():
+            source_dir = None  # Disable cross-references if source not found
 
     mdx_files = list(api_dir.rglob("*.mdx"))
     if not mdx_files:
@@ -304,7 +629,7 @@ def main() -> None:
 
     changed = 0
     for f in mdx_files:
-        if process_mdx_file(f):
+        if process_mdx_file(f, args.version, api_dir, source_dir):
             changed += 1
 
     print(

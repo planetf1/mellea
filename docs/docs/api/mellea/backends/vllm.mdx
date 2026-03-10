@@ -4,6 +4,9 @@ sidebarTitle: "mellea.backends.vllm"
 description: "A backend that uses a VLLM in the current process."
 ---
 
+The `mellea.backends` module provides integrations with various LLM providers. Each backend implements the `Backend` interface and handles provider-specific authentication, API calls, and response formatting.
+
+
 
 
 
@@ -20,7 +23,10 @@ The purpose of the VLLM backend is to provide a locally running fast inference e
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `LocalVLLMBackend` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/vllm.py#L55" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `LocalVLLMBackend` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/vllm.py#L59" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 The LocalVLLMBackend uses vLLM's python interface for inference, and uses a Formatter to convert `Component`s into prompts.
@@ -33,14 +39,20 @@ Its throughput is generally higher than that of LocalHFBackend.
 However, it takes longer to load the weights during the instantiation.
 Also, if you submit a request one by one, it can be slower.
 
+Note: vLLM defaults to ~16 tokens. Always set ModelOption.MAX_NEW_TOKENS explicitly (100-1000+).
+Structured output needs 200-500+ tokens.
 
+
+
+<div className="h-8" />
 
 <div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `generate_from_context` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/vllm.py#L237" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `generate_from_context` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/vllm.py#L236" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 generate_from_context(self, action: Component[C] | CBlock, ctx: Context) -> tuple[ModelOutputThunk[C], Context]
@@ -51,7 +63,8 @@ Generate using the huggingface model.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `processing` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/vllm.py#L379" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `processing` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/vllm.py#L366" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 processing(self, mot: ModelOutputThunk, chunk: vllm.RequestOutput)
@@ -62,10 +75,11 @@ Process the returned chunks or the complete response.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `post_processing` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/vllm.py#L385" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `post_processing` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/vllm.py#L372" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
-post_processing(self, mot: ModelOutputThunk, conversation: list[dict], _format: type[BaseModelSubclass] | None, tool_calls: bool, tools: dict[str, Callable], seed)
+post_processing(self, mot: ModelOutputThunk, conversation: list[dict], _format: type[BaseModelSubclass] | None, tool_calls: bool, tools: dict[str, AbstractMelleaTool], seed)
 ```
 
 Called when generation is done.
@@ -73,7 +87,8 @@ Called when generation is done.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `generate_from_raw` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/vllm.py#L428" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `generate_from_raw` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/vllm.py#L415" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 generate_from_raw(self, actions: list[Component[C]], ctx: Context) -> list[ModelOutputThunk[C]]
@@ -81,7 +96,8 @@ generate_from_raw(self, actions: list[Component[C]], ctx: Context) -> list[Model
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `generate_from_raw` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/vllm.py#L439" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `generate_from_raw` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/vllm.py#L426" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 generate_from_raw(self, actions: list[Component[C] | CBlock], ctx: Context) -> list[ModelOutputThunk[C | str]]
@@ -89,7 +105,8 @@ generate_from_raw(self, actions: list[Component[C] | CBlock], ctx: Context) -> l
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `generate_from_raw` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/vllm.py#L449" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `generate_from_raw` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/vllm.py#L436" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 generate_from_raw(self, actions: Sequence[Component[C] | CBlock], ctx: Context) -> list[ModelOutputThunk]

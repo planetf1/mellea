@@ -4,6 +4,9 @@ sidebarTitle: "mellea.core.base"
 description: "Core Classes and Data Structures."
 ---
 
+The `mellea.core` module provides the foundational abstractions for building LLM-powered applications. It includes the base classes for backends, formatters, and the `@generative` decorator for creating LLM-powered functions.
+
+
 
 
 
@@ -17,7 +20,10 @@ import { SidebarFix } from "/snippets/SidebarFix.mdx";
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `blockify` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L618" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `blockify` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L659" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 blockify(s: str | CBlock | Component) -> CBlock | Component
@@ -29,7 +35,8 @@ blockify(s: str | CBlock | Component) -> CBlock | Component
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get_images_from_component` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L632" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get_images_from_component` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L673" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 get_images_from_component(c: Component) -> None | list[ImageBlock]
@@ -41,12 +48,16 @@ Gets images from a `Component` if they are present and a non-empty list, otherwi
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
+
 ## Classes
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `CBlock` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L21" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `CBlock` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L21" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A `CBlock` is a block of content that can serve as input to or output from an LLM.
@@ -54,11 +65,14 @@ A `CBlock` is a block of content that can serve as input to or output from an LL
 
 
 <div className="h-8" />
+
+<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `value` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L47" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `value` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L47" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 value(self) -> str | None
@@ -69,7 +83,8 @@ Gets the value of the block.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `value` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L52" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `value` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L52" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 value(self, v: str)
@@ -80,7 +95,8 @@ Sets the value of the block.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ImageBlock` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L65" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ImageBlock` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L65" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A `ImageBlock` represents an image (as base64 PNG).
@@ -88,11 +104,14 @@ A `ImageBlock` represents an image (as base64 PNG).
 
 
 <div className="h-8" />
+
+<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_valid_base64_png` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L76" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_valid_base64_png` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L76" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 is_valid_base64_png(s: str) -> bool
@@ -103,7 +122,8 @@ Checks if a string is a valid base64 string [AIA PAI Nc Hin R v1.0].
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `pil_to_base64` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L105" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `pil_to_base64` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L105" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 pil_to_base64(image: PILImage.Image) -> str
@@ -114,7 +134,8 @@ Converts a PIL image to a base64 string representation.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_pil_image` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L112" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_pil_image` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L112" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 from_pil_image(cls, image: PILImage.Image, meta: dict[str, Any] | None = None) -> ImageBlock
@@ -125,7 +146,8 @@ Converts a PIL image to a base64 string representation.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ComponentParseError` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L131" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ComponentParseError` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L131" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 Raised by `Component.parse()` when the underlying parsing method throws an exception.
@@ -133,7 +155,8 @@ Raised by `Component.parse()` when the underlying parsing method throws an excep
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `Component` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L136" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `Component` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L136" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A `Component` is a composite data structure that is intended to be represented to an LLM.
@@ -141,11 +164,14 @@ A `Component` is a composite data structure that is intended to be represented t
 
 
 <div className="h-8" />
+
+<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `parts` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L139" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `parts` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L139" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 parts(self) -> list[Component | CBlock]
@@ -156,7 +182,8 @@ The set of all the constituent parts of the `Component`.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `format_for_llm` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L143" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `format_for_llm` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L143" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 format_for_llm(self) -> TemplateRepresentation | str
@@ -169,7 +196,8 @@ Returns: a `TemplateRepresentation` or string
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `parse` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L150" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `parse` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L150" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 parse(self, computed: ModelOutputThunk) -> S
@@ -182,7 +210,8 @@ Calls the Component's underlying `._parse` function.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `GenerateType` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L165" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `GenerateType` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L165" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 Used to track what functions can be used to extract a value from a ModelOutputThunk.
@@ -190,7 +219,8 @@ Used to track what functions can be used to extract a value from a ModelOutputTh
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ModelOutputThunk` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L173" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ModelOutputThunk` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L173" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A `ModelOutputThunk` is a special type of `CBlock` that we know came from a model's output. It is possible to instantiate one without the output being computed yet.
@@ -198,11 +228,14 @@ A `ModelOutputThunk` is a special type of `CBlock` that we know came from a mode
 
 
 <div className="h-8" />
+
+<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_computed` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L218" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_computed` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L218" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 is_computed(self)
@@ -213,7 +246,8 @@ Returns true only if this Thunk has already been filled.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `value` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L223" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `value` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L223" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 value(self) -> str | None
@@ -224,7 +258,8 @@ Gets the value of the block.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `value` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L230" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `value` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L230" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 value(self, v: str)
@@ -235,7 +270,8 @@ Sets the value of the block.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `avalue` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L234" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `avalue` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L234" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 avalue(self) -> str
@@ -250,7 +286,8 @@ Returns the value of the ModelOutputThunk. Can be used for both async streaming 
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `astream` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L257" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `astream` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L257" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 astream(self) -> str
@@ -271,7 +308,8 @@ we see this error happen in a real use case.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ContextTurn` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L407" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ContextTurn` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L432" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A turn of model input and model output.
@@ -279,7 +317,8 @@ A turn of model input and model output.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `Context` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L417" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `Context` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L442" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A `Context` is used to track the state of a `MelleaSession`.
@@ -289,11 +328,14 @@ A context is immutable. Every alteration leads to a new context.
 
 
 <div className="h-8" />
+
+<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_previous` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L437" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_previous` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L462" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 from_previous(cls: type[ContextT], previous: Context, data: Component | CBlock) -> ContextT
@@ -304,7 +346,8 @@ Constructs a new context from an existing context.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `reset_to_new` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L454" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `reset_to_new` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L479" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 reset_to_new(cls: type[ContextT]) -> ContextT
@@ -315,7 +358,8 @@ Returns an empty context for convenience.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_root_node` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L461" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_root_node` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L486" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 is_root_node(self) -> bool
@@ -326,7 +370,8 @@ Returns whether this context is the root context node.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `previous_node` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L466" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `previous_node` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L491" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 previous_node(self) -> Context | None
@@ -339,7 +384,8 @@ Internal use: Users should not need to use this property.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `node_data` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L474" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `node_data` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L499" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 node_data(self) -> Component | CBlock | None
@@ -352,7 +398,8 @@ Internal use: Users should not need to use this property.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_chat_context` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L482" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_chat_context` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L507" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 is_chat_context(self) -> bool
@@ -363,7 +410,8 @@ Returns whether this context is a chat context.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `as_list` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L488" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `as_list` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L513" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 as_list(self, last_n_components: int | None = None) -> list[Component | CBlock]
@@ -376,7 +424,8 @@ If `last_n_components` is `None`, then all components are returned.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `actions_for_available_tools` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L516" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `actions_for_available_tools` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L541" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 actions_for_available_tools(self) -> list[Component | CBlock] | None
@@ -389,7 +438,8 @@ Can be used to make the available tools differ from the tools of all the actions
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `last_output` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L523" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `last_output` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L548" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 last_output(self, check_last_n_components: int = 3) -> ModelOutputThunk | None
@@ -400,7 +450,8 @@ The last output thunk of the context.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `last_turn` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L530" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `last_turn` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L555" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 last_turn(self)
@@ -413,7 +464,8 @@ This can be partial. If the last event is an input, then the output is None.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `add` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L554" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `add` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L579" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 add(self, c: Component | CBlock) -> Context
@@ -424,7 +476,8 @@ Returns a new context obtained by adding `c` to this context.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `view_for_generation` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L560" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `view_for_generation` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L585" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 view_for_generation(self) -> list[Component | CBlock] | None
@@ -435,7 +488,47 @@ Provides a linear list of context components to use for generation, or None if t
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `TemplateRepresentation` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L566" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `AbstractMelleaTool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L590" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Abstract base class for Mellea Tool.
+
+
+
+<div className="h-8" />
+
+<div className="h-8" />
+**Methods:**
+
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `run` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L597" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+run(self, *args, **kwargs) -> Any
+```
+
+Runs the tool on the given arguments.
+
+
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `as_json_tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L602" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+as_json_tool(self) -> dict[str, Any]
+```
+
+Provides a JSON description for Mellea Tool.
+
+
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `TemplateRepresentation` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L607" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 Representing a component as a set of important attributes that can be consumed by the formatter.
@@ -443,7 +536,8 @@ Representing a component as a set of important attributes that can be consumed b
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `GenerateLog` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L584" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `GenerateLog` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L625" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A dataclass for capturing log entries.
@@ -454,7 +548,8 @@ records of events or operations where context and additional data are significan
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ModelToolCall` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L603" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ModelToolCall` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L644" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A dataclass for capturing the tool calls a model wants to make.
@@ -464,11 +559,14 @@ Provides a unified way to call tools post generation.
 
 
 <div className="h-8" />
+
+<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `call_func` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/core/base.py#L613" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `call_func` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/core/base.py#L654" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 call_func(self) -> Any

@@ -4,6 +4,9 @@ sidebarTitle: "mellea.stdlib.components.chat"
 description: "Chat primitives."
 ---
 
+The `mellea.stdlib` module provides high-level components for common LLM patterns. It includes sessions for conversation management, context handling, and reusable components for building complex workflows.
+
+
 
 
 
@@ -17,7 +20,10 @@ import { SidebarFix } from "/snippets/SidebarFix.mdx";
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `as_chat_history` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/chat.py#L184" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `as_chat_history` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/chat.py#L208" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 as_chat_history(ctx: Context) -> list[Message]
@@ -29,12 +35,16 @@ Returns a list of Messages corresponding to a Context.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
+
 ## Classes
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `Message` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/chat.py#L18" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `Message` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/chat.py#L18" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 A single Message in a Chat history.
@@ -45,11 +55,14 @@ The fact that some Component gets rendered as a chat message is `Formatter` misc
 
 
 <div className="h-8" />
+
+<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `images` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/chat.py#L50" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `images` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/chat.py#L50" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 images(self) -> None | list[str]
@@ -60,7 +73,8 @@ Returns the images associated with this message as list of base 64 strings.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `parts` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/chat.py#L56" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `parts` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/chat.py#L56" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 parts(self) -> list[Component | CBlock]
@@ -71,7 +85,8 @@ Returns all of the constituent parts of an Instruction.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `format_for_llm` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/chat.py#L65" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `format_for_llm` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/chat.py#L65" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 format_for_llm(self) -> TemplateRepresentation
@@ -85,7 +100,8 @@ Formats the content for a Language Model.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ToolMessage` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/chat.py#L141" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `ToolMessage` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/chat.py#L165" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 Adds the name field for function name.
@@ -93,11 +109,14 @@ Adds the name field for function name.
 
 
 <div className="h-8" />
+
+<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `format_for_llm` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/components/chat.py#L169" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `format_for_llm` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/components/chat.py#L193" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 format_for_llm(self) -> TemplateRepresentation

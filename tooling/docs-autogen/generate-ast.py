@@ -545,6 +545,11 @@ def main() -> None:
         required=False,
         help="Version like v0.3.0 or 0.3.0. Omit for latest.",
     )
+    parser.add_argument(
+        "--no-venv",
+        action="store_true",
+        help="Skip virtual environment creation (use when called via 'uv run --with').",
+    )
 
     args = parser.parse_args()
 
@@ -560,8 +565,12 @@ def main() -> None:
         shutil.rmtree(STAGING_API_DIR)
     STAGING_API_DIR.mkdir(parents=True, exist_ok=True)
 
-    venv_python = ensure_venv()
-    pip_install(venv_python, args.pypi_name, args.pypi_version)
+    if args.no_venv:
+        print("⚠️ Skipping venv creation (--no-venv flag set)", flush=True)
+        venv_python = Path(sys.executable)
+    else:
+        venv_python = ensure_venv()
+        pip_install(venv_python, args.pypi_name, args.pypi_version)
 
     # Generate MDX into staging (critical cwd fix inside run_mdxify_generation)
     for pkg in PACKAGES:
