@@ -575,11 +575,19 @@ def _find_index_mdx(child_dir: Path) -> Path | None:
     return mdxs[0] if mdxs else None
 
 
-def _collect_module_entries(api_dir: Path, pkg: str) -> list[tuple[str, str, str, str]]:
+def _collect_module_entries(
+    api_dir: Path, pkg: str, docstring_cache: dict[str, str] | None = None
+) -> list[tuple[str, str, str, str]]:
     """Return (module_name, description, preamble, href) for direct children of api/<pkg>/.
 
     Only includes entries at the immediate subdirectory level (not deep nested),
     to keep the landing page overview concise.
+
+    The preamble for each entry comes from the package's __init__ docstring
+    (looked up in docstring_cache via the dotted module path), falling back to
+    reading the body of the representative MDX file when no cache is available.
+    This follows standard Python practice: __init__.py is the canonical
+    description of a package.
     """
     base = api_dir / pkg
     if not base.exists():
@@ -590,28 +598,42 @@ def _collect_module_entries(api_dir: Path, pkg: str) -> list[tuple[str, str, str
             index_mdx = _find_index_mdx(child)
             if index_mdx is None:
                 continue
+            module_path = f"{pkg}.{child.name}"
             desc = _read_frontmatter_field(index_mdx, "description")
-            preamble = _read_body_preamble(index_mdx)
+            if docstring_cache:
+                preamble = docstring_cache.get(module_path, "")
+            else:
+                preamble = _read_body_preamble(index_mdx)
             href = f"api/{pkg}/{child.name}/{index_mdx.stem}"
             entries.append((child.name, desc, preamble, href))
         elif child.suffix == ".mdx":
+            module_path = f"{pkg}.{child.stem}"
             desc = _read_frontmatter_field(child, "description")
-            preamble = _read_body_preamble(child)
+            if docstring_cache:
+                preamble = docstring_cache.get(module_path, "")
+            else:
+                preamble = _read_body_preamble(child)
             href = f"api/{pkg}/{child.stem}"
             entries.append((child.stem, desc, preamble, href))
     return entries
 
 
-def generate_landing_page(api_dir: Path, docs_root: Path) -> None:
+def generate_landing_page(
+    api_dir: Path, docs_root: Path, docstring_cache: dict[str, str] | None = None
+) -> None:
     """Generate api-reference.mdx as a landing page for the API Reference tab.
 
     Scans the generated api/ directory structure to produce an up-to-date
     overview of every top-level module, rendered as a prose list with links.
     The file is written to docs_root so Mintlify serves it when the user
     clicks the API Reference tab.
+
+    When docstring_cache is provided, package descriptions are sourced directly
+    from __init__ module docstrings (standard Python practice) rather than
+    inferred from the representative MDX file body.
     """
-    mellea_entries = _collect_module_entries(api_dir, "mellea")
-    cli_entries = _collect_module_entries(api_dir, "cli")
+    mellea_entries = _collect_module_entries(api_dir, "mellea", docstring_cache)
+    cli_entries = _collect_module_entries(api_dir, "cli", docstring_cache)
 
     def _entry(name: str, desc: str, preamble: str, href: str, pkg: str) -> str:
         title = f"mellea.{name}" if pkg == "mellea" else f"m {name}"
@@ -668,14 +690,38 @@ def build_api_reference_tab_object(api_dir: Path, docs_root: Path) -> dict[str, 
     }
 
 
+def _load_docstring_cache() -> dict[str, str]:
+    """Load the module-path→docstring cache from the source packages.
+
+    Imports build_module_docstring_cache from decorate_api_mdx (same directory)
+    and builds the cache from the repo root.  Returns an empty dict on any failure
+    so callers degrade gracefully to the _read_body_preamble() fallback.
+    """
+    try:
+        sys.path.insert(0, str(Path(__file__).parent))
+        from decorate_api_mdx import (
+            build_module_docstring_cache,  # type: ignore[import]
+        )
+
+        cache = build_module_docstring_cache(REPO_ROOT / "mellea")
+        print(f"  Loaded {len(cache)} module docstrings from source.", flush=True)
+        return cache
+    except Exception as exc:
+        print(f"  WARNING: could not load docstring cache: {exc}", flush=True)
+        return {}
+
+
 def build_and_merge_navigation(
-    docs_json_path: Path, api_dir: Path, docs_root: Path
+    docs_json_path: Path,
+    api_dir: Path,
+    docs_root: Path,
+    docstring_cache: dict[str, str] | None = None,
 ) -> None:
     print("-" * 30, flush=True)
     print(
         "🛠️ Building API Reference navigation and merging into docs.json...", flush=True
     )
-    generate_landing_page(api_dir, docs_root)
+    generate_landing_page(api_dir, docs_root, docstring_cache)
     api_tab = build_api_reference_tab_object(api_dir, docs_root)
     merge_api_reference_into_docs_json(docs_json_path, api_tab)
 
@@ -738,7 +784,10 @@ def main() -> None:
                 "Run the full pipeline first (without --nav-only)."
             )
         print("🔄 --nav-only: rebuilding landing page and navigation...", flush=True)
-        build_and_merge_navigation(docs_json_path, final_api_dir, docs_root)
+        docstring_cache = _load_docstring_cache()
+        build_and_merge_navigation(
+            docs_json_path, final_api_dir, docs_root, docstring_cache
+        )
         print("🎉 Navigation rebuild complete.", flush=True)
         return
 
@@ -768,7 +817,9 @@ def main() -> None:
     final_api_dir = move_api_to_docs_root(docs_root)
 
     # Merge nav based on final location
-    build_and_merge_navigation(docs_json_path, final_api_dir, docs_root)
+    build_and_merge_navigation(
+        docs_json_path, final_api_dir, docs_root, _load_docstring_cache()
+    )
 
     # Cleanup mdxify run cwd (optional)
     if MDXIFY_CWD.exists():
