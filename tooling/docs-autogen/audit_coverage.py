@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Audit API documentation coverage.
 
-Discovers all public symbols in mellea/ and cli/ using Griffe,
-then checks which ones have generated MDX documentation.
+Discovers all public classes and functions in mellea/ and cli/ using Griffe,
+then checks which ones have generated MDX documentation. Constants and module
+attributes are excluded from the count — they are not expected to have
+standalone documentation.
 """
 
 import argparse
@@ -45,13 +47,17 @@ def discover_public_symbols(
         if any(part.startswith("_") for part in module_path.split(".")):
             return
 
-        # Get public members (not starting with _)
+        # Get public classes and functions (not starting with _).
+        # Constants/attributes are excluded — they are not expected to have
+        # standalone documentation and would skew the coverage metric.
+        # Aliases (re-exports from other modules) are also excluded — they are
+        # documented at their canonical definition, not at each re-export site.
         for name, member in module.members.items():
             if not name.startswith("_"):
-                # Include classes, functions, and important attributes
                 try:
-                    if member.is_class or member.is_function or member.is_attribute:
-                        # Store as full path: package.module.symbol
+                    if getattr(member, "is_alias", False):
+                        continue
+                    if member.is_class or member.is_function:
                         full_path = f"{module_path}.{name}"
                         symbols[full_path] = []
                 except Exception:
@@ -227,7 +233,7 @@ def main():
     print(f"\n{'=' * 60}")
     print("API Documentation Coverage Report")
     print(f"{'=' * 60}")
-    print(f"Total symbols: {report['total_symbols']}")
+    print(f"Total classes + functions: {report['total_symbols']}")
     print(f"Documented: {report['documented_symbols']}")
     print(f"Coverage: {report['coverage_percentage']}%")
     print(f"CLI commands: {len(report['cli_commands'])}")
