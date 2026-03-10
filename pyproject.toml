@@ -191,6 +191,10 @@ help = "Run docs tooling unit tests"
 cmd = "python tooling/docs-autogen/find_orphans.py"
 help = "Find MDX files not referenced in docs.json navigation"
 
+[tool.poe.tasks.apidocs-quality]
+cmd = "python tooling/docs-autogen/audit_coverage.py --docs-dir docs/docs/api --quality --no-methods"
+help = "Audit docstring quality for documented public symbols (missing, short, no Args/Returns)"
+
 # -----------------------------
 # Ruff - Linting and Formatting
 # -----------------------------

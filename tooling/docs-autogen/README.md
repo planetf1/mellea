@@ -101,21 +101,15 @@ uv run python tooling/docs-autogen/validate.py docs/docs/api --version 0.3.2 --c
 **Docstring quality audit** (`audit_coverage.py --quality`):
 
 ```bash
-# Report missing docstrings, short docstrings, missing Args/Returns sections
-uv run --isolated --with griffe python tooling/docs-autogen/audit_coverage.py \
-    --docs-dir docs/docs/api --quality
+uv run poe apidocs-quality          # missing, short, no Args/Returns (top-level, no methods)
 
-# Top-level symbols only (skip class methods)
-uv run --isolated --with griffe python tooling/docs-autogen/audit_coverage.py \
-    --docs-dir docs/docs/api --quality --no-methods
-
-# Raise the "short" threshold (default: 5 words)
-uv run --isolated --with griffe python tooling/docs-autogen/audit_coverage.py \
-    --docs-dir docs/docs/api --quality --short-threshold 15
-
-# Save full report (coverage + quality) to JSON
-uv run --isolated --with griffe python tooling/docs-autogen/audit_coverage.py \
-    --docs-dir docs/docs/api --quality --output report.json
+# Extended options (direct invocation)
+uv run python tooling/docs-autogen/audit_coverage.py \
+    --docs-dir docs/docs/api --quality               # include class methods too
+uv run python tooling/docs-autogen/audit_coverage.py \
+    --docs-dir docs/docs/api --quality --short-threshold 15   # raise "short" threshold
+uv run python tooling/docs-autogen/audit_coverage.py \
+    --docs-dir docs/docs/api --quality --output report.json   # save JSON report
 ```
 
 Four issue kinds are reported:
