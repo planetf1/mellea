@@ -52,9 +52,8 @@ def main():
             str(
                 output_dir.parent
             ),  # generate-ast.py expects docs/docs, not docs/docs/api
+            "--no-venv",  # Always use current environment
         ]
-        if args.no_venv:
-            cmd.append("--no-venv")
 
         print(f"[build.py] Running: {' '.join(cmd)}")
         result = subprocess.run(cmd, check=False)

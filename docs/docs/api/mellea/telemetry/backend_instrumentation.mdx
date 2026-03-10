@@ -21,10 +21,7 @@ https://opentelemetry.io/docs/specs/semconv/gen-ai/
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get_model_id_str` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/backend_instrumentation.py#L12" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get_model_id_str` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/telemetry/backend_instrumentation.py#L12" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 get_model_id_str(backend: Any) -> str
@@ -42,8 +39,7 @@ Extract model_id string from a backend instance.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get_system_name` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/backend_instrumentation.py#L29" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get_system_name` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/telemetry/backend_instrumentation.py#L29" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 get_system_name(backend: Any) -> str
@@ -61,8 +57,7 @@ Get the Gen-AI system name from backend.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get_context_size` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/backend_instrumentation.py#L55" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get_context_size` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/telemetry/backend_instrumentation.py#L55" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 get_context_size(ctx: Any) -> int
@@ -80,8 +75,7 @@ Get the size of a context.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `instrument_generate_from_context` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/backend_instrumentation.py#L74" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `instrument_generate_from_context` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/telemetry/backend_instrumentation.py#L74" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 instrument_generate_from_context(backend: Any, action: Any, ctx: Any, format: Any = None, tool_calls: bool = False)
@@ -105,8 +99,7 @@ Follows Gen-AI semantic conventions for chat operations.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `start_generate_span` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/backend_instrumentation.py#L112" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `start_generate_span` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/telemetry/backend_instrumentation.py#L112" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 start_generate_span(backend: Any, action: Any, ctx: Any, format: Any = None, tool_calls: bool = False)
@@ -131,8 +124,7 @@ post-processing completes.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `instrument_generate_from_raw` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/backend_instrumentation.py#L153" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `instrument_generate_from_raw` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/telemetry/backend_instrumentation.py#L153" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 instrument_generate_from_raw(backend: Any, num_actions: int, format: Any = None, tool_calls: bool = False)
@@ -155,8 +147,7 @@ Follows Gen-AI semantic conventions for text generation operations.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `record_token_usage` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/backend_instrumentation.py#L189" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `record_token_usage` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/telemetry/backend_instrumentation.py#L189" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 record_token_usage(span: Any, usage: Any) -> None
@@ -172,8 +163,7 @@ Record token usage metrics following Gen-AI semantic conventions.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `record_response_metadata` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/backend_instrumentation.py#L223" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `record_response_metadata` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/telemetry/backend_instrumentation.py#L223" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 record_response_metadata(span: Any, response: Any, model_id: str | None = None) -> None

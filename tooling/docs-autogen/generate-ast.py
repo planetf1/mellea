@@ -7,9 +7,8 @@ Key fix vs your prior script:
     shadowed by repo-local ./mellea or ./cli packages.
 
 Pipeline:
-  1) Create/Reuse venv: <repo-root>/.venv-docs-autogen
-  2) pip install: mdxify + mellea (optionally pinned)
-  3) Run mdxify --all for root modules: mellea, cli into STAGING: <repo-root>/docs/api/<pkg>
+  1) Use current Python environment (assumes mdxify is installed)
+  2) Run mdxify --all for root modules: mellea, cli into STAGING: <repo-root>/docs/api/<pkg>
   4) Reorganize flat mdxify output into nested folders
   5) Rename __init__.mdx -> <foldername>.mdx (dedupe if identical)
   6) Update frontmatter (title/sidebarTitle/description) from H1 + first paragraph
@@ -172,12 +171,23 @@ def ensure_venv() -> Path:
 
 def pip_install(venv_python: Path, pypi_name: str, pypi_version: str | None) -> None:
     ver = normalize_version(pypi_version)
-    spec = pypi_name if not ver else f"{pypi_name}=={ver}"
+    # If no version specified, install from local source (for development)
+    # Otherwise install from PyPI with specified version
+    if not ver:
+        spec = "."  # Install from current directory
+        print(
+            f"📦 Installing into venv: mdxify + {pypi_name} (from local source)",
+            flush=True,
+        )
+    else:
+        spec = f"{pypi_name}=={ver}"
+        print(f"📦 Installing into venv: mdxify + {spec}", flush=True)
 
-    print(f"📦 Installing into venv: mdxify + {spec}", flush=True)
     subprocess.run([str(venv_python), "-m", "pip", "install", "-U", "pip"], check=True)
     subprocess.run(
-        [str(venv_python), "-m", "pip", "install", "-U", "mdxify", spec], check=True
+        [str(venv_python), "-m", "pip", "install", "-U", "mdxify", spec],
+        check=True,
+        cwd=str(REPO_ROOT) if not ver else None,
     )
 
 

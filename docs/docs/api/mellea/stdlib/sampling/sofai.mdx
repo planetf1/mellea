@@ -4,16 +4,16 @@ sidebarTitle: "mellea.stdlib.sampling.sofai"
 description: "SOFAI (Slow and Fast AI) Sampling Strategy."
 ---
 
+
+import { SidebarFix } from "/snippets/SidebarFix.mdx";
+
+<SidebarFix />
+
 The `mellea.stdlib` module provides high-level components for common LLM patterns. It includes sessions for conversation management, context handling, and reusable components for building complex workflows.
 
 
 
 
-
-
-import { SidebarFix } from "/snippets/SidebarFix.mdx";
-
-<SidebarFix />
 
 This module implements a two-solver sampling strategy that uses:
 1. S1 Solver (fast model) - Iterative solving with feedback-based repair
@@ -28,10 +28,7 @@ feedback for repair, enabling more effective iterative improvement.
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `SOFAISamplingStrategy` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/sampling/sofai.py#L36" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `SOFAISamplingStrategy` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/sampling/sofai.py#L36" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 SOFAI sampling strategy.
@@ -46,14 +43,11 @@ feedback for repair, enabling more effective iterative improvement.
 
 
 <div className="h-8" />
-
-<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `repair` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/sampling/sofai.py#L106" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `repair` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/sampling/sofai.py#L106" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 repair(old_ctx: Context, new_ctx: Context, past_actions: list[Component], past_results: list[ModelOutputThunk], past_val: list[list[tuple[Requirement, ValidationResult]]]) -> tuple[Component, Context]
@@ -77,8 +71,7 @@ to provide specific, actionable feedback for the next attempt.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `select_from_failure` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/sampling/sofai.py#L154" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `select_from_failure` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/sampling/sofai.py#L154" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 select_from_failure(sampled_actions: list[Component], sampled_results: list[ModelOutputThunk], sampled_val: list[list[tuple[Requirement, ValidationResult]]]) -> int
@@ -99,8 +92,7 @@ Returns the last attempt as it has benefited from the most feedback.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `sample` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/sampling/sofai.py#L556" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `sample` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/sampling/sofai.py#L556" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 sample(self, action: Component[S], context: Context, backend: Backend, requirements: list[Requirement] | None) -> SamplingResult[S]

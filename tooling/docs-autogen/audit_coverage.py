@@ -17,15 +17,18 @@ except ImportError:
     sys.exit(1)
 
 
-def discover_public_symbols(source_dir: Path) -> dict[str, list[str]]:
+def discover_public_symbols(
+    source_dir: Path, package_name: str
+) -> dict[str, list[str]]:
     """Discover all public symbols using Griffe.
 
     Args:
         source_dir: Root directory to scan (e.g., mellea/ or cli/)
+        package_name: Package name to prepend (e.g., "mellea" or "cli")
 
     Returns:
-        Dict mapping module paths to lists of public symbol names
-        Example: {"mellea.core.base": ["Base", "Backend", "generative"]}
+        Dict mapping full symbol paths to empty lists (for compatibility)
+        Example: {"mellea.core.base.Component": [], "mellea.core.base.generative": []}
     """
     symbols: dict[str, list[str]] = {}
 
@@ -36,9 +39,11 @@ def discover_public_symbols(source_dir: Path) -> dict[str, list[str]]:
         print(f"WARNING: Failed to load {source_dir}: {e}", file=sys.stderr)
         return symbols
 
-    # Walk through all modules
-    for module_path, module in package.modules.items():
-        public_members = []
+    def walk_module(module, module_path: str):
+        """Recursively walk through module and submodules."""
+        # Skip internal modules (starting with _)
+        if any(part.startswith("_") for part in module_path.split(".")):
+            return
 
         # Get public members (not starting with _)
         for name, member in module.members.items():
@@ -46,13 +51,25 @@ def discover_public_symbols(source_dir: Path) -> dict[str, list[str]]:
                 # Include classes, functions, and important attributes
                 try:
                     if member.is_class or member.is_function or member.is_attribute:
-                        public_members.append(name)
+                        # Store as full path: package.module.symbol
+                        full_path = f"{module_path}.{name}"
+                        symbols[full_path] = []
                 except Exception:
                     # Skip members that can't be resolved (e.g., aliases to stdlib)
                     pass
 
-        if public_members:
-            symbols[module_path] = sorted(public_members)
+        # Recursively walk submodules (but skip internal ones)
+        if hasattr(module, "modules"):
+            for submodule_name, submodule in module.modules.items():
+                if not submodule_name.startswith("_"):
+                    submodule_path = f"{module_path}.{submodule_name}"
+                    walk_module(submodule, submodule_path)
+
+    # Walk through all top-level modules
+    for module_name, module in package.modules.items():
+        if not module_name.startswith("_"):
+            module_path = f"{package_name}.{module_name}"
+            walk_module(module, module_path)
 
     return symbols
 
@@ -113,11 +130,21 @@ def find_documented_symbols(docs_dir: Path) -> set[str]:
         content = mdx_file.read_text()
 
         # Look for heading patterns that indicate symbol documentation
-        # e.g., "## class Base", "## function generative"
+        # The actual format is: ### <span>...FUNC</span> `symbol_name`
+        # or: ### <span>...CLASS</span> `ClassName`
         import re
 
-        symbol_pattern = r"^##\s+(?:class|function|attribute)\s+(\w+)"
-        for match in re.finditer(symbol_pattern, content, re.MULTILINE):
+        # Match both old format and new format
+        # Old: ## class Base, ## function generative
+        # New: ### <span>...FUNC</span> `blockify`, ### <span>...CLASS</span> `Component`
+        old_pattern = r"^##\s+(?:class|function|attribute)\s+(\w+)"
+        new_pattern = r"###\s+<span[^>]*>(?:FUNC|CLASS|ATTR)</span>\s+`(\w+)`"
+
+        for match in re.finditer(old_pattern, content, re.MULTILINE):
+            symbol_name = match.group(1)
+            documented.add(f"{module_path}.{symbol_name}")
+
+        for match in re.finditer(new_pattern, content, re.MULTILINE):
             symbol_name = match.group(1)
             documented.add(f"{module_path}.{symbol_name}")
 
@@ -130,26 +157,30 @@ def generate_coverage_report(
     """Generate coverage report.
 
     Args:
-        discovered: All discovered public symbols
-        documented: Set of documented symbols
+        discovered: Dict of full symbol paths (keys are "module.symbol", values are empty lists)
+        documented: Set of documented symbols (full paths like "module.symbol")
         cli_commands: List of CLI commands
 
     Returns:
         Coverage report dict with statistics and missing symbols
     """
-    total_symbols = sum(len(symbols) for symbols in discovered.values())
-    documented_count = len(documented)
+    # discovered is now a dict where keys are full paths like "mellea.core.base.Component"
+    total_symbols = len(discovered)
 
-    missing = {}
-    for module_path, symbols in discovered.items():
-        missing_in_module = []
-        for symbol in symbols:
-            full_path = f"{module_path}.{symbol}"
-            if full_path not in documented:
-                missing_in_module.append(symbol)
+    # Count how many discovered symbols are documented
+    documented_count = len(discovered.keys() & documented)
 
-        if missing_in_module:
-            missing[module_path] = missing_in_module
+    # Find missing symbols grouped by module
+    missing: dict[str, list[str]] = {}
+    for full_path in discovered.keys():
+        if full_path not in documented:
+            # Extract module and symbol name
+            parts = full_path.rsplit(".", 1)
+            if len(parts) == 2:
+                module_path, symbol_name = parts
+                if module_path not in missing:
+                    missing[module_path] = []
+                missing[module_path].append(symbol_name)
 
     coverage_pct = (documented_count / total_symbols * 100) if total_symbols > 0 else 0
 
@@ -179,8 +210,8 @@ def main():
     docs_dir = Path(args.docs_dir)
 
     print("🔍 Discovering public symbols...")
-    mellea_symbols = discover_public_symbols(source_dir / "mellea")
-    cli_symbols = discover_public_symbols(source_dir / "cli")
+    mellea_symbols = discover_public_symbols(source_dir / "mellea", "mellea")
+    cli_symbols = discover_public_symbols(source_dir / "cli", "cli")
 
     print("🔍 Discovering CLI commands...")
     cli_commands = discover_cli_commands(source_dir / "cli")

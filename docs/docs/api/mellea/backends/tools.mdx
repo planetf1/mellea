@@ -4,26 +4,23 @@ sidebarTitle: "mellea.backends.tools"
 description: "Utilities for dealing with LLM tools."
 ---
 
-The `mellea.backends` module provides integrations with various LLM providers. Each backend implements the `Backend` interface and handles provider-specific authentication, API calls, and response formatting.
-
-
-
-
-
 
 import { SidebarFix } from "/snippets/SidebarFix.mdx";
 
 <SidebarFix />
+
+The `mellea.backends` module provides integrations with various LLM providers. Each backend implements the [`Backend`](../core/backend#class-backend) interface and handles provider-specific authentication, API calls, and response formatting.
+
+
+
+
 
 ## Functions
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L157" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L157" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 tool(func: Callable | None = None, name: str | None = None) -> MelleaTool | Callable[[Callable], MelleaTool]
@@ -78,8 +75,7 @@ With custom name (as function):
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `add_tools_from_model_options` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L220" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `add_tools_from_model_options` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L220" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 add_tools_from_model_options(tools_dict: dict[str, AbstractMelleaTool], model_options: dict[str, Any])
@@ -93,8 +89,7 @@ Accepts MelleaTool instances or @tool decorated functions.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `add_tools_from_context_actions` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L259" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `add_tools_from_context_actions` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L259" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 add_tools_from_context_actions(tools_dict: dict[str, AbstractMelleaTool], ctx_actions: list[Component | CBlock] | None)
@@ -106,8 +101,7 @@ If any of the actions in ctx_actions have tools in their template_representation
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `convert_tools_to_json` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L279" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `convert_tools_to_json` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L279" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 convert_tools_to_json(tools: dict[str, AbstractMelleaTool]) -> list[dict]
@@ -124,8 +118,7 @@ Notes:
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `json_extraction` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L290" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `json_extraction` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L290" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 json_extraction(text: str) -> Generator[dict, None, None]
@@ -137,8 +130,7 @@ Yields the next valid json object in a given string.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `find_func` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L310" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `find_func` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L310" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 find_func(d) -> tuple[str | None, Mapping | None]
@@ -152,8 +144,7 @@ Most llms output tool requests in the form `...{"name": string, "arguments": {}}
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `parse_tools` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L338" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `parse_tools` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L338" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 parse_tools(llm_response: str) -> list[tuple[str, Mapping]]
@@ -165,8 +156,7 @@ A simple parser that will scan a string for tools and attempt to extract them; o
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `validate_tool_arguments` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L350" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `validate_tool_arguments` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L350" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 validate_tool_arguments(tool: AbstractMelleaTool, args: Mapping[str, Any]) -> dict[str, Any]
@@ -212,8 +202,7 @@ pydantic.ValidationError: ...
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `convert_function_to_ollama_tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L719" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `convert_function_to_ollama_tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L718" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 convert_function_to_ollama_tool(func: Callable, name: str | None = None) -> OllamaTool
@@ -225,16 +214,12 @@ Imported from Ollama.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
 ## Classes
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `MelleaTool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L19" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `MelleaTool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L19" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 Tool class to represent a tool.
@@ -242,14 +227,11 @@ Tool class to represent a tool.
 
 
 <div className="h-8" />
-
-<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `run` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L37" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `run` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L37" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 run(self, *args, **kwargs) -> Any
@@ -260,8 +242,7 @@ Run the tool with the given arguments.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `as_json_tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L42" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `as_json_tool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L42" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 as_json_tool(self) -> dict[str, Any]
@@ -272,8 +253,7 @@ Return the tool converted to a OpenAI compatible JSON object.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_langchain` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L47" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_langchain` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L47" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 from_langchain(cls, tool: Any)
@@ -284,8 +264,7 @@ Create a Tool from a langchain tool object.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_smolagents` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L83" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_smolagents` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L83" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 from_smolagents(cls, tool: Any)
@@ -306,8 +285,7 @@ Create a Tool from a HuggingFace smolagents tool object.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_callable` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L138" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `from_callable` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L138" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 from_callable(cls, func: Callable, name: str | None = None)
@@ -318,8 +296,7 @@ Create a Tool from a callable.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `SubscriptableBaseModel` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L544" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `SubscriptableBaseModel` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L543" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 Class imported from Ollama.
@@ -327,14 +304,11 @@ Class imported from Ollama.
 
 
 <div className="h-8" />
-
-<div className="h-8" />
 **Methods:**
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L617" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+#### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `get` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L616" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 get(self, key: str, default: Any = None) -> Any
@@ -357,8 +331,7 @@ Get.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `OllamaTool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/backends/tools.py#L636" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#4ADE8033]/20 text-[#15803D]">CLASS</span> `OllamaTool` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/backends/tools.py#L635" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 
 Class imported from Ollama.

@@ -4,26 +4,23 @@ sidebarTitle: "mellea.stdlib.frameworks.react"
 description: "ReACT Agentic Pattern."
 ---
 
+
+import { SidebarFix } from "/snippets/SidebarFix.mdx";
+
+<SidebarFix />
+
 The `mellea.stdlib` module provides high-level components for common LLM patterns. It includes sessions for conversation management, context handling, and reusable components for building complex workflows.
 
 
 
 
 
-
-import { SidebarFix } from "/snippets/SidebarFix.mdx";
-
-<SidebarFix />
-
 ## Functions
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `react` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/frameworks/react.py#L20" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `react` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/frameworks/react.py#L20" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 react(goal: str, context: ChatContext, backend: Backend) -> tuple[ModelOutputThunk[str], ChatContext]
@@ -42,7 +39,7 @@ Asynchronous ReACT pattern (Think -> Act -> Observe -> Repeat Until Done); attem
 - `loop_budget`: the number of steps allowed; use -1 for unlimited
 
 **Returns:**
-- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a `SamplingResult`.
+- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a [`SamplingResult`](../../core/sampling#class-samplingresult).
 
 **Raises:**
 - `RuntimeError`: if the loop ends before a final answer is found

@@ -4,26 +4,23 @@ sidebarTitle: "mellea.stdlib.functional"
 description: "Functions for Mellea operations like Instruct, Chat, etc..."
 ---
 
+
+import { SidebarFix } from "/snippets/SidebarFix.mdx";
+
+<SidebarFix />
+
 The `mellea.stdlib` module provides high-level components for common LLM patterns. It includes sessions for conversation management, context handling, and reusable components for building complex workflows.
 
 
 
 
 
-
-import { SidebarFix } from "/snippets/SidebarFix.mdx";
-
-<SidebarFix />
-
 ## Functions
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
 
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `act` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L65" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `act` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L65" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 act(action: Component[S], context: Context, backend: Backend) -> tuple[ModelOutputThunk[S], Context] | SamplingResult[S]
@@ -44,13 +41,12 @@ Runs a generic action, and adds both the action and the result to the context.
 - `tool_calls`: if true, tool calling is enabled.
 
 **Returns:**
-- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a `SamplingResult`.
+- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a [`SamplingResult`](../core/sampling#class-samplingresult).
 
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `instruct` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L154" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `instruct` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L154" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 instruct(description: str, context: Context, backend: Backend) -> tuple[ModelOutputThunk[str], Context] | SamplingResult[str]
@@ -77,13 +73,12 @@ Generates from an instruction.
 - `images`: A list of images to be used in the instruction or None if none.
 
 **Returns:**
-- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a `SamplingResult`.
+- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a [`SamplingResult`](../core/sampling#class-samplingresult).
 
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `chat` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L225" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `chat` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L225" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 chat(content: str, context: Context, backend: Backend) -> tuple[Message, Context]
@@ -95,8 +90,7 @@ Sends a simple chat message and returns the response. Adds both messages to the 
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `validate` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L262" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `validate` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L262" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 validate(reqs: Requirement | list[Requirement], context: Context, backend: Backend) -> list[ValidationResult]
@@ -108,8 +102,7 @@ Validates a set of requirements over the output (if provided) or the current con
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `query` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L294" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `query` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L294" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 query(obj: Any, query: str, context: Context, backend: Backend) -> tuple[ModelOutputThunk, Context]
@@ -119,7 +112,7 @@ query(obj: Any, query: str, context: Context, backend: Backend) -> tuple[ModelOu
 Query method for retrieving information from an object.
 
 **Args:**
-- `obj `: The object to be queried. It should be an instance of MObject or can be converted to one if necessary.
+- `obj`: The object to be queried. It should be an instance of MObject or can be converted to one if necessary.
 - `query`: The string representing the query to be executed against the object.
 - `context`: the context being used as a history from which to generate the response.
 - `backend`: the backend used to generate the response.
@@ -133,8 +126,7 @@ Query method for retrieving information from an object.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `transform` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L336" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `transform` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L336" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 transform(obj: Any, transformation: str, context: Context, backend: Backend) -> tuple[ModelOutputThunk | Any, Context]
@@ -159,8 +151,7 @@ Transform method for creating a new object with the transformation applied.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `aact` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L449" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `aact` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L449" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 aact(action: Component[S], context: Context, backend: Backend) -> tuple[ModelOutputThunk[S], Context] | SamplingResult
@@ -182,13 +173,12 @@ Asynchronous version of .act; runs a generic action, and adds both the action an
 - `silence_context_type_warning`: if called directly from an asynchronous function, will log a warning if not using a SimpleContext
 
 **Returns:**
-- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a `SamplingResult`.
+- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a [`SamplingResult`](../core/sampling#class-samplingresult).
 
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `ainstruct` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L628" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `ainstruct` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L628" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 ainstruct(description: str, context: Context, backend: Backend) -> tuple[ModelOutputThunk[str], Context] | SamplingResult
@@ -215,13 +205,12 @@ Generates from an instruction.
 - `images`: A list of images to be used in the instruction or None if none.
 
 **Returns:**
-- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a `SamplingResult`.
+- A (ModelOutputThunk, Context) if `return_sampling_results` is `False`, else returns a [`SamplingResult`](../core/sampling#class-samplingresult).
 
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `achat` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L699" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `achat` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L699" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 achat(content: str, context: Context, backend: Backend) -> tuple[Message, Context]
@@ -233,8 +222,7 @@ Sends a simple chat message and returns the response. Adds both messages to the 
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `avalidate` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L736" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `avalidate` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L736" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 avalidate(reqs: Requirement | list[Requirement], context: Context, backend: Backend) -> list[ValidationResult]
@@ -246,8 +234,7 @@ Asynchronous version of .validate; validates a set of requirements over the outp
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `aquery` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L793" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `aquery` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L793" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 aquery(obj: Any, query: str, context: Context, backend: Backend) -> tuple[ModelOutputThunk, Context]
@@ -257,7 +244,7 @@ aquery(obj: Any, query: str, context: Context, backend: Backend) -> tuple[ModelO
 Query method for retrieving information from an object.
 
 **Args:**
-- `obj `: The object to be queried. It should be an instance of MObject or can be converted to one if necessary.
+- `obj`: The object to be queried. It should be an instance of MObject or can be converted to one if necessary.
 - `query`: The string representing the query to be executed against the object.
 - `context`: the context being used as a history from which to generate the response.
 - `backend`: the backend used to generate the response.
@@ -271,8 +258,7 @@ Query method for retrieving information from an object.
 
 <div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
 
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `atransform` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/stdlib/functional.py#L835" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `atransform` <sup><a href="https://github.com/generative-computing/mellea/blob/main/mellea/stdlib/functional.py#L835" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
 
 ```python
 atransform(obj: Any, transformation: str, context: Context, backend: Backend) -> tuple[ModelOutputThunk | Any, Context]

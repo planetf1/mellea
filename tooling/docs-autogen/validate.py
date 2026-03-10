@@ -74,8 +74,8 @@ def validate_coverage(docs_dir: Path, threshold: float) -> tuple[bool, dict]:
 
     # Run coverage audit
     source_dir = docs_dir.parent.parent.parent  # Go up to project root
-    mellea_symbols = discover_public_symbols(source_dir / "mellea")
-    cli_symbols = discover_public_symbols(source_dir / "cli")
+    mellea_symbols = discover_public_symbols(source_dir / "mellea", "mellea")
+    cli_symbols = discover_public_symbols(source_dir / "cli", "cli")
     cli_commands = discover_cli_commands(source_dir / "cli")
     documented = find_documented_symbols(docs_dir)
 
@@ -139,16 +139,29 @@ def validate_internal_links(docs_dir: Path) -> tuple[int, list[str]]:
         rel_path = mdx_file.relative_to(docs_dir)
 
         # Find relative links (not starting with http)
+        # Use DOTALL to handle multiline links
         link_pattern = r"\[([^\]]+)\]\(([^)]+)\)"
-        for match in re.finditer(link_pattern, content):
+        for match in re.finditer(link_pattern, content, re.DOTALL):
             link_text, link_url = match.groups()
+
+            # Strip whitespace from URL (handles multiline links)
+            link_url = link_url.strip()
 
             # Skip external links
             if link_url.startswith(("http://", "https://", "#")):
                 continue
 
-            # Resolve relative link
-            target = (mdx_file.parent / link_url).resolve()
+            # Split anchor from path (e.g., "base#class-component" -> "base", "class-component")
+            if "#" in link_url:
+                file_path, _ = link_url.split("#", 1)  # anchor not used
+            else:
+                file_path = link_url
+
+            # Resolve relative link - add .mdx extension if not present
+            if file_path and not file_path.endswith(".mdx"):
+                file_path = f"{file_path}.mdx"
+
+            target = (mdx_file.parent / file_path).resolve()
 
             if not target.exists():
                 errors.append(

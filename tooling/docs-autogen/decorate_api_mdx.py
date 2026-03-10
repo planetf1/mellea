@@ -420,7 +420,15 @@ def resolve_symbol_path(symbol_name: str, source_dir: Path) -> str | None:
     # Search for symbol in all modules
     for module_path, module in package.modules.items():
         if symbol_name in module.members:
-            return module_path
+            # Use the canonical path which points to the actual definition
+            member = module.members[symbol_name]
+            canonical = member.canonical_path
+            # canonical is like "mellea.core.base.Component"
+            # We want "mellea.core.base" (the module path)
+            parts = canonical.split(".")
+            if len(parts) > 1:
+                return ".".join(parts[:-1])  # Remove the symbol name
+            return f"mellea.{module_path}"
 
     return None
 
@@ -484,6 +492,48 @@ def add_cross_references(content: str, module_path: str, source_dir: Path) -> st
         if symbol in resolved:
             target_module = resolved[symbol]
             # Calculate relative path
+            # module_path is like "mellea.core.formatter" (the current file)
+            # target_module is like "mellea.core.base" (the target file)
+            current_parts = module_path.split(".")
+            target_parts = target_module.split(".")
+
+            # Find common prefix
+            common = 0
+            for i in range(min(len(current_parts), len(target_parts))):
+                if current_parts[i] == target_parts[i]:
+                    common += 1
+                else:
+                    break
+
+            # Build relative path
+            # We need to go up from the current file's directory, not from the file itself
+            # current_parts[-1] is the file name, so we exclude it
+            up_levels = (
+                len(current_parts) - common - 1
+            )  # -1 because we're in a file, not a dir
+
+            # If we're in the same directory (e.g., both in mellea.core), up_levels will be 0
+            # and we just need the target file name
+            if up_levels == 0:
+                rel_path = target_parts[-1]  # Just the filename in same directory
+            else:
+                rel_path = "../" * up_levels + "/".join(target_parts[common:])
+
+            # Generate anchor
+            anchor = mintlify_anchor(f"class {symbol}")
+
+            return f"[`{symbol}`]({rel_path}#{anchor})"
+        return match.group(0)
+
+    # First, fix existing markdown links that may have wrong paths
+    # Pattern: [`Symbol`](path#anchor)
+    def fix_existing_link(match):
+        symbol = match.group(1)
+        # old_path = match.group(2)  # Not needed, we recalculate
+        anchor = match.group(3)
+
+        if symbol in resolved:
+            target_module = resolved[symbol]
             current_parts = module_path.split(".")
             target_parts = target_module.split(".")
 
@@ -497,15 +547,21 @@ def add_cross_references(content: str, module_path: str, source_dir: Path) -> st
 
             # Build relative path
             up_levels = len(current_parts) - common - 1
-            rel_path = "../" * up_levels + "/".join(target_parts[common:])
 
-            # Generate anchor
-            anchor = mintlify_anchor(f"class {symbol}")
+            if up_levels == 0:
+                rel_path = target_parts[-1]
+            else:
+                rel_path = "../" * up_levels + "/".join(target_parts[common:])
 
+            # Keep the existing anchor
             return f"[`{symbol}`]({rel_path}#{anchor})"
         return match.group(0)
 
-    # Only replace backtick references, not type annotations
+    # Fix existing links first
+    existing_link_pattern = r"\[`([A-Z][a-zA-Z0-9_]*)`\]\(([^)#]+)#([^)]+)\)"
+    content = re.sub(existing_link_pattern, fix_existing_link, content)
+
+    # Then add links to plain backtick references
     pattern = r"`([A-Z][a-zA-Z0-9_]*)`"
     content = re.sub(pattern, replace_ref, content)
 

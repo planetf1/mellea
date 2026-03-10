@@ -12,158 +12,44 @@ import { SidebarFix } from "/snippets/SidebarFix.mdx";
 
 <SidebarFix />
 
-This module provides two independent trace scopes:
-1. Application Trace (mellea.application) - User-facing operations
-2. Backend Trace (mellea.backend) - LLM backend interactions
-
-Follows OpenTelemetry Gen-AI semantic conventions:
-https://opentelemetry.io/docs/specs/semconv/gen-ai/
-
-Configuration via environment variables:
-- MELLEA_TRACE_APPLICATION: Enable/disable application tracing (default: false)
-- MELLEA_TRACE_BACKEND: Enable/disable backend tracing (default: false)
-- OTEL_EXPORTER_OTLP_ENDPOINT: OTLP endpoint for trace export
-- OTEL_SERVICE_NAME: Service name for traces (default: mellea)
-
-
-## Functions
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_application_tracing_enabled` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/__init__.py#L93" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
-
-```python
-is_application_tracing_enabled() -> bool
-```
-
-
-Check if application tracing is enabled.
-
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `is_backend_tracing_enabled` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/__init__.py#L98" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
-
-```python
-is_backend_tracing_enabled() -> bool
-```
-
-
-Check if backend tracing is enabled.
-
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `trace_application` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/__init__.py#L104" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
-
-```python
-trace_application(name: str, **attributes: Any)
-```
-
-
-Create an application trace span if application tracing is enabled.
-
-**Args:**
-- `name`: Name of the span
-- `**attributes`: Additional attributes to add to the span
-
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `trace_backend` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/__init__.py#L125" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
-
-```python
-trace_backend(name: str, **attributes: Any)
-```
-
-
-Create a backend trace span if backend tracing is enabled.
-
-Follows Gen-AI semantic conventions for LLM operations.
-
-**Args:**
-- `name`: Name of the span
-- `**attributes`: Additional attributes to add to the span
-
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `start_backend_span` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/__init__.py#L150" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
-
-```python
-start_backend_span(name: str, **attributes: Any)
-```
-
-
-Start a backend trace span without auto-closing (for async operations).
-
-Use this when you need to manually control span lifecycle, such as for
-async operations where the span should remain open until post-processing.
-
-**Args:**
-- `name`: Name of the span
-- `**attributes`: Additional attributes to add to the span
-
-**Returns:**
-- The span object if tracing is enabled, otherwise None
-
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `end_backend_span` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/__init__.py#L175" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
-
-```python
-end_backend_span(span: Any) -> None
-```
-
-
-End a backend trace span.
-
-**Args:**
-- `span`: The span object to end
-
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `set_span_attribute` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/__init__.py#L211" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
-
-```python
-set_span_attribute(span: Any, key: str, value: Any) -> None
-```
-
-
-Set an attribute on a span if the span is not None.
-
-**Args:**
-- `span`: The span object (may be None if tracing is disabled)
-- `key`: Attribute key
-- `value`: Attribute value
-
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
-
-
-### <span className="ml-2 inline-flex items-center rounded-full px-2 py-1 text-[0.7rem] font-bold tracking-wide bg-[#3064E3]/20 text-[#1D4ED8]">FUNC</span> `set_span_error` <sup><a href="https://github.com/generative-computing/mellea/blob/main/.venv-docs-autogen/lib/python3.14/site-packages/mellea/telemetry/__init__.py#L223" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
-
-```python
-set_span_error(span: Any, exception: Exception) -> None
-```
-
-
-Record an exception on a span if the span is not None.
-
-**Args:**
-- `span`: The span object (may be None if tracing is disabled)
-- `exception`: The exception to record
-
-<div className="w-full h-px bg-gray-200 dark:bg-gray-700 my-4" />
+This package provides observability capabilities for Mellea through OpenTelemetry,
+enabling tracing and metrics collection for both application-level operations and
+backend LLM interactions.
+
+Package Structure:
+    - tracing: Distributed tracing with two independent scopes:
+        * Application traces (mellea.application): User-facing operations
+        * Backend traces (mellea.backend): LLM backend interactions
+    - metrics: Metrics collection for counters, histograms, and up-down counters
+    - backend_instrumentation: Automatic instrumentation for backend operations
+
+Configuration:
+    All telemetry features are opt-in via environment variables:
+
+    Tracing:
+        - MELLEA_TRACE_APPLICATION: Enable application tracing (default: false)
+        - MELLEA_TRACE_BACKEND: Enable backend tracing (default: false)
+        - OTEL_EXPORTER_OTLP_ENDPOINT: OTLP endpoint for trace export
+        - OTEL_SERVICE_NAME: Service name for traces (default: mellea)
+
+    Metrics:
+        - MELLEA_METRICS_ENABLED: Enable metrics collection (default: false)
+        - MELLEA_METRICS_CONSOLE: Print metrics to console (default: false)
+        - OTEL_EXPORTER_OTLP_ENDPOINT: OTLP endpoint for metric export (optional)
+        - OTEL_SERVICE_NAME: Service name for metrics (default: mellea)
+
+Dependencies:
+    OpenTelemetry packages are optional. If not installed, telemetry features
+    are gracefully disabled. Install with: pip install mellea[telemetry]
+
+Example:
+    from mellea.telemetry import trace_application, create_counter
+
+    # Trace application operations
+    @trace_application("my_operation")
+    def my_function():
+        pass
+
+    # Collect metrics
+    counter = create_counter("mellea.requests", unit="1")
+    counter.add(1, {"backend": "ollama"})
