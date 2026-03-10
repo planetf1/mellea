@@ -68,7 +68,9 @@ def main():
             sys.executable,
             str(script_dir / "generate-ast.py"),
             "--docs-root",
-            str(output_dir.parent),  # generate-ast.py expects docs/docs, not docs/docs/api
+            str(
+                output_dir.parent
+            ),  # generate-ast.py expects docs/docs, not docs/docs/api
             "--no-venv",  # Always use current environment
         ]
 
@@ -100,6 +102,28 @@ def main():
         if result.returncode != 0:
             print(
                 f"[build.py] ERROR: decorate_api_mdx.py failed with code {result.returncode}",
+                file=sys.stderr,
+            )
+            sys.exit(result.returncode)
+
+    # Step 3: Rebuild landing page and navigation from decorated files.
+    # Decoration (step 2) injects rich preamble text into each module's MDX;
+    # this step re-reads those decorated files so the landing page cards show
+    # the full module descriptions rather than the short frontmatter one-liners.
+    if not args.skip_generation and not args.skip_decoration:
+        cmd = [
+            sys.executable,
+            str(script_dir / "generate-ast.py"),
+            "--docs-root",
+            str(output_dir.parent),
+            "--no-venv",
+            "--nav-only",
+        ]
+        print(f"[build.py] Running: {' '.join(cmd)}")
+        result = subprocess.run(cmd, check=False)
+        if result.returncode != 0:
+            print(
+                f"[build.py] ERROR: generate-ast.py (nav-only) failed with code {result.returncode}",
                 file=sys.stderr,
             )
             sys.exit(result.returncode)

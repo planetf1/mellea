@@ -519,10 +519,66 @@ def _read_frontmatter_field(mdx_path: Path, field: str) -> str:
     return ""
 
 
-def _collect_module_entries(api_dir: Path, pkg: str) -> list[tuple[str, str]]:
-    """Return (module_name, description) pairs for direct children of api/<pkg>/.
+_MD_LINK_RE = re.compile(r"\[([^\]]*)\]\([^)]*\)")
 
-    Only includes .mdx files at the immediate subdirectory level (not deep nested),
+
+def _read_body_preamble(mdx_path: Path) -> str:
+    """Extract the first rich prose paragraph from an MDX body.
+
+    Skips frontmatter, import lines, and JSX/HTML tags, then returns the
+    first meaningful paragraph of prose text before any heading.
+
+    Markdown links are simplified to their display text, and { / } are
+    escaped as HTML entities so the text is safe inside JSX Card children.
+    """
+    try:
+        content = mdx_path.read_text(encoding="utf-8")
+    except OSError:
+        return ""
+    # Strip frontmatter
+    if content.startswith("---\n"):
+        end = content.find("\n---\n", 4)
+        if end != -1:
+            content = content[end + 5 :]
+    lines = content.splitlines()
+    current_para: list[str] = []
+    for line in lines:
+        s = line.strip()
+        if not s:
+            if current_para:
+                break
+            continue
+        # Skip import lines, JSX/HTML tags, and SidebarFix
+        if s.startswith(("import ", "<")) or "SidebarFix" in s or s == "---":
+            if current_para:
+                break
+            continue
+        # Stop at the first heading
+        if s.startswith("#"):
+            break
+        current_para.append(s)
+    text = " ".join(current_para).strip()
+    # Simplify markdown links to their display text
+    text = _MD_LINK_RE.sub(r"\1", text)
+    # Escape { and } for safe rendering inside JSX Card children
+    text = text.replace("{", "&#123;").replace("}", "&#125;")
+    return text
+
+
+def _find_index_mdx(child_dir: Path) -> Path | None:
+    """Return the best representative MDX file for a module subdirectory."""
+    # Prefer a file whose stem matches the directory name
+    candidate = child_dir / f"{child_dir.name}.mdx"
+    if candidate.exists():
+        return candidate
+    mdxs = sorted(child_dir.glob("*.mdx"))
+    return mdxs[0] if mdxs else None
+
+
+def _collect_module_entries(api_dir: Path, pkg: str) -> list[tuple[str, str, str, str]]:
+    """Return (module_name, description, preamble, href) for direct children of api/<pkg>/.
+
+    Only includes entries at the immediate subdirectory level (not deep nested),
     to keep the landing page overview concise.
     """
     base = api_dir / pkg
@@ -531,19 +587,18 @@ def _collect_module_entries(api_dir: Path, pkg: str) -> list[tuple[str, str]]:
     entries = []
     for child in sorted(base.iterdir()):
         if child.is_dir():
-            # Use the folder's top-level MDX (same name as folder) if present
-            index_mdx = child / f"{child.name}.mdx"
-            if not index_mdx.exists():
-                # Fall back to any .mdx at that level
-                mdxs = sorted(child.glob("*.mdx"))
-                if not mdxs:
-                    continue
-                index_mdx = mdxs[0]
+            index_mdx = _find_index_mdx(child)
+            if index_mdx is None:
+                continue
             desc = _read_frontmatter_field(index_mdx, "description")
-            entries.append((child.name, desc))
+            preamble = _read_body_preamble(index_mdx)
+            href = f"api/{pkg}/{child.name}/{index_mdx.stem}"
+            entries.append((child.name, desc, preamble, href))
         elif child.suffix == ".mdx":
             desc = _read_frontmatter_field(child, "description")
-            entries.append((child.stem, desc))
+            preamble = _read_body_preamble(child)
+            href = f"api/{pkg}/{child.stem}"
+            entries.append((child.stem, desc, preamble, href))
     return entries
 
 
@@ -551,21 +606,28 @@ def generate_landing_page(api_dir: Path, docs_root: Path) -> None:
     """Generate api-reference.mdx as a landing page for the API Reference tab.
 
     Scans the generated api/ directory structure to produce an up-to-date
-    overview of every top-level module. The file is written to docs_root so
-    Mintlify serves it when the user clicks the API Reference tab.
+    overview of every top-level module, rendered as Mintlify CardGroup cards.
+    The file is written to docs_root so Mintlify serves it when the user
+    clicks the API Reference tab.
     """
     mellea_entries = _collect_module_entries(api_dir, "mellea")
     cli_entries = _collect_module_entries(api_dir, "cli")
 
-    def _entry_row(name: str, desc: str, pkg: str) -> str:
-        link = f"api/{pkg}/{name}"
-        label = f"`{pkg}.{name}`" if pkg == "mellea" else f"`m {name}`"
-        if desc:
-            return f"- [{label}]({link}) — {desc}"
-        return f"- [{label}]({link})"
+    def _card(name: str, desc: str, preamble: str, href: str, pkg: str) -> str:
+        title = f"mellea.{name}" if pkg == "mellea" else f"m {name}"
+        body = preamble or desc
+        lines = [f'  <Card title="{title}" href="{href}">']
+        if body:
+            lines.append(f"    {body}")
+        lines.append("  </Card>")
+        return "\n".join(lines)
 
-    mellea_lines = [_entry_row(n, d, "mellea") for n, d in mellea_entries]
-    cli_lines = [_entry_row(n, d, "cli") for n, d in cli_entries]
+    def _card_section(entries: list[tuple[str, str, str, str]], pkg: str) -> str:
+        if not entries:
+            return "_No modules found._\n"
+        cards = "\n\n".join(_card(n, d, p, h, pkg) for n, d, p, h in entries)
+        # cols={2} uses a Python f-string literal brace escape
+        return f"<CardGroup cols={{2}}>\n{cards}\n</CardGroup>\n"
 
     content = """\
 ---
@@ -580,21 +642,9 @@ workflows.
 ## Python Library
 
 """
-
-    if mellea_lines:
-        content += "\n".join(mellea_lines) + "\n"
-    else:
-        content += "_No modules found._\n"
-
-    content += """
-## CLI (`m`)
-
-"""
-
-    if cli_lines:
-        content += "\n".join(cli_lines) + "\n"
-    else:
-        content += "_No commands found._\n"
+    content += _card_section(mellea_entries, "mellea")
+    content += "\n## CLI (`m`)\n\n"
+    content += _card_section(cli_entries, "cli")
 
     out_path = docs_root / "api-reference.mdx"
     safe_write_text(out_path, content)
@@ -663,6 +713,15 @@ def main() -> None:
         action="store_true",
         help="Skip virtual environment creation (use when called via 'uv run --with').",
     )
+    parser.add_argument(
+        "--nav-only",
+        action="store_true",
+        help=(
+            "Skip MDX generation; only rebuild the landing page and navigation from "
+            "existing files in docs-root/api. Use after decoration so that preamble "
+            "text injected by decorate_api_mdx.py appears in landing page cards."
+        ),
+    )
 
     args = parser.parse_args()
 
@@ -672,6 +731,19 @@ def main() -> None:
         if args.docs_root
         else docs_json_path.parent.resolve()
     )
+
+    # --nav-only: skip all MDX generation; just rebuild landing page + nav
+    if args.nav_only:
+        final_api_dir = (docs_root / "api").resolve()
+        if not final_api_dir.exists():
+            raise SystemExit(
+                f"❌ API dir not found: {final_api_dir}\n"
+                "Run the full pipeline first (without --nav-only)."
+            )
+        print("🔄 --nav-only: rebuilding landing page and navigation...", flush=True)
+        build_and_merge_navigation(docs_json_path, final_api_dir, docs_root)
+        print("🎉 Navigation rebuild complete.", flush=True)
+        return
 
     # Prep staging
     if STAGING_API_DIR.exists():

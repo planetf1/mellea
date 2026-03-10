@@ -77,35 +77,44 @@ def inject_sidebar_fix(mdx_text: str) -> str:
 
 
 def fix_source_links(content: str, version: str) -> str:
-    """Fix GitHub source links to point to correct repository and version.
+    """Fix GitHub source links to use a versioned tag instead of blob/main.
+
+    Handles both output formats from mdxify:
+    - HTML anchor: <a href="https://github.com/OWNER/REPO/blob/main/PATH">
+    - Markdown link: [View source](https://github.com/OWNER/REPO/blob/main/PATH)
 
     Args:
         content: MDX file content
         version: Package version (e.g., "0.5.0")
 
     Returns:
-        Content with corrected GitHub links
-
-    Example:
-        Input:  [View source](https://github.com/pypa/pip/blob/main/src/pip/_internal/cli/base_command.py#L123)
-        Output: [View source](https://github.com/ibm-granite/mellea/blob/v0.5.0/src/pip/_internal/cli/base_command.py#L123)
+        Content with blob/main replaced by blob/v{version}
     """
-    # Pattern: [View source](https://github.com/OWNER/REPO/blob/BRANCH/PATH#LINE)
-    pattern = r"\[View source\]\(https://github\.com/[^/]+/[^/]+/blob/[^/]+/([^)]+)\)"
+    # HTML href format (used by current mdxify output):
+    # <a href="https://github.com/OWNER/REPO/blob/BRANCH/PATH" ...>
+    html_pattern = r'href="(https://github\.com/([^/]+)/([^/]+)/blob/)[^/]+/([^"]+)"'
 
-    def replace_link(match):
-        path = match.group(1)
-        # Extract just the file path and line number
-        # path might be like "src/pip/_internal/cli/base_command.py#L123"
-        # We need to map this to the actual mellea path
+    def replace_html(match):
+        base = match.group(1)  # https://github.com/OWNER/REPO/blob/
+        path = match.group(4)
+        return f'href="{base}v{version}/{path}"'
 
-        # For mellea, the source is in mellea/ or cli/ directories
-        # The mdxify tool should have preserved the correct path
-        # We just need to fix the repository URL
+    content = re.sub(html_pattern, replace_html, content)
 
-        return f"[View source](https://github.com/ibm-granite/mellea/blob/v{version}/{path})"
+    # Markdown link format (kept for backwards compatibility):
+    # [View source](https://github.com/OWNER/REPO/blob/BRANCH/PATH)
+    md_pattern = (
+        r"\[View source\]\((https://github\.com/([^/]+)/([^/]+)/blob/)[^/]+/([^)]+)\)"
+    )
 
-    return re.sub(pattern, replace_link, content)
+    def replace_md(match):
+        base = match.group(1)
+        path = match.group(4)
+        return f"[View source]({base}v{version}/{path})"
+
+    content = re.sub(md_pattern, replace_md, content)
+
+    return content
 
 
 # =========================
@@ -113,56 +122,113 @@ def fix_source_links(content: str, version: str) -> str:
 # =========================
 
 
-def escape_mdx_syntax(content: str) -> str:
-    """Escape MDX-sensitive characters in code blocks.
+_DOCTEST_PROMPT_RE = re.compile(r"^\s*>>>\s")
 
-    MDX interprets curly braces as JSX expressions, which breaks
-    Python dict literals and JSON. This function escapes them.
 
-    Also fixes blockquote continuations in tracebacks.
+def wrap_doctest_blocks(content: str) -> str:
+    """Wrap bare doctest (>>>) blocks in ```python code fences.
+
+    mdxify renders Python doctest examples from docstrings as raw MDX prose.
+    Lines starting with >>> are parsed by MDX as nested Markdown blockquotes,
+    and subsequent output lines without a > prefix trigger a lazy-line parse
+    error in MDX v2.
+
+    This pass wraps each contiguous doctest block in a ```python...``` fence.
+    Must be called before escape_mdx_syntax() so the fence escaping applies.
 
     Args:
         content: MDX file content
 
     Returns:
-        Content with escaped MDX syntax in code blocks
+        Content with doctest blocks wrapped in fenced code blocks
+    """
+    lines = content.splitlines(keepends=True)
+    result: list[str] = []
+    in_fence = False
+    i = 0
+
+    while i < len(lines):
+        raw = lines[i]
+        stripped = raw.rstrip("\n").rstrip("\r")
+
+        if stripped.lstrip().startswith("```"):
+            in_fence = not in_fence
+            result.append(raw)
+            i += 1
+            continue
+
+        if in_fence:
+            result.append(raw)
+            i += 1
+            continue
+
+        if _DOCTEST_PROMPT_RE.match(stripped):
+            # Collect all consecutive non-blank lines as one doctest block
+            block: list[str] = []
+            while i < len(lines):
+                raw_l = lines[i]
+                sl = raw_l.rstrip("\n").rstrip("\r")
+                if not sl.strip():
+                    break
+                block.append(sl.lstrip())
+                i += 1
+
+            if block:
+                result.append("```python\n")
+                for bl in block:
+                    result.append(bl + "\n")
+                result.append("```\n")
+            continue
+
+        result.append(raw)
+        i += 1
+
+    return "".join(result)
+
+
+def escape_mdx_syntax(content: str) -> str:
+    """Escape MDX-sensitive characters in code blocks and prose.
+
+    MDX interprets curly braces as JSX expressions, which breaks
+    Python dict literals and JSON in two contexts:
+
+    1. Inside fenced code blocks (```): escaped as {{ / }} so that the
+       MDX compiler does not strip them.
+    2. In prose outside code blocks: escaped as \\{ / \\} (CommonMark
+       backslash escapes) so acorn never sees a bare { as an expression.
+       Import lines and JSX/HTML tag lines are left untouched.
+
+    Args:
+        content: MDX file content
+
+    Returns:
+        Content with escaped MDX syntax
     """
     lines = content.splitlines(keepends=True)
     result = []
     in_code_block = False
-    in_blockquote = False
     code_fence_pattern = re.compile(r"^```")
-    blockquote_pattern = re.compile(r"^>>>?\s")
 
     for line in lines:
         # Track code block boundaries
         if code_fence_pattern.match(line):
             in_code_block = not in_code_block
-            in_blockquote = False  # Reset blockquote when entering/exiting code
             result.append(line)
             continue
 
-        # Escape curly braces inside code blocks
         if in_code_block:
-            # Check if this is a blockquote line (>>> or Traceback)
-            if blockquote_pattern.match(line) or line.strip().startswith("Traceback"):
-                in_blockquote = True
-                # Escape braces in blockquote lines too
-                escaped = line.replace("{", "{{").replace("}", "}}")
-                result.append(escaped)
-            elif in_blockquote and line.strip() and not line.startswith(">>>"):
-                # Continuation of blockquote - prefix with >
-                escaped = line.replace("{", "{{").replace("}", "}}")
-                result.append("> " + escaped)
-            else:
-                # Reset blockquote if we hit an empty line or new prompt
-                if not line.strip() or line.startswith(">>>"):
-                    in_blockquote = False
-                # Simple approach: just escape all { and }
-                # This is safe because mdxify generates fresh content without escapes
-                escaped = line.replace("{", "{{").replace("}", "}}")
-                result.append(escaped)
+            # Inside fenced code blocks: escape { and } as {{ / }} so that the
+            # MDX compiler does not strip them as JSX expression delimiters.
+            result.append(line.replace("{", "{{").replace("}", "}}"))
         else:
+            # Outside fenced code blocks: escape bare { and } with backslash
+            # so MDX does not try to evaluate them as JavaScript expressions.
+            # Skip import lines (e.g. import { SidebarFix } from "...") and
+            # JSX/HTML tag lines (e.g. <div ...>) which require real brace syntax.
+            if "{" in line or "}" in line:
+                s = line.lstrip()
+                if not s.startswith("<") and not s.startswith("import "):
+                    line = line.replace("{", r"\{").replace("}", r"\}")
             result.append(line)
 
     return "".join(result)
@@ -702,7 +768,11 @@ def process_mdx_file(
     # Step 3: inject SidebarFix
     text = inject_sidebar_fix(text)
 
-    # Step 4: Escape MDX syntax in code blocks
+    # Step 3.5: Wrap bare doctest (>>>) blocks in fenced code blocks.
+    # Must run before escape_mdx_syntax so the new fences are processed.
+    text = wrap_doctest_blocks(text)
+
+    # Step 4: Escape MDX syntax in code blocks and bare prose braces
     text = escape_mdx_syntax(text)
 
     # Step 5: Add cross-references (if source_dir provided)
