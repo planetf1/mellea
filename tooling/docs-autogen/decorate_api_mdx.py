@@ -239,18 +239,31 @@ def escape_mdx_syntax(content: str) -> str:
 # =========================
 
 
-def inject_preamble(content: str, module_path: str) -> str:
+def inject_preamble(
+    content: str, module_path: str, docstring_cache: dict[str, str] | None = None
+) -> str:
     """Inject preamble text after frontmatter.
+
+    Resolution order:
+    1. Hardcoded overrides (exact match) — richer text for key top-level modules.
+    2. Module docstring from source code (exact match via docstring_cache).
+    3. Hardcoded overrides (prefix match) — propagate top-level text to sub-files.
+    If none match, the file is returned unchanged.
 
     Args:
         content: MDX file content
-        module_path: Module path (e.g., "mellea.core.base")
+        module_path: Module path derived from file path (e.g. "mellea.core.base")
+        docstring_cache: Optional module-path→docstring dict from
+            build_module_docstring_cache(). When provided, module docstrings are
+            used as preambles for modules not covered by the hardcoded overrides.
 
     Returns:
         Content with preamble injected
     """
-    # Define preambles for key modules
-    preambles = {
+    # Hardcoded overrides — richer descriptions for the most important modules.
+    # Exact-match keys prevent child modules from accidentally inheriting them;
+    # prefix matching is only used as a final fallback (step 3 below).
+    _OVERRIDES: dict[str, str] = {
         "mellea.core": (
             "The `mellea.core` module provides the foundational abstractions for building "
             "LLM-powered applications. It includes the base classes for backends, formatters, "
@@ -271,19 +284,38 @@ def inject_preamble(content: str, module_path: str) -> str:
             "It includes sessions for conversation management, context handling, and reusable "
             "components for building complex workflows.\n\n"
         ),
-        "cli": (
-            "The `cli` module provides command-line tools for working with Mellea. "
-            "It includes commands for serving models, generating documentation, and "
-            "running evaluations.\n\n"
+        "mellea.telemetry": (
+            "The `mellea.telemetry` module provides observability capabilities through "
+            "OpenTelemetry, enabling tracing and metrics collection for both application-level "
+            "operations and backend LLM interactions.\n\n"
         ),
     }
 
-    # Find matching preamble (exact match or parent module)
-    preamble_text = None
-    for key, text in preambles.items():
-        if module_path == key or module_path.startswith(key + "."):
-            preamble_text = text
-            break
+    # 1. Exact-match hardcoded override
+    preamble_text = _OVERRIDES.get(module_path)
+
+    # 2. Prefix-match hardcoded override — propagates the rich top-level description
+    #    to every sub-file (e.g. mellea.backends.backend → mellea.backends override).
+    #    Must run before the docstring cache so that a terse sub-module docstring
+    #    (e.g. "FormatterBackend.") doesn't shadow the richer parent override.
+    if not preamble_text:
+        for key, text in _OVERRIDES.items():
+            if module_path.startswith(key + "."):
+                preamble_text = text
+                break
+
+    # 3. Module docstring from source — used for modules not covered by any override
+    #    (e.g. cli.alora, mellea.helpers, and any future modules).
+    #    Walk up the dotted path so that cli.alora.commands falls back to the
+    #    cli.alora package docstring when the leaf module has no docstring of its own.
+    if not preamble_text and docstring_cache:
+        candidate = module_path
+        while candidate:
+            doc = docstring_cache.get(candidate)
+            if doc:
+                preamble_text = doc + "\n\n"
+                break
+            candidate = candidate.rsplit(".", 1)[0] if "." in candidate else ""
 
     if not preamble_text:
         return content
@@ -517,6 +549,59 @@ def extract_type_references(content: str) -> set[str]:
     return refs
 
 
+def build_module_docstring_cache(source_dir: Path) -> dict[str, str]:
+    """Build a module-path→docstring lookup table from the source packages.
+
+    Loads mellea and cli (if present) with Griffe and returns a dict mapping
+    each public module's dotted path to the first paragraph of its docstring,
+    e.g. {"cli.alora": "alora command group for training and uploading adapters."}.
+
+    This is used by inject_preamble() to source per-module descriptions directly
+    from the code rather than maintaining a hardcoded list — new modules are
+    covered automatically.
+
+    Args:
+        source_dir: The mellea/ source directory (e.g. <repo-root>/mellea)
+
+    Returns:
+        Dict mapping module path → docstring text, or empty dict on failure
+    """
+    try:
+        import griffe
+    except ImportError:
+        return {}
+
+    cache: dict[str, str] = {}
+    search_root = source_dir.parent
+
+    def _walk(module: object, path: str) -> None:
+        if any(part.startswith("_") for part in path.split(".")):
+            return
+        doc = getattr(module, "docstring", None)
+        if doc:
+            text = doc.value.strip()
+            # Take only the first paragraph
+            first_para = text.split("\n\n")[0].replace("\n", " ").strip()
+            if first_para:
+                cache[path] = first_para
+        if hasattr(module, "modules"):
+            for name, sub in module.modules.items():
+                if not name.startswith("_"):
+                    _walk(sub, f"{path}.{name}")
+
+    for pkg_name in ("mellea", "cli"):
+        pkg_dir = search_root / pkg_name
+        if not pkg_dir.exists():
+            continue
+        try:
+            pkg = griffe.load(pkg_name, search_paths=[str(search_root)])
+            _walk(pkg, pkg_name)
+        except Exception:
+            pass
+
+    return cache
+
+
 def build_symbol_cache(source_dir: Path) -> dict[str, str]:
     """Build a symbol→module-path lookup table from the mellea package.
 
@@ -731,6 +816,7 @@ def process_mdx_file(
     api_dir: Path | None = None,
     source_dir: Path | None = None,
     symbol_cache: dict[str, str] | None = None,
+    docstring_cache: dict[str, str] | None = None,
 ) -> bool:
     """Process a single MDX file.
 
@@ -741,6 +827,9 @@ def process_mdx_file(
         source_dir: Project source directory (for cross-reference resolution)
         symbol_cache: Pre-built symbol→module-path cache from build_symbol_cache().
             When provided, cross-references are resolved without re-loading Griffe.
+        docstring_cache: Pre-built module-path→docstring cache from
+            build_module_docstring_cache(). When provided, module docstrings are
+            used as preambles for modules not covered by hardcoded overrides.
 
     Returns:
         True if file was modified, False otherwise
@@ -763,7 +852,7 @@ def process_mdx_file(
     text = fix_source_links(original, version)
 
     # Step 2: Inject preamble
-    text = inject_preamble(text, module_path)
+    text = inject_preamble(text, module_path, docstring_cache)
 
     # Step 3: inject SidebarFix
     text = inject_sidebar_fix(text)
@@ -831,17 +920,22 @@ def main() -> None:
         print(f"⚠️ No .mdx files found under: {api_dir}")
         return
 
-    # Build the Griffe symbol cache once for all files (key perf fix:
+    # Build the Griffe caches once for all files (key perf fix:
     # the old code called griffe.load() once per symbol per file — O(files x symbols)).
     symbol_cache: dict[str, str] | None = None
+    docstring_cache: dict[str, str] | None = None
     if source_dir:
         print(f"Building symbol cache from {source_dir}...")
         symbol_cache = build_symbol_cache(source_dir)
         print(f"  Cached {len(symbol_cache)} symbols.")
+        docstring_cache = build_module_docstring_cache(source_dir)
+        print(f"  Cached {len(docstring_cache)} module docstrings.")
 
     changed = 0
     for f in mdx_files:
-        if process_mdx_file(f, args.version, api_dir, source_dir, symbol_cache):
+        if process_mdx_file(
+            f, args.version, api_dir, source_dir, symbol_cache, docstring_cache
+        ):
             changed += 1
 
     print(
