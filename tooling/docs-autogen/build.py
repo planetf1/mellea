@@ -2,15 +2,29 @@
 """Unified API documentation build script.
 
 Usage:
-    python build.py --version 0.5.0
-    python build.py --version 0.5.0-rc1 --no-venv
-    python build.py --version 0.5.0 --skip-decoration
+    python build.py                      # auto-detects version from pyproject.toml
+    python build.py --version 0.5.0      # explicit version override
+    python build.py --skip-decoration    # generation only
 """
 
 import argparse
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
+
+
+def read_project_version(repo_root: Path) -> str:
+    """Read the project version from pyproject.toml."""
+    pyproject = repo_root / "pyproject.toml"
+    if not pyproject.exists():
+        raise SystemExit(f"❌ pyproject.toml not found at {pyproject}")
+    with pyproject.open("rb") as f:
+        data = tomllib.load(f)
+    version = data.get("project", {}).get("version")
+    if not version:
+        raise SystemExit("❌ No [project].version found in pyproject.toml")
+    return version
 
 
 def normalize_version(version: str) -> str:
@@ -21,7 +35,9 @@ def normalize_version(version: str) -> str:
 def main():
     parser = argparse.ArgumentParser(description="Build API documentation")
     parser.add_argument(
-        "--version", required=True, help="Package version (e.g., 0.5.0 or 0.5.0-rc1)"
+        "--version",
+        default=None,
+        help="Package version (e.g., 0.5.0). Defaults to version in pyproject.toml.",
     )
     parser.add_argument(
         "--output-dir", default="docs/docs/api", help="Output directory"
@@ -40,8 +56,11 @@ def main():
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent
+    repo_root = script_dir.parent.parent
     output_dir = Path(args.output_dir)
-    normalized_version = normalize_version(args.version)
+
+    version = args.version or read_project_version(repo_root)
+    normalized_version = normalize_version(version)
 
     # Step 1: Generate AST
     if not args.skip_generation:
@@ -49,9 +68,7 @@ def main():
             sys.executable,
             str(script_dir / "generate-ast.py"),
             "--docs-root",
-            str(
-                output_dir.parent
-            ),  # generate-ast.py expects docs/docs, not docs/docs/api
+            str(output_dir.parent),  # generate-ast.py expects docs/docs, not docs/docs/api
             "--no-venv",  # Always use current environment
         ]
 
@@ -66,6 +83,7 @@ def main():
 
     # Step 2: Decorate MDX
     if not args.skip_decoration:
+        source_dir = repo_root / "mellea"
         cmd = [
             sys.executable,
             str(script_dir / "decorate_api_mdx.py"),
@@ -74,6 +92,8 @@ def main():
             "--version",
             normalized_version,
         ]
+        if source_dir.exists():
+            cmd += ["--source-dir", str(source_dir)]
 
         print(f"[build.py] Running: {' '.join(cmd)}")
         result = subprocess.run(cmd, check=False)
@@ -85,11 +105,9 @@ def main():
             sys.exit(result.returncode)
 
     print(
-        f"[build.py] ✅ Documentation build complete (version={args.version}, normalized={normalized_version})"
+        f"[build.py] ✅ Documentation build complete (version={version}, normalized={normalized_version})"
     )
 
 
 if __name__ == "__main__":
     main()
-
-# Made with Bob

@@ -1,29 +1,24 @@
 #!/usr/bin/env python3
-"""decorate_api_mdx_merged.py
+"""decorate_api_mdx.py — Step 2 of the API docs pipeline.
 
-Merges the two behaviors you were running back-to-back:
+Applies a series of decoration passes to the raw MDX files produced by
+generate-ast.py (step 1).  Run via build.py or directly:
 
-1) decorate_api_mdx.py behavior:
-   - Adds CLASS/FUNC pills to headings
-   - Inserts divider lines
-   - Skips <br />
+    uv run python tooling/docs-autogen/decorate_api_mdx.py \\
+        --api-dir docs/docs/api \\
+        --version 0.5.0 \\
+        --source-dir mellea
 
-2) v3 behavior:
-   - Injects SidebarFix import + render so Mintlify sidebar badges/icons work:
-       import { SidebarFix } from "/snippets/SidebarFix.mdx";
-       <SidebarFix />
+Decoration passes (applied in order per file):
+1. fix_source_links      — correct GitHub blob URLs to versioned tags
+2. inject_preamble       — add per-module introductory text
+3. inject_sidebar_fix    — insert SidebarFix Mintlify component
+4. escape_mdx_syntax     — escape {{ }} in code blocks so MDX doesn't treat them as JSX
+5. add_cross_references  — linkify type names to their definition pages
+6. decorate_mdx_body     — add CLASS/FUNC pills and visual dividers to headings
 
-3) GitHub source link fixing:
-   - Corrects GitHub URLs to point to ibm-granite/mellea repository
-   - Uses version tags instead of branch names
-
-Usage examples:
-
-# (Recommended) Point at the Mintlify docs root (the folder that contains api/ and snippets/)
-python3 decorate_api_mdx_merged.py --docs-root /path/to/docs/docs --version 0.5.0
-
-# Or point directly at api directory
-python3 decorate_api_mdx_merged.py --api-dir /path/to/docs/docs/api --version 0.5.0
+WARNING: Not idempotent.  Each pass appends/wraps without checking for prior runs.
+Always run the full pipeline from scratch via `uv run poe apidocs`.
 """
 
 from __future__ import annotations
@@ -749,9 +744,9 @@ def main() -> None:
         raise SystemExit(
             f"❌ API directory not found: {api_dir}\n"
             "Try:\n"
-            "  python3 decorate_api_mdx_merged.py --docs-root /path/to/docs/docs --version 0.5.0\n"
+            "  uv run python tooling/docs-autogen/decorate_api_mdx.py --docs-root docs/docs --version 0.5.0\n"
             "or\n"
-            "  python3 decorate_api_mdx_merged.py --api-dir /path/to/docs/docs/api --version 0.5.0\n"
+            "  uv run python tooling/docs-autogen/decorate_api_mdx.py --api-dir docs/docs/api --version 0.5.0\n"
         )
 
     # Resolve source directory (default to mellea/ in current directory)

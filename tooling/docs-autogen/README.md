@@ -6,19 +6,21 @@ documentation using Mintlify.
 ## Quick Start
 
 ```bash
-make docs            # Generate + decorate (uses version from pyproject.toml)
-make docs-validate   # Verify quality
-make docs-serve      # Start preview server at http://localhost:3000
+uv run poe apidocs           # Generate + decorate (version auto-read from pyproject.toml)
+uv run poe apidocs-validate  # Verify quality
+uv run poe apidocs-clean     # Remove generated artefacts
 ```
 
-The `make docs` command runs `build.py`, which calls `generate-ast.py` then
+Makefile shims are also available if you prefer `make apidocs` etc.
+
+The `apidocs` task runs `build.py`, which calls `generate-ast.py` then
 `decorate_api_mdx.py` in sequence. Both the `docs/docs/api/` directory and the
 `docs/docs/api-reference.mdx` landing page are **fully generated artefacts** —
 do not commit or edit them by hand.
 
 ## Pipeline Overview
 
-```
+```text
 mellea/ source code
     │
     ▼
@@ -56,7 +58,7 @@ docs/docs/api/   (fresh copy, replaces previous entirely)
 
 ## File Structure
 
-```
+```text
 tooling/docs-autogen/
 ├── README.md               # This file
 ├── build.py                # Unified wrapper: calls generate-ast then decorate
@@ -83,8 +85,7 @@ docs/docs/
 
 ## Configuration
 
-**Version** is read automatically from `pyproject.toml` by the Makefile.
-To override:
+**Version** is auto-detected from `pyproject.toml`. To override:
 
 ```bash
 uv run python tooling/docs-autogen/build.py --version 0.4.0
@@ -93,7 +94,7 @@ uv run python tooling/docs-autogen/build.py --version 0.4.0
 **Coverage threshold** (`validate.py`, default 80%):
 
 ```bash
-make docs-validate  # uses Makefile default
+uv run poe apidocs-validate  # uses default threshold
 uv run python tooling/docs-autogen/validate.py docs/docs/api --version 0.3.2 --coverage-threshold 50
 ```
 
@@ -106,8 +107,11 @@ Do not edit the API Reference tab in `docs.json` or `api-reference.mdx` by hand
 `decorate_api_mdx.py` uses [Griffe](https://mkdocstrings.github.io/griffe/) to
 resolve type names to their source modules and emit hyperlinks. The package is
 loaded **once** per run (via `build_symbol_cache()`), then the resulting
-`symbol → module` dict is reused across all 89 files — making cross-reference
+`symbol → module` dict is reused across all files — making cross-reference
 generation fast (~10 s total, down from ~3 min with the old per-symbol load).
+
+`build.py` passes `--source-dir mellea` automatically if the directory exists.
+To disable cross-references (e.g. if Griffe is not installed), omit `--source-dir`.
 
 ## Important: Pipeline Is Not Idempotent
 
@@ -118,7 +122,7 @@ appends or wraps without checking whether its output already exists.
 **Always run the full pipeline from scratch:**
 
 ```bash
-make docs   # generate-ast.py replaces api/ entirely, then decorates fresh files
+uv run poe apidocs   # generate-ast.py replaces api/ entirely, then decorates fresh files
 ```
 
 Never run `decorate_api_mdx.py` standalone on files that have already been
@@ -128,16 +132,17 @@ decorated.
 
 ```bash
 # Run all unit tests
-uv run pytest tooling/docs-autogen/
+uv run poe apidocs-test
 
 # Run a specific test file
 uv run pytest tooling/docs-autogen/test_escape_mdx.py -v
 
 # Find MDX files not in docs.json navigation
-make docs-orphans
+uv run poe apidocs-orphans
 ```
 
 To add a new decoration step:
+
 1. Add the function to `decorate_api_mdx.py`
 2. Call it from `process_mdx_file()` in the correct order
 3. Write unit tests in a `test_*.py` file
@@ -167,9 +172,9 @@ most common cases but has not been fully verified end-to-end.
 ## Troubleshooting
 
 | Symptom | Fix |
-|---------|-----|
+| --- | --- |
 | `No module named 'mdxify'` | `uv add --dev mdxify griffe` |
-| `Could not parse expression with acorn` | Unescaped `{}`  — run `make docs` to regenerate |
+| `Could not parse expression with acorn` | Unescaped `{}` — run `make docs` to regenerate |
 | `VIRTUAL_ENV … does not match` warning | Harmless — `uv run` uses the project venv regardless |
 | Port 3000 in use | `lsof -ti:3000 \| xargs kill -9` |
 | Duplicate preamble / double dividers in MDX | Files were decorated twice — run `make docs` (which starts from fresh generation) |
