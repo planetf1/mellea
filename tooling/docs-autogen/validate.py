@@ -106,6 +106,41 @@ def validate_mdx_syntax(docs_dir: Path) -> tuple[int, list[str]]:
         if code_block_count % 2 != 0:
             errors.append(f"{rel_path}: Unclosed code block (odd number of ```)")
 
+        # Check for unescaped curly braces in code blocks
+        lines = content.splitlines()
+        in_code_block = False
+        code_fence_pattern = re.compile(r"^```")
+
+        for line_num, line in enumerate(lines, 1):
+            if code_fence_pattern.match(line):
+                in_code_block = not in_code_block
+                continue
+
+            if in_code_block:
+                # Check for sequences of { or } that have odd length (indicating unescaped)
+                # Properly escaped: {{ or }} (even length)
+                # Unescaped: { or } or {{{ or }}} (odd length)
+                
+                # Find all sequences of consecutive open braces
+                for match in re.finditer(r'\{+', line):
+                    brace_seq = match.group()
+                    if len(brace_seq) % 2 != 0:  # Odd number = unescaped
+                        errors.append(
+                            f"{rel_path}:{line_num}: Unescaped curly brace in code block (found {len(brace_seq)} consecutive '{{' - should be even)\n"
+                            f"  Line: {line.strip()[:80]}"
+                        )
+                        break  # Only report once per line
+                
+                # Find all sequences of consecutive close braces
+                for match in re.finditer(r'\}+', line):
+                    brace_seq = match.group()
+                    if len(brace_seq) % 2 != 0:  # Odd number = unescaped
+                        errors.append(
+                            f"{rel_path}:{line_num}: Unescaped curly brace in code block (found {len(brace_seq)} consecutive '}}' - should be even)\n"
+                            f"  Line: {line.strip()[:80]}"
+                        )
+                        break  # Only report once per line
+
         # Check for frontmatter
         if not content.startswith("---\n"):
             errors.append(f"{rel_path}: Missing frontmatter")

@@ -114,6 +114,66 @@ def fix_source_links(content: str, version: str) -> str:
 
 
 # =========================
+# MDX escaping
+# =========================
+
+
+def escape_mdx_syntax(content: str) -> str:
+    """Escape MDX-sensitive characters in code blocks.
+
+    MDX interprets curly braces as JSX expressions, which breaks
+    Python dict literals and JSON. This function escapes them.
+    
+    Also fixes blockquote continuations in tracebacks.
+
+    Args:
+        content: MDX file content
+
+    Returns:
+        Content with escaped MDX syntax in code blocks
+    """
+    lines = content.splitlines(keepends=True)
+    result = []
+    in_code_block = False
+    in_blockquote = False
+    code_fence_pattern = re.compile(r"^```")
+    blockquote_pattern = re.compile(r"^>>>?\s")
+
+    for line in lines:
+        # Track code block boundaries
+        if code_fence_pattern.match(line):
+            in_code_block = not in_code_block
+            in_blockquote = False  # Reset blockquote when entering/exiting code
+            result.append(line)
+            continue
+
+        # Escape curly braces inside code blocks
+        if in_code_block:
+            # Check if this is a blockquote line (>>> or Traceback)
+            if blockquote_pattern.match(line) or line.strip().startswith("Traceback"):
+                in_blockquote = True
+                # Escape braces in blockquote lines too
+                escaped = line.replace("{", "{{").replace("}", "}}")
+                result.append(escaped)
+            elif in_blockquote and line.strip() and not line.startswith(">>>"):
+                # Continuation of blockquote - prefix with >
+                escaped = line.replace("{", "{{").replace("}", "}}")
+                result.append("> " + escaped)
+            else:
+                # Reset blockquote if we hit an empty line or new prompt
+                if not line.strip() or line.startswith(">>>"):
+                    in_blockquote = False
+                # Simple approach: just escape all { and }
+                # This is safe because mdxify generates fresh content without escapes
+                escaped = line.replace("{", "{{").replace("}", "}}")
+                result.append(escaped)
+        else:
+            result.append(line)
+
+    return "".join(result)
+
+
+# =========================
 # Preamble injection
 # =========================
 
@@ -627,11 +687,14 @@ def process_mdx_file(
     # Step 3: inject SidebarFix
     text = inject_sidebar_fix(text)
 
-    # Step 4: Add cross-references (if source_dir provided)
+    # Step 4: Escape MDX syntax in code blocks
+    text = escape_mdx_syntax(text)
+
+    # Step 5: Add cross-references (if source_dir provided)
     if source_dir:
         text = add_cross_references(text, module_path, source_dir)
 
-    # Step 5: decorate headings/dividers
+    # Step 6: decorate headings/dividers
     text = decorate_mdx_body(text)
 
     if text != original:
