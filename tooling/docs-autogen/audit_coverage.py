@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
-"""Audit API documentation coverage.
+"""Audit API documentation coverage and docstring quality.
 
 Discovers all public classes and functions in mellea/ and cli/ using Griffe,
 then checks which ones have generated MDX documentation. Constants and module
 attributes are excluded from the count — they are not expected to have
 standalone documentation.
+
+With --quality, also audits docstring quality: flags missing docstrings,
+very short docstrings, and functions whose Args/Returns sections are absent.
 """
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -17,6 +21,15 @@ try:
 except ImportError:
     print("ERROR: griffe not installed. Run: uv pip install griffe", file=sys.stderr)
     sys.exit(1)
+
+
+def _load_package(source_dir: Path, package_name: str):
+    """Load a package with Griffe. Returns the package object or None on failure."""
+    try:
+        return griffe.load(source_dir.name, search_paths=[str(source_dir.parent)])
+    except Exception as e:
+        print(f"WARNING: Failed to load {source_dir}: {e}", file=sys.stderr)
+        return None
 
 
 def discover_public_symbols(
@@ -33,12 +46,8 @@ def discover_public_symbols(
         Example: {"mellea.core.base.Component": [], "mellea.core.base.generative": []}
     """
     symbols: dict[str, list[str]] = {}
-
-    # Load the package using Griffe
-    try:
-        package = griffe.load(source_dir.name, search_paths=[str(source_dir.parent)])
-    except Exception as e:
-        print(f"WARNING: Failed to load {source_dir}: {e}", file=sys.stderr)
+    package = _load_package(source_dir, package_name)
+    if package is None:
         return symbols
 
     def walk_module(module, module_path: str):
@@ -80,6 +89,181 @@ def discover_public_symbols(
     return symbols
 
 
+# ---------------------------------------------------------------------------
+# Docstring quality audit
+# ---------------------------------------------------------------------------
+
+_ARGS_RE = re.compile(r"^\s*(Args|Arguments|Parameters)\s*:", re.MULTILINE)
+_RETURNS_RE = re.compile(r"^\s*Returns\s*:", re.MULTILINE)
+# Return annotations that need no Returns section
+_TRIVIAL_RETURNS = {"None", "NoReturn", "Never", "never", ""}
+
+
+def _check_member(member, full_path: str, short_threshold: int) -> list[dict]:
+    """Return quality issues for a single class or function member."""
+    issues: list[dict] = []
+
+    doc = getattr(member, "docstring", None)
+    doc_text = doc.value.strip() if (doc and doc.value) else ""
+
+    if not doc_text:
+        issues.append({"path": full_path, "kind": "missing", "detail": "no docstring"})
+        return issues  # no further checks without a docstring
+
+    word_count = len(doc_text.split())
+    if word_count < short_threshold:
+        preview = doc_text[:70].replace("\n", " ")
+        issues.append(
+            {
+                "path": full_path,
+                "kind": "short",
+                "detail": f'{word_count} word(s): "{preview}"',
+            }
+        )
+
+    if getattr(member, "is_function", False):
+        # Args section check: only flag when there are meaningful parameters
+        params = getattr(member, "parameters", None)
+        meaningful = [
+            p.name
+            for p in (params or [])
+            if p.name not in ("self", "cls") and not p.name.startswith("*")
+        ]
+        if meaningful and not _ARGS_RE.search(doc_text):
+            sample = ", ".join(meaningful[:3]) + ("..." if len(meaningful) > 3 else "")
+            issues.append(
+                {
+                    "path": full_path,
+                    "kind": "no_args",
+                    "detail": f"params [{sample}] have no Args section",
+                }
+            )
+
+        # Returns section check: only flag when there is an explicit non-trivial annotation
+        returns = getattr(member, "returns", None)
+        ret_str = str(returns).strip() if returns else ""
+        if (
+            ret_str
+            and ret_str not in _TRIVIAL_RETURNS
+            and not _RETURNS_RE.search(doc_text)
+        ):
+            issues.append(
+                {
+                    "path": full_path,
+                    "kind": "no_returns",
+                    "detail": f"return type {ret_str!r} has no Returns section",
+                }
+            )
+
+    return issues
+
+
+def audit_docstring_quality(
+    source_dir: Path,
+    package_name: str,
+    short_threshold: int = 5,
+    include_methods: bool = True,
+) -> list[dict]:
+    """Audit docstring quality for all public classes and functions.
+
+    Checks each public symbol for:
+    - missing: no docstring at all
+    - short: docstring below short_threshold words
+    - no_args: function with parameters but no Args/Parameters section
+    - no_returns: function with a non-trivial return annotation but no Returns section
+
+    Args:
+        source_dir: Root directory to scan (e.g., mellea/ or cli/)
+        package_name: Package name (e.g., "mellea" or "cli")
+        short_threshold: Word count below which a docstring is flagged as short
+        include_methods: Whether to audit public methods on classes in addition
+            to top-level functions and classes
+
+    Returns:
+        List of issue dicts, each with keys: path, kind, detail
+    """
+    issues: list[dict] = []
+    package = _load_package(source_dir, package_name)
+    if package is None:
+        return issues
+
+    def walk_module(module, module_path: str) -> None:
+        if any(part.startswith("_") for part in module_path.split(".")):
+            return
+
+        for name, member in module.members.items():
+            if name.startswith("_"):
+                continue
+            try:
+                if getattr(member, "is_alias", False):
+                    continue
+                if not (member.is_class or member.is_function):
+                    continue
+            except Exception:
+                continue
+
+            full_path = f"{module_path}.{name}"
+            issues.extend(_check_member(member, full_path, short_threshold))
+
+            if include_methods and getattr(member, "is_class", False):
+                for mname, method in member.members.items():
+                    if mname.startswith("_"):
+                        continue
+                    try:
+                        if getattr(method, "is_alias", False):
+                            continue
+                        if not getattr(method, "is_function", False):
+                            continue
+                    except Exception:
+                        continue
+                    issues.extend(
+                        _check_member(method, f"{full_path}.{mname}", short_threshold)
+                    )
+
+        if hasattr(module, "modules"):
+            for submodule_name, submodule in module.modules.items():
+                if not submodule_name.startswith("_"):
+                    walk_module(submodule, f"{module_path}.{submodule_name}")
+
+    for module_name, module in package.modules.items():
+        if not module_name.startswith("_"):
+            walk_module(module, f"{package_name}.{module_name}")
+
+    return issues
+
+
+def _print_quality_report(issues: list[dict]) -> None:
+    """Print a grouped quality report to stdout."""
+    by_kind: dict[str, list[dict]] = {}
+    for issue in issues:
+        by_kind.setdefault(issue["kind"], []).append(issue)
+
+    kind_labels = {
+        "missing": "Missing docstrings",
+        "short": "Short docstrings",
+        "no_args": "Missing Args section",
+        "no_returns": "Missing Returns section",
+    }
+
+    total = len(issues)
+    print(f"\n{'=' * 60}")
+    print("Docstring Quality Report")
+    print(f"{'=' * 60}")
+    print(f"Total issues found: {total}")
+
+    for kind in ("missing", "short", "no_args", "no_returns"):
+        items = by_kind.get(kind, [])
+        if not items:
+            continue
+        label = kind_labels.get(kind, kind)
+        print(f"\n{'─' * 50}")
+        print(f"  {label} ({len(items)})")
+        print(f"{'─' * 50}")
+        for item in sorted(items, key=lambda x: x["path"]):
+            print(f"  {item['path']}")
+            print(f"    {item['detail']}")
+
+
 def discover_cli_commands(cli_dir: Path) -> list[str]:
     """Discover CLI commands from Typer applications.
 
@@ -98,7 +282,6 @@ def discover_cli_commands(cli_dir: Path) -> list[str]:
         content = main_file.read_text()
 
         # Simple heuristic: look for @app.command() decorators or add_typer() calls
-        import re
 
         # Find command decorators
         command_pattern = r'@app\.command\(["\']([^"\']+)["\']\)'
@@ -138,7 +321,6 @@ def find_documented_symbols(docs_dir: Path) -> set[str]:
         # Look for heading patterns that indicate symbol documentation
         # The actual format is: ### <span>...FUNC</span> `symbol_name`
         # or: ### <span>...CLASS</span> `ClassName`
-        import re
 
         # Match both old format and new format
         # Old: ## class Base, ## function generative
@@ -210,6 +392,23 @@ def main():
     parser.add_argument(
         "--threshold", type=float, default=80.0, help="Minimum coverage threshold"
     )
+    parser.add_argument(
+        "--quality",
+        action="store_true",
+        help="Run docstring quality audit (missing, short, no Args/Returns sections)",
+    )
+    parser.add_argument(
+        "--short-threshold",
+        type=int,
+        default=5,
+        metavar="N",
+        help="Flag docstrings with fewer than N words as short (default: 5)",
+    )
+    parser.add_argument(
+        "--no-methods",
+        action="store_true",
+        help="Exclude class methods from quality audit (check top-level symbols only)",
+    )
     args = parser.parse_args()
 
     source_dir = Path(args.source_dir)
@@ -229,7 +428,7 @@ def main():
     all_symbols = {**mellea_symbols, **cli_symbols}
     report = generate_coverage_report(all_symbols, documented, cli_commands)
 
-    # Print report
+    # Print coverage report
     print(f"\n{'=' * 60}")
     print("API Documentation Coverage Report")
     print(f"{'=' * 60}")
@@ -245,11 +444,32 @@ def main():
         for module, symbols in sorted(report["missing_symbols"].items()):
             print(f"  {module}: {', '.join(symbols)}")
 
+    # Quality audit
+    quality_issues: list[dict] = []
+    if args.quality:
+        print("\n🔬 Running docstring quality audit...")
+        include_methods = not args.no_methods
+        for pkg, pkg_name in [("mellea", "mellea"), ("cli", "cli")]:
+            pkg_dir = source_dir / pkg
+            if pkg_dir.exists():
+                quality_issues.extend(
+                    audit_docstring_quality(
+                        pkg_dir,
+                        pkg_name,
+                        short_threshold=args.short_threshold,
+                        include_methods=include_methods,
+                    )
+                )
+        _print_quality_report(quality_issues)
+
     # Save report if requested
     if args.output:
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        output_path.write_text(json.dumps(report, indent=2))
+        full_report = {**report}
+        if args.quality:
+            full_report["quality_issues"] = quality_issues
+        output_path.write_text(json.dumps(full_report, indent=2))
         print(f"\n✅ Report saved to {output_path}")
 
     # Check threshold
