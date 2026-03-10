@@ -163,6 +163,7 @@ def audit_docstring_quality(
     package_name: str,
     short_threshold: int = 5,
     include_methods: bool = True,
+    documented: set[str] | None = None,
 ) -> list[dict]:
     """Audit docstring quality for all public classes and functions.
 
@@ -172,12 +173,19 @@ def audit_docstring_quality(
     - no_args: function with parameters but no Args/Parameters section
     - no_returns: function with a non-trivial return annotation but no Returns section
 
+    Only symbols (and methods whose parent class) present in `documented` are
+    checked when that set is provided — ensuring the audit is scoped to what is
+    actually surfaced in the API reference.
+
     Args:
         source_dir: Root directory to scan (e.g., mellea/ or cli/)
         package_name: Package name (e.g., "mellea" or "cli")
         short_threshold: Word count below which a docstring is flagged as short
         include_methods: Whether to audit public methods on classes in addition
             to top-level functions and classes
+        documented: Set of symbol paths present in the generated MDX docs (from
+            find_documented_symbols()). When provided, only documented symbols
+            are audited. Pass None to audit all public symbols.
 
     Returns:
         List of issue dicts, each with keys: path, kind, detail
@@ -203,6 +211,11 @@ def audit_docstring_quality(
                 continue
 
             full_path = f"{module_path}.{name}"
+
+            # Skip symbols not in the API reference when a filter is provided
+            if documented is not None and full_path not in documented:
+                continue
+
             issues.extend(_check_member(member, full_path, short_threshold))
 
             if include_methods and getattr(member, "is_class", False):
@@ -444,10 +457,10 @@ def main():
         for module, symbols in sorted(report["missing_symbols"].items()):
             print(f"  {module}: {', '.join(symbols)}")
 
-    # Quality audit
+    # Quality audit — scoped to documented (API reference) symbols only
     quality_issues: list[dict] = []
     if args.quality:
-        print("\n🔬 Running docstring quality audit...")
+        print("\n🔬 Running docstring quality audit (documented symbols only)...")
         include_methods = not args.no_methods
         for pkg, pkg_name in [("mellea", "mellea"), ("cli", "cli")]:
             pkg_dir = source_dir / pkg
@@ -458,6 +471,7 @@ def main():
                         pkg_name,
                         short_threshold=args.short_threshold,
                         include_methods=include_methods,
+                        documented=documented,
                     )
                 )
         _print_quality_report(quality_issues)
