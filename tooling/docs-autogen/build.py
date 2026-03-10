@@ -48,8 +48,10 @@ def main():
         cmd = [
             sys.executable,
             str(script_dir / "generate-ast.py"),
-            "--output-dir",
-            str(output_dir),
+            "--docs-root",
+            str(
+                output_dir.parent
+            ),  # generate-ast.py expects docs/docs, not docs/docs/api
         ]
         if args.no_venv:
             cmd.append("--no-venv")
@@ -68,7 +70,7 @@ def main():
         cmd = [
             sys.executable,
             str(script_dir / "decorate_api_mdx.py"),
-            "--input-dir",
+            "--api-dir",
             str(output_dir),
             "--version",
             normalized_version,
