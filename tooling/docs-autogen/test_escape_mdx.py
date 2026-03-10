@@ -63,7 +63,7 @@ def test_escape_json_code_block():
 
 def test_idempotent_on_fresh_content():
     """Test that escaping fresh content twice gives same result as once.
-    
+
     Note: This function is designed for fresh mdxify output which has no
     escaped braces. If you run it on already-escaped content, it will
     double-escape. This is acceptable since the function is only called

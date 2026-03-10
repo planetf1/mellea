@@ -62,6 +62,7 @@
       {
         "tab": "API Reference",
         "pages": [
+          "api-reference",
           {
             "group": "mellea",
             "pages": [

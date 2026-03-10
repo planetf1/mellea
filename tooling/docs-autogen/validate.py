@@ -120,9 +120,9 @@ def validate_mdx_syntax(docs_dir: Path) -> tuple[int, list[str]]:
                 # Check for sequences of { or } that have odd length (indicating unescaped)
                 # Properly escaped: {{ or }} (even length)
                 # Unescaped: { or } or {{{ or }}} (odd length)
-                
+
                 # Find all sequences of consecutive open braces
-                for match in re.finditer(r'\{+', line):
+                for match in re.finditer(r"\{+", line):
                     brace_seq = match.group()
                     if len(brace_seq) % 2 != 0:  # Odd number = unescaped
                         errors.append(
@@ -130,9 +130,9 @@ def validate_mdx_syntax(docs_dir: Path) -> tuple[int, list[str]]:
                             f"  Line: {line.strip()[:80]}"
                         )
                         break  # Only report once per line
-                
+
                 # Find all sequences of consecutive close braces
-                for match in re.finditer(r'\}+', line):
+                for match in re.finditer(r"\}+", line):
                     brace_seq = match.group()
                     if len(brace_seq) % 2 != 0:  # Odd number = unescaped
                         errors.append(

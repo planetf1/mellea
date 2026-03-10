@@ -123,7 +123,7 @@ def escape_mdx_syntax(content: str) -> str:
 
     MDX interprets curly braces as JSX expressions, which breaks
     Python dict literals and JSON. This function escapes them.
-    
+
     Also fixes blockquote continuations in tracebacks.
 
     Args:
@@ -456,50 +456,65 @@ def extract_type_references(content: str) -> set[str]:
     return refs
 
 
-def resolve_symbol_path(symbol_name: str, source_dir: Path) -> str | None:
-    """Resolve symbol name to module path using Griffe.
+def build_symbol_cache(source_dir: Path) -> dict[str, str]:
+    """Build a symbol→module-path lookup table from the mellea package.
+
+    Loads the package once with Griffe and returns a dict mapping each
+    exported symbol name to its canonical module path, e.g.:
+        {"Backend": "mellea.core.backend", "Session": "mellea.stdlib.session", ...}
+
+    This is intentionally called once per process (in main()) and the result
+    is passed through to add_cross_references(), avoiding the O(files x symbols)
+    repeated Griffe loads that made the old resolve_symbol_path() so expensive.
 
     Args:
-        symbol_name: Symbol to resolve (e.g., "Backend")
-        source_dir: Project source directory
+        source_dir: The mellea/ source directory (e.g. <repo-root>/mellea)
 
     Returns:
-        Module path if found (e.g., "mellea.core.backend"), None otherwise
+        Dict mapping symbol name → module path, or empty dict on failure
     """
     try:
         import griffe
     except ImportError:
-        return None
+        return {}
 
-    # Load mellea package
     try:
         package = griffe.load("mellea", search_paths=[str(source_dir.parent)])
     except Exception:
-        return None
+        return {}
 
-    # Search for symbol in all modules
-    for module_path, module in package.modules.items():
-        if symbol_name in module.members:
-            # Use the canonical path which points to the actual definition
-            member = module.members[symbol_name]
-            canonical = member.canonical_path
-            # canonical is like "mellea.core.base.Component"
-            # We want "mellea.core.base" (the module path)
+    cache: dict[str, str] = {}
+    for _mod_key, module in package.modules.items():
+        for symbol_name, member in module.members.items():
+            if symbol_name in cache:
+                continue  # Keep first (shallowest) match
+            try:
+                canonical = member.canonical_path
+            except Exception:
+                # Griffe raises AliasResolutionError for re-exports that point
+                # outside the package (e.g. `from dataclasses import dataclass`).
+                # Skip these — they're not mellea symbols.
+                continue
             parts = canonical.split(".")
             if len(parts) > 1:
-                return ".".join(parts[:-1])  # Remove the symbol name
-            return f"mellea.{module_path}"
-
-    return None
+                cache[symbol_name] = ".".join(parts[:-1])
+    return cache
 
 
-def add_cross_references(content: str, module_path: str, source_dir: Path) -> str:
+def add_cross_references(
+    content: str,
+    module_path: str,
+    source_dir: Path,
+    symbol_cache: dict[str, str] | None = None,
+) -> str:
     """Add cross-reference links to type mentions.
 
     Args:
         content: MDX file content
         module_path: Current module path (e.g., "mellea.core.base")
-        source_dir: Project source directory
+        source_dir: Project source directory (used only if symbol_cache is None)
+        symbol_cache: Pre-built symbol→module-path mapping from build_symbol_cache().
+            Pass this in from main() to avoid reloading Griffe for every file.
 
     Returns:
         Content with cross-reference links added
@@ -533,16 +548,18 @@ def add_cross_references(content: str, module_path: str, source_dir: Path) -> st
             anchor = re.sub(r"-+", "-", anchor)
             return anchor.strip("-")
 
+    # Use provided cache or build a one-off one (slow path, kept for backwards compat)
+    if symbol_cache is None:
+        symbol_cache = build_symbol_cache(source_dir)
+
     # Extract type references
     refs = extract_type_references(content)
 
-    # Resolve each reference to a module path
+    # Resolve each reference to a module path using the cache
     resolved = {}
     for ref in refs:
-        target_module = resolve_symbol_path(ref, source_dir)
+        target_module = symbol_cache.get(ref)
         if target_module and target_module != module_path:
-            # Convert module path to relative MDX path
-            # e.g., mellea.core.backend -> ../core/backend
             resolved[ref] = target_module
 
     # Replace backtick references with links
@@ -652,6 +669,7 @@ def process_mdx_file(
     version: str,
     api_dir: Path | None = None,
     source_dir: Path | None = None,
+    symbol_cache: dict[str, str] | None = None,
 ) -> bool:
     """Process a single MDX file.
 
@@ -660,6 +678,8 @@ def process_mdx_file(
         version: Package version for GitHub links
         api_dir: API directory (for extracting module path)
         source_dir: Project source directory (for cross-reference resolution)
+        symbol_cache: Pre-built symbol→module-path cache from build_symbol_cache().
+            When provided, cross-references are resolved without re-loading Griffe.
 
     Returns:
         True if file was modified, False otherwise
@@ -692,7 +712,7 @@ def process_mdx_file(
 
     # Step 5: Add cross-references (if source_dir provided)
     if source_dir:
-        text = add_cross_references(text, module_path, source_dir)
+        text = add_cross_references(text, module_path, source_dir, symbol_cache)
 
     # Step 6: decorate headings/dividers
     text = decorate_mdx_body(text)
@@ -746,9 +766,17 @@ def main() -> None:
         print(f"⚠️ No .mdx files found under: {api_dir}")
         return
 
+    # Build the Griffe symbol cache once for all files (key perf fix:
+    # the old code called griffe.load() once per symbol per file — O(files x symbols)).
+    symbol_cache: dict[str, str] | None = None
+    if source_dir:
+        print(f"Building symbol cache from {source_dir}...")
+        symbol_cache = build_symbol_cache(source_dir)
+        print(f"  Cached {len(symbol_cache)} symbols.")
+
     changed = 0
     for f in mdx_files:
-        if process_mdx_file(f, args.version, api_dir, source_dir):
+        if process_mdx_file(f, args.version, api_dir, source_dir, symbol_cache):
             changed += 1
 
     print(

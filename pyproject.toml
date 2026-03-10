@@ -146,6 +146,8 @@ dev = [
     {include-group = "typecheck"},
     {include-group = "build"},
     {include-group = "release"},
+    "griffe>=2.0.0",
+    "mdxify>=0.2.37",
 ]
 
 # Documentation and notebooks
