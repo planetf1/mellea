@@ -606,28 +606,25 @@ def generate_landing_page(api_dir: Path, docs_root: Path) -> None:
     """Generate api-reference.mdx as a landing page for the API Reference tab.
 
     Scans the generated api/ directory structure to produce an up-to-date
-    overview of every top-level module, rendered as Mintlify CardGroup cards.
+    overview of every top-level module, rendered as a prose list with links.
     The file is written to docs_root so Mintlify serves it when the user
     clicks the API Reference tab.
     """
     mellea_entries = _collect_module_entries(api_dir, "mellea")
     cli_entries = _collect_module_entries(api_dir, "cli")
 
-    def _card(name: str, desc: str, preamble: str, href: str, pkg: str) -> str:
+    def _entry(name: str, desc: str, preamble: str, href: str, pkg: str) -> str:
         title = f"mellea.{name}" if pkg == "mellea" else f"m {name}"
         body = preamble or desc
-        lines = [f'  <Card title="{title}" href="{href}">']
+        line = f"- **[{title}](/{href})**"
         if body:
-            lines.append(f"    {body}")
-        lines.append("  </Card>")
-        return "\n".join(lines)
+            line += f" — {body}"
+        return line
 
-    def _card_section(entries: list[tuple[str, str, str, str]], pkg: str) -> str:
+    def _list_section(entries: list[tuple[str, str, str, str]], pkg: str) -> str:
         if not entries:
             return "_No modules found._\n"
-        cards = "\n\n".join(_card(n, d, p, h, pkg) for n, d, p, h in entries)
-        # cols={2} uses a Python f-string literal brace escape
-        return f"<CardGroup cols={{2}}>\n{cards}\n</CardGroup>\n"
+        return "\n".join(_entry(n, d, p, h, pkg) for n, d, p, h in entries) + "\n"
 
     content = """\
 ---
@@ -642,9 +639,9 @@ workflows.
 ## Python Library
 
 """
-    content += _card_section(mellea_entries, "mellea")
+    content += _list_section(mellea_entries, "mellea")
     content += "\n## CLI (`m`)\n\n"
-    content += _card_section(cli_entries, "cli")
+    content += _list_section(cli_entries, "cli")
 
     out_path = docs_root / "api-reference.mdx"
     safe_write_text(out_path, content)
