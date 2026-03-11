@@ -399,7 +399,9 @@ def main():
     parser = argparse.ArgumentParser(description="Audit API documentation coverage")
     parser.add_argument("--source-dir", default=".", help="Project root directory")
     parser.add_argument(
-        "--docs-dir", default="docs/docs/api", help="Generated docs directory"
+        "--docs-dir",
+        default=None,
+        help="Generated docs directory (default: <source-dir>/docs/docs/api)",
     )
     parser.add_argument("--output", help="Output JSON file for report")
     parser.add_argument(
@@ -425,7 +427,7 @@ def main():
     args = parser.parse_args()
 
     source_dir = Path(args.source_dir)
-    docs_dir = Path(args.docs_dir)
+    docs_dir = Path(args.docs_dir) if args.docs_dir else source_dir / "docs/docs/api"
 
     print("🔍 Discovering public symbols...")
     mellea_symbols = discover_public_symbols(source_dir / "mellea", "mellea")
