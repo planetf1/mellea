@@ -43,6 +43,12 @@ def main():
         "--output-dir", default="docs/docs/api", help="Output directory"
     )
     parser.add_argument(
+        "--source-dir",
+        default=None,
+        help="Source repo root to document (default: this repo). "
+        "Use to generate docs for a different checkout, e.g. --source-dir ../mellea-b",
+    )
+    parser.add_argument(
         "--no-venv",
         action="store_true",
         help="Skip venv creation (pass to generate-ast.py)",
@@ -56,7 +62,9 @@ def main():
     args = parser.parse_args()
 
     script_dir = Path(__file__).parent
-    repo_root = script_dir.parent.parent
+    repo_root = (
+        Path(args.source_dir).resolve() if args.source_dir else script_dir.parent.parent
+    )
     output_dir = Path(args.output_dir)
 
     version = args.version or read_project_version(repo_root)
@@ -72,6 +80,8 @@ def main():
                 output_dir.parent
             ),  # generate-ast.py expects docs/docs, not docs/docs/api
             "--no-venv",  # Always use current environment
+            "--source-dir",
+            str(repo_root),
         ]
 
         print(f"[build.py] Running: {' '.join(cmd)}")
@@ -85,7 +95,7 @@ def main():
 
     # Step 2: Decorate MDX
     if not args.skip_decoration:
-        source_dir = repo_root / "mellea"
+        source_pkg_dir = repo_root / "mellea"
         cmd = [
             sys.executable,
             str(script_dir / "decorate_api_mdx.py"),
@@ -94,8 +104,8 @@ def main():
             "--version",
             normalized_version,
         ]
-        if source_dir.exists():
-            cmd += ["--source-dir", str(source_dir)]
+        if source_pkg_dir.exists():
+            cmd += ["--source-dir", str(source_pkg_dir)]
 
         print(f"[build.py] Running: {' '.join(cmd)}")
         result = subprocess.run(cmd, check=False)
@@ -118,6 +128,8 @@ def main():
             str(output_dir.parent),
             "--no-venv",
             "--nav-only",
+            "--source-dir",
+            str(repo_root),
         ]
         print(f"[build.py] Running: {' '.join(cmd)}")
         result = subprocess.run(cmd, check=False)

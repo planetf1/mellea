@@ -107,25 +107,28 @@ def is_meaningful_body_line(line: str) -> bool:
     return True
 
 
-def find_docs_json(cli_path: str | None) -> Path:
+def find_docs_json(cli_path: str | None, search_root: Path | None = None) -> Path:
     if cli_path:
         p = Path(cli_path)
         if not p.is_absolute():
-            p = (REPO_ROOT / p).resolve()
+            root = search_root if search_root is not None else REPO_ROOT
+            p = (root / p).resolve()
         if not p.exists():
             raise FileNotFoundError(f"--docs-json path not found: {p}")
         return p
 
+    root = search_root if search_root is not None else REPO_ROOT
     candidates = [
-        REPO_ROOT / "docs.json",
-        REPO_ROOT / "docs" / "docs.json",
-        REPO_ROOT / "docs" / "docs" / "docs.json",
+        root / "docs.json",
+        root / "docs" / "docs.json",
+        root / "docs" / "docs" / "docs.json",
     ]
     for c in candidates:
         if c.exists():
             return c
     raise FileNotFoundError(
-        "Could not locate docs.json. Pass --docs-json explicitly, e.g. --docs-json docs/docs/docs.json"
+        f"Could not locate docs.json under {root}. "
+        "Pass --docs-json explicitly, e.g. --docs-json docs/docs/docs.json"
     )
 
 
@@ -194,7 +197,9 @@ def pip_install(venv_python: Path, pypi_name: str, pypi_version: str | None) -> 
 # -----------------------------
 # mdxify generation
 # -----------------------------
-def run_mdxify_generation(venv_python: Path, root_module: str) -> None:
+def run_mdxify_generation(
+    venv_python: Path, root_module: str, source_root: Path | None = None
+) -> None:
     output_dir = STAGING_API_DIR / root_module
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -223,9 +228,15 @@ def run_mdxify_generation(venv_python: Path, root_module: str) -> None:
         REPO_URL,
     ]
 
-    # Ensure PYTHONPATH doesn't accidentally include repo roots
     env = os.environ.copy()
-    env.pop("PYTHONPATH", None)
+    if source_root is not None:
+        # Point mdxify at the external source tree so it imports the right package.
+        # We set PYTHONPATH rather than clearing it so the venv site-packages
+        # (mdxify itself) remain importable.
+        env["PYTHONPATH"] = str(source_root)
+    else:
+        # Default: clear PYTHONPATH so the repo-local packages don't shadow site-packages
+        env.pop("PYTHONPATH", None)
 
     subprocess.run(cmd, check=True, text=True, cwd=str(MDXIFY_CWD), env=env)
     print(f"✅ Successfully generated docs for {root_module}", flush=True)
@@ -690,20 +701,29 @@ def build_api_reference_tab_object(api_dir: Path, docs_root: Path) -> dict[str, 
     }
 
 
-def _load_docstring_cache() -> dict[str, str]:
+def _load_docstring_cache(source_root: Path | None = None) -> dict[str, str]:
     """Load the module-path→docstring cache from the source packages.
 
     Imports build_module_docstring_cache from decorate_api_mdx (same directory)
-    and builds the cache from the repo root.  Returns an empty dict on any failure
-    so callers degrade gracefully to the _read_body_preamble() fallback.
+    and builds the cache from the given source root (defaults to REPO_ROOT).
+    Returns an empty dict on any failure so callers degrade gracefully to the
+    _read_body_preamble() fallback.
+
+    Args:
+        source_root: Root of the repo whose mellea/ package to read. Defaults
+            to REPO_ROOT (this checkout).
+
+    Returns:
+        Dict mapping module dotted paths to their first-paragraph docstrings.
     """
+    root = source_root if source_root is not None else REPO_ROOT
     try:
         sys.path.insert(0, str(Path(__file__).parent))
         from decorate_api_mdx import (
             build_module_docstring_cache,  # type: ignore[import]
         )
 
-        cache = build_module_docstring_cache(REPO_ROOT / "mellea")
+        cache = build_module_docstring_cache(root / "mellea")
         print(f"  Loaded {len(cache)} module docstrings from source.", flush=True)
         return cache
     except Exception as exc:
@@ -765,10 +785,22 @@ def main() -> None:
             "text injected by decorate_api_mdx.py appears in landing page cards."
         ),
     )
+    parser.add_argument(
+        "--source-dir",
+        default=None,
+        help="Source repo root whose mellea/ and cli/ packages to document "
+        "(default: this repo). Overrides REPO_ROOT for package lookup and "
+        "docstring cache; does not affect staging/output paths.",
+    )
 
     args = parser.parse_args()
 
-    docs_json_path = find_docs_json(args.docs_json)
+    # source_root: the repo whose mellea/ and cli/ packages to document.
+    # Defaults to REPO_ROOT (this checkout). Override with --source-dir when
+    # generating docs for a different repo without modifying that repo.
+    source_root = Path(args.source_dir).resolve() if args.source_dir else REPO_ROOT
+
+    docs_json_path = find_docs_json(args.docs_json, search_root=source_root)
     docs_root = (
         Path(args.docs_root).resolve()
         if args.docs_root
@@ -784,7 +816,7 @@ def main() -> None:
                 "Run the full pipeline first (without --nav-only)."
             )
         print("🔄 --nav-only: rebuilding landing page and navigation...", flush=True)
-        docstring_cache = _load_docstring_cache()
+        docstring_cache = _load_docstring_cache(source_root)
         build_and_merge_navigation(
             docs_json_path, final_api_dir, docs_root, docstring_cache
         )
@@ -805,7 +837,9 @@ def main() -> None:
 
     # Generate MDX into staging (critical cwd fix inside run_mdxify_generation)
     for pkg in PACKAGES:
-        run_mdxify_generation(venv_python, pkg)
+        run_mdxify_generation(
+            venv_python, pkg, source_root if source_root != REPO_ROOT else None
+        )
 
     # Restructure + cleanup in staging
     reorganize_to_nested_structure()
@@ -818,7 +852,7 @@ def main() -> None:
 
     # Merge nav based on final location
     build_and_merge_navigation(
-        docs_json_path, final_api_dir, docs_root, _load_docstring_cache()
+        docs_json_path, final_api_dir, docs_root, _load_docstring_cache(source_root)
     )
 
     # Cleanup mdxify run cwd (optional)

@@ -244,71 +244,24 @@ def inject_preamble(
 ) -> str:
     """Inject preamble text after frontmatter.
 
-    Resolution order:
-    1. Hardcoded overrides (exact match) — richer text for key top-level modules.
-    2. Module docstring from source code (exact match via docstring_cache).
-    3. Hardcoded overrides (prefix match) — propagate top-level text to sub-files.
-    If none match, the file is returned unchanged.
+    Uses the module docstring from source as the preamble, walking up the
+    dotted path until a docstring is found (e.g. cli.alora.commands falls back
+    to cli.alora). If nothing is found the file is returned unchanged.
 
     Args:
         content: MDX file content
         module_path: Module path derived from file path (e.g. "mellea.core.base")
         docstring_cache: Optional module-path→docstring dict from
             build_module_docstring_cache(). When provided, module docstrings are
-            used as preambles for modules not covered by the hardcoded overrides.
+            used as preambles.
 
     Returns:
         Content with preamble injected
     """
-    # Hardcoded overrides — richer descriptions for the most important modules.
-    # Exact-match keys prevent child modules from accidentally inheriting them;
-    # prefix matching is only used as a final fallback (step 3 below).
-    _OVERRIDES: dict[str, str] = {
-        "mellea.core": (
-            "The `mellea.core` module provides the foundational abstractions for building "
-            "LLM-powered applications. It includes the base classes for backends, formatters, "
-            "and the `@generative` decorator for creating LLM-powered functions.\n\n"
-        ),
-        "mellea.backends": (
-            "The `mellea.backends` module provides integrations with various LLM providers. "
-            "Each backend implements the `Backend` interface and handles provider-specific "
-            "authentication, API calls, and response formatting.\n\n"
-        ),
-        "mellea.formatters": (
-            "The `mellea.formatters` module provides output formatters that parse and validate "
-            "LLM responses into structured Python types. Formatters handle JSON parsing, "
-            "type validation, and error recovery.\n\n"
-        ),
-        "mellea.stdlib": (
-            "The `mellea.stdlib` module provides high-level components for common LLM patterns. "
-            "It includes sessions for conversation management, context handling, and reusable "
-            "components for building complex workflows.\n\n"
-        ),
-        "mellea.telemetry": (
-            "The `mellea.telemetry` module provides observability capabilities through "
-            "OpenTelemetry, enabling tracing and metrics collection for both application-level "
-            "operations and backend LLM interactions.\n\n"
-        ),
-    }
-
-    # 1. Exact-match hardcoded override
-    preamble_text = _OVERRIDES.get(module_path)
-
-    # 2. Prefix-match hardcoded override — propagates the rich top-level description
-    #    to every sub-file (e.g. mellea.backends.backend → mellea.backends override).
-    #    Must run before the docstring cache so that a terse sub-module docstring
-    #    (e.g. "FormatterBackend.") doesn't shadow the richer parent override.
-    if not preamble_text:
-        for key, text in _OVERRIDES.items():
-            if module_path.startswith(key + "."):
-                preamble_text = text
-                break
-
-    # 3. Module docstring from source — used for modules not covered by any override
-    #    (e.g. cli.alora, mellea.helpers, and any future modules).
-    #    Walk up the dotted path so that cli.alora.commands falls back to the
-    #    cli.alora package docstring when the leaf module has no docstring of its own.
-    if not preamble_text and docstring_cache:
+    # Module docstring from source — walk up the dotted path so that
+    # cli.alora.commands falls back to cli.alora when the leaf has no docstring.
+    preamble_text: str | None = None
+    if docstring_cache:
         candidate = module_path
         while candidate:
             doc = docstring_cache.get(candidate)

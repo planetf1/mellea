@@ -195,6 +195,16 @@ help = "Find MDX files not referenced in docs/mint.json navigation"
 cmd = "python tooling/docs-autogen/audit_coverage.py --quality --no-methods"
 help = "Audit docstring quality for documented public symbols (missing, short, no Args/Returns)"
 
+[tool.poe.tasks.apidocs-preview]
+shell = """
+set -e
+PREVIEW_DIR=/tmp/mellea-preview
+python tooling/docs-autogen/build.py --output-dir "$PREVIEW_DIR/api"
+python tooling/docs-autogen/audit_coverage.py --quality --no-methods \
+  --docs-dir "$PREVIEW_DIR/api"
+"""
+help = "Generate fresh API docs to /tmp/mellea-preview and audit quality."
+
 # -----------------------------
 # Ruff - Linting and Formatting
 # -----------------------------
