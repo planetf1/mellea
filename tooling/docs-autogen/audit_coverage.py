@@ -106,7 +106,9 @@ _RETURNS_RE = re.compile(r"^\s*Returns\s*:", re.MULTILINE)
 _RAISES_RE = re.compile(r"^\s*Raises\s*:", re.MULTILINE)
 _ATTRIBUTES_RE = re.compile(r"^\s*Attributes\s*:", re.MULTILINE)
 # Matches an indented param entry inside an Args block: "    param_name:" or "    param_name (type):"
-_ARGS_ENTRY_RE = re.compile(r"^\s{4,}(\w+)\s*(?:\([^)]*\))?\s*:", re.MULTILINE)
+# The colon must be followed by whitespace to avoid matching Sphinx cross-reference
+# continuation lines like "        through :func:`...`".
+_ARGS_ENTRY_RE = re.compile(r"^\s{4,}(\w+)\s*(?:\([^)]*\))?\s*:\s", re.MULTILINE)
 # Return annotations that need no Returns section
 _TRIVIAL_RETURNS = {"None", "NoReturn", "Never", "never", ""}
 
@@ -134,15 +136,30 @@ def _check_member(member, full_path: str, short_threshold: int) -> list[dict]:
         )
 
     if getattr(member, "is_function", False):
-        # Args section check: only flag when there are meaningful parameters
+        # Args section check: only flag when there are meaningful parameters.
+        # Use Griffe ParameterKind to correctly exclude *args / **kwargs — their
+        # names are stored without the leading '*', so a startswith("*") check
+        # would not filter them.
         params = getattr(member, "parameters", None)
-        meaningful = [
+        _variadic_kinds = {
+            griffe.ParameterKind.var_positional,
+            griffe.ParameterKind.var_keyword,
+        }
+        concrete = [
             p.name
             for p in (params or [])
-            if p.name not in ("self", "cls") and not p.name.startswith("*")
+            if p.name not in ("self", "cls")
+            and getattr(p, "kind", None) not in _variadic_kinds
         ]
-        if meaningful and not _ARGS_RE.search(doc_text):
-            sample = ", ".join(meaningful[:3]) + ("..." if len(meaningful) > 3 else "")
+        # A function whose only non-self params are *args/**kwargs is a variadic
+        # forwarder (e.g. def f(*args, **kwargs)). Its docstring Args: section
+        # documents accepted kwargs by convention, not a concrete signature —
+        # skip both no_args and param_mismatch for these.
+        is_variadic_forwarder = (not concrete) and any(
+            getattr(p, "kind", None) in _variadic_kinds for p in (params or [])
+        )
+        if concrete and not _ARGS_RE.search(doc_text):
+            sample = ", ".join(concrete[:3]) + ("..." if len(concrete) > 3 else "")
             issues.append(
                 {
                     "path": full_path,
@@ -150,7 +167,7 @@ def _check_member(member, full_path: str, short_threshold: int) -> list[dict]:
                     "detail": f"params [{sample}] have no Args section",
                 }
             )
-        elif meaningful and _ARGS_RE.search(doc_text):
+        elif concrete and not is_variadic_forwarder and _ARGS_RE.search(doc_text):
             # Param name mismatch: documented names that don't exist in the signature
             args_block = re.search(
                 r"(?:Args|Arguments|Parameters)\s*:(.*?)(?:\n\s*\n|\Z)",
@@ -159,7 +176,7 @@ def _check_member(member, full_path: str, short_threshold: int) -> list[dict]:
             )
             if args_block:
                 doc_param_names = set(_ARGS_ENTRY_RE.findall(args_block.group(1)))
-                actual_names = set(meaningful)
+                actual_names = set(concrete)
                 phantom = doc_param_names - actual_names
                 if phantom:
                     issues.append(
