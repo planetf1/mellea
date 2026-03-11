@@ -12,6 +12,7 @@ very short docstrings, and functions whose Args/Returns sections are absent.
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -330,6 +331,17 @@ def audit_docstring_quality(
     return issues
 
 
+_IN_GHA = os.environ.get("GITHUB_ACTIONS") == "true"
+
+
+def _gha_cmd(level: str, title: str, message: str) -> None:
+    """Emit a GitHub Actions workflow command annotation."""
+    # Escape special characters required by the GHA annotation format
+    message = message.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+    title = title.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+    print(f"::{level} title={title}::{message}")
+
+
 def _print_quality_report(issues: list[dict]) -> None:
     """Print a grouped quality report to stdout."""
     by_kind: dict[str, list[dict]] = {}
@@ -373,6 +385,8 @@ def _print_quality_report(issues: list[dict]) -> None:
         for item in sorted(items, key=lambda x: x["path"]):
             print(f"  {item['path']}")
             print(f"    {item['detail']}")
+            if _IN_GHA:
+                _gha_cmd("error", label, f"{item['path']} — {item['detail']}")
 
 
 def audit_nav_orphans(docs_dir: Path, source_dir: Path) -> list[str]:
@@ -668,6 +682,20 @@ def main():
             f"\n❌ {len(quality_issues)} quality issue(s) found (--fail-on-quality set)"
         )
         failed = True
+
+    if _IN_GHA:
+        if quality_issues:
+            _gha_cmd(
+                "error" if (args.fail_on_quality and quality_issues) else "warning",
+                "Docstring quality",
+                f"{len(quality_issues)} issue(s) found — run audit_coverage.py --quality locally for details",
+            )
+        else:
+            _gha_cmd(
+                "notice",
+                "Docstring quality",
+                "All documented symbols pass quality checks",
+            )
 
     sys.exit(1 if failed else 0)
 
