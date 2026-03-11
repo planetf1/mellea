@@ -102,6 +102,10 @@ def discover_public_symbols(
 
 _ARGS_RE = re.compile(r"^\s*(Args|Arguments|Parameters)\s*:", re.MULTILINE)
 _RETURNS_RE = re.compile(r"^\s*Returns\s*:", re.MULTILINE)
+_RAISES_RE = re.compile(r"^\s*Raises\s*:", re.MULTILINE)
+_ATTRIBUTES_RE = re.compile(r"^\s*Attributes\s*:", re.MULTILINE)
+# Matches an indented param entry inside an Args block: "    param_name:" or "    param_name (type):"
+_ARGS_ENTRY_RE = re.compile(r"^\s{4,}(\w+)\s*(?:\([^)]*\))?\s*:", re.MULTILINE)
 # Return annotations that need no Returns section
 _TRIVIAL_RETURNS = {"None", "NoReturn", "Never", "never", ""}
 
@@ -145,6 +149,25 @@ def _check_member(member, full_path: str, short_threshold: int) -> list[dict]:
                     "detail": f"params [{sample}] have no Args section",
                 }
             )
+        elif meaningful and _ARGS_RE.search(doc_text):
+            # Param name mismatch: documented names that don't exist in the signature
+            args_block = re.search(
+                r"(?:Args|Arguments|Parameters)\s*:(.*?)(?:\n\s*\n|\Z)",
+                doc_text,
+                re.DOTALL,
+            )
+            if args_block:
+                doc_param_names = set(_ARGS_ENTRY_RE.findall(args_block.group(1)))
+                actual_names = set(meaningful)
+                phantom = doc_param_names - actual_names
+                if phantom:
+                    issues.append(
+                        {
+                            "path": full_path,
+                            "kind": "param_mismatch",
+                            "detail": f"documented params {sorted(phantom)} not in signature",
+                        }
+                    )
 
         # Returns section check: only flag when there is an explicit non-trivial annotation
         returns = getattr(member, "returns", None)
@@ -159,6 +182,57 @@ def _check_member(member, full_path: str, short_threshold: int) -> list[dict]:
                     "path": full_path,
                     "kind": "no_returns",
                     "detail": f"return type {ret_str!r} has no Returns section",
+                }
+            )
+
+        # Raises section check: only flag when the source contains explicit raise statements
+        source = getattr(member, "source", None) or ""
+        if "raise " in source and not _RAISES_RE.search(doc_text):
+            issues.append(
+                {
+                    "path": full_path,
+                    "kind": "no_raises",
+                    "detail": "function raises but has no Raises section",
+                }
+            )
+
+    if getattr(member, "is_class", False):
+        # Args section check for classes: look at __init__ typed parameters
+        init = member.members.get("__init__")
+        if init:
+            init_params = getattr(init, "parameters", None)
+            typed_params = [
+                p.name
+                for p in (init_params or [])
+                if p.name not in ("self", "cls")
+                and not p.name.startswith("*")
+                and p.annotation is not None
+            ]
+            if typed_params and not _ARGS_RE.search(doc_text):
+                sample = ", ".join(typed_params[:3]) + (
+                    "..." if len(typed_params) > 3 else ""
+                )
+                issues.append(
+                    {
+                        "path": full_path,
+                        "kind": "no_class_args",
+                        "detail": f"__init__ params [{sample}] have no Args section",
+                    }
+                )
+
+        # Attributes section check: flag when public non-method attributes exist
+        pub_attrs = [
+            n
+            for n, m in member.members.items()
+            if not n.startswith("_") and getattr(m, "is_attribute", False)
+        ]
+        if pub_attrs and not _ATTRIBUTES_RE.search(doc_text):
+            sample = ", ".join(pub_attrs[:3]) + ("..." if len(pub_attrs) > 3 else "")
+            issues.append(
+                {
+                    "path": full_path,
+                    "kind": "no_attributes",
+                    "detail": f"public attributes [{sample}] have no Attributes section",
                 }
             )
 
@@ -179,6 +253,10 @@ def audit_docstring_quality(
     - short: docstring below short_threshold words
     - no_args: function with parameters but no Args/Parameters section
     - no_returns: function with a non-trivial return annotation but no Returns section
+    - no_raises: function whose source contains raise but has no Raises section
+    - no_class_args: class whose __init__ has typed params but no Args section
+    - no_attributes: class with public attributes but no Attributes section
+    - param_mismatch: Args section documents names absent from the real signature
 
     Only symbols (and methods whose parent class) present in `documented` are
     checked when that set is provided — ensuring the audit is scoped to what is
@@ -263,6 +341,10 @@ def _print_quality_report(issues: list[dict]) -> None:
         "short": "Short docstrings",
         "no_args": "Missing Args section",
         "no_returns": "Missing Returns section",
+        "no_raises": "Missing Raises section",
+        "no_class_args": "Missing class Args section",
+        "no_attributes": "Missing Attributes section",
+        "param_mismatch": "Param name mismatches (documented but not in signature)",
     }
 
     total = len(issues)
@@ -271,7 +353,16 @@ def _print_quality_report(issues: list[dict]) -> None:
     print(f"{'=' * 60}")
     print(f"Total issues found: {total}")
 
-    for kind in ("missing", "short", "no_args", "no_returns"):
+    for kind in (
+        "missing",
+        "short",
+        "no_args",
+        "no_returns",
+        "no_raises",
+        "no_class_args",
+        "no_attributes",
+        "param_mismatch",
+    ):
         items = by_kind.get(kind, [])
         if not items:
             continue
