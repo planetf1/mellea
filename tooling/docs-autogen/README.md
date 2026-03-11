@@ -132,6 +132,8 @@ uv run python tooling/docs-autogen/audit_coverage.py \
     --docs-dir docs/docs/api --quality --short-threshold 15   # raise "short" threshold
 uv run python tooling/docs-autogen/audit_coverage.py \
     --docs-dir docs/docs/api --quality --output report.json   # save JSON report
+uv run python tooling/docs-autogen/audit_coverage.py \
+    --docs-dir docs/docs/api --quality --fail-on-quality      # exit 1 if any issues (CI/pre-commit)
 ```
 
 Eight issue kinds are reported:

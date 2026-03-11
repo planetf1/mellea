@@ -567,6 +567,11 @@ def main():
         action="store_true",
         help="Check for MDX files not linked in docs/mint.json navigation",
     )
+    parser.add_argument(
+        "--fail-on-quality",
+        action="store_true",
+        help="Exit 1 if any quality issues are found (for CI/pre-commit use)",
+    )
     args = parser.parse_args()
 
     source_dir = Path(args.source_dir)
@@ -649,14 +654,22 @@ def main():
         print(f"\n✅ Report saved to {output_path}")
 
     # Check threshold
+    failed = False
     if report["coverage_percentage"] < args.threshold:
         print(
             f"\n❌ Coverage {report['coverage_percentage']}% below threshold {args.threshold}%"
         )
-        sys.exit(1)
+        failed = True
     else:
         print(f"\n✅ Coverage meets threshold {args.threshold}%")
-        sys.exit(0)
+
+    if args.fail_on_quality and quality_issues:
+        print(
+            f"\n❌ {len(quality_issues)} quality issue(s) found (--fail-on-quality set)"
+        )
+        failed = True
+
+    sys.exit(1 if failed else 0)
 
 
 if __name__ == "__main__":
