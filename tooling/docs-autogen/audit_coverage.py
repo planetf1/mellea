@@ -26,7 +26,14 @@ except ImportError:
 def _load_package(source_dir: Path, package_name: str):
     """Load a package with Griffe. Returns the package object or None on failure."""
     try:
-        return griffe.load(source_dir.name, search_paths=[str(source_dir.parent)])
+        # try_relative_path=False ensures Griffe only searches the explicit
+        # search_paths and does not fall back to CWD, which avoids loading a
+        # same-named package from the project root when --source-dir points
+        # elsewhere (e.g. auditing mellea-b while running from mellea-d).
+        search_path = str(source_dir.parent.resolve())
+        return griffe.load(
+            source_dir.name, search_paths=[search_path], try_relative_path=False
+        )
     except Exception as e:
         print(f"WARNING: Failed to load {source_dir}: {e}", file=sys.stderr)
         return None
