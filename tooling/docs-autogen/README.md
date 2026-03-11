@@ -149,8 +149,15 @@ Eight issue kinds are reported:
 | `no_attributes` | Class has public attributes but no `Attributes:` section |
 | `param_mismatch` | `Args:` section documents parameter names not in the real signature |
 
-The quality audit is informational — it does not fail the build. Use `--output`
-to track trends over time or feed results into issue tracking.
+**`*args` / `**kwargs` forwarders** — functions whose only non-`self` parameters are
+`*args` and/or `**kwargs` are exempt from both `no_args` and `param_mismatch`. These
+are variadic forwarders where the concrete signature carries no named parameters; the
+docstring `Args:` section conventionally describes the accepted keyword arguments rather
+than the signature itself. Authors should document those kwargs freely — the audit will
+not flag them as mismatches.
+
+The quality audit is informational — it does not fail the build unless `--fail-on-quality`
+is passed. Use `--output` to track trends over time or feed results into issue tracking.
 
 **Navigation orphan audit** (`audit_coverage.py --orphans`):
 
