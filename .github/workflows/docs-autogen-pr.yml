@@ -1,10 +1,13 @@
 name: Generate API Documentation
 
+# TODO: Re-enable once branch strategy is agreed (main vs dedicated docs branch)
+# and integration with the new uv-based tooling is validated end-to-end. See PR #611.
 on:
-  push:
-    tags:
-      - 'v*'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      enabled:
+        description: 'This workflow is currently disabled pending branch strategy decision'
+        required: false
 
 permissions:
   contents: write
@@ -29,7 +32,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          cache-dependency-glob: "tooling/docs-autogen/requirements.txt"
+          cache-dependency-glob: "uv.lock"
       
       # Check lock file is up to date (determinism check)
       - name: Check lock file is up to date
@@ -88,4 +91,3 @@ jobs:
             documentation
             automation
 
-# Made with Bob
