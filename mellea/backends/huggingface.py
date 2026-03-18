@@ -1133,16 +1133,12 @@ class LocalHFBackend(FormatterBackend, AdapterMixin):
         )
 
         span = mot._meta.get("_telemetry_span")
-        from ..telemetry.metrics import is_metrics_enabled
 
-        metrics_enabled = is_metrics_enabled()
-
-        # Extract token counts only if needed
+        # Extract token counts from the HF output sequences.
+        # Always computed (usage is a standard mot field, not a telemetry concern).
         hf_output = mot._meta.get("hf_output")
         n_prompt, n_completion = None, None
-        if (span is not None or metrics_enabled) and isinstance(
-            hf_output, GenerateDecoderOnlyOutput
-        ):
+        if isinstance(hf_output, GenerateDecoderOnlyOutput):
             # HuggingFace local models don't provide usage objects, but we can
             # calculate token counts from sequences
             try:

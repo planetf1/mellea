@@ -320,11 +320,24 @@ def pytest_collection_finish(session):
     # Run examples in isolation
     exit_code = _run_vllm_examples_isolated(session, vllm_files)
 
-    # Clear collected items so pytest doesn't run them again
-    session.items.clear()
+    # Remove only the vLLM example items so pytest doesn't run them again
+    vllm_file_set = set(vllm_files)
+    session.items[:] = [
+        item for item in session.items if str(item.path) not in vllm_file_set
+    ]
 
-    # Exit with appropriate code
-    pytest.exit("vLLM examples completed in isolated processes", returncode=exit_code)
+    # If this is a standalone examples run (no other test items), exit cleanly.
+    # In a mixed run (e.g. pytest test/ docs/), let the remaining items execute.
+    has_other_items = any(
+        "docs" not in str(item.path) or "examples" not in str(item.path)
+        for item in session.items
+    )
+    if not has_other_items:
+        pytest.exit(
+            "vLLM examples completed in isolated processes", returncode=exit_code
+        )
+    elif exit_code != 0:
+        session.testsfailed += 1
 
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
