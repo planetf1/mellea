@@ -48,8 +48,15 @@ def _check_ollama_available():
         return False
 
 
+_capabilities_cache: dict | None = None
+
+
 def get_system_capabilities():
     """Detect system capabilities for test requirements."""
+    global _capabilities_cache
+    if _capabilities_cache is not None:
+        return _capabilities_cache
+
     capabilities = {
         "has_gpu": False,
         "gpu_memory_gb": 0,
@@ -117,6 +124,7 @@ def get_system_capabilities():
     # Detect Ollama availability
     capabilities["has_ollama"] = _check_ollama_available()
 
+    _capabilities_cache = capabilities
     return capabilities
 
 
