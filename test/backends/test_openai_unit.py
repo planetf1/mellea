@@ -1,7 +1,8 @@
 """Unit tests for OpenAI backend pure-logic helpers — no API calls required.
 
 Covers filter_openai_client_kwargs, filter_chat_completions_kwargs,
-_simplify_and_merge, and _make_backend_specific_and_remove.
+_simplify_and_merge, _make_backend_specific_and_remove, and post_processing
+error detection for empty thinking-mode responses.
 """
 
 import pytest
@@ -11,6 +12,7 @@ from openai.types.chat.chat_completion import Choice
 from mellea.backends import ModelOption
 from mellea.backends.openai import OpenAIBackend
 from mellea.core.base import ModelOutputThunk
+from mellea.stdlib.components import Message
 
 
 def _make_backend(model_options: dict | None = None) -> OpenAIBackend:
@@ -309,6 +311,129 @@ async def test_processing_reasoning_content_takes_precedence_over_reasoning(back
 
     assert mot._thinking == "attr-trace"
     assert mot._underlying_value == "answer"
+
+
+# --- post_processing: empty thinking-mode response detection ---
+
+
+def _build_mot_for_empty_content_check(
+    finish_reason: str = "stop",
+    content: str | None = None,
+    completion_tokens: int = 9,
+    tool_calls: list | None = None,
+    thinking: str | None = None,
+) -> ModelOutputThunk:
+    """Construct a ModelOutputThunk in the state post_processing expects after processing()."""
+    mot = ModelOutputThunk(value=None)
+    mot._action = Message("user", "What is 2 + 2?")
+    mot._model_options = {}
+    mot._underlying_value = content if content is not None else ""
+    if thinking is not None:
+        mot._thinking = thinking
+    choice = {
+        "finish_reason": finish_reason,
+        "index": 0,
+        "message": {"content": content, "role": "assistant", "tool_calls": tool_calls},
+    }
+    full_response = {
+        "id": "chatcmpl-test",
+        "object": "chat.completion",
+        "choices": [choice],
+        "usage": {
+            "prompt_tokens": 10,
+            "completion_tokens": completion_tokens,
+            "total_tokens": 10 + completion_tokens,
+        },
+    }
+    mot._meta["oai_chat_response"] = full_response
+    mot._meta["oai_chat_response_choice"] = choice
+    return mot
+
+
+async def test_post_processing_raises_on_empty_content_with_tokens(backend):
+    """Thinking model with content=None, finish_reason=stop, non-zero tokens -> RuntimeError."""
+    mot = _build_mot_for_empty_content_check()
+    with pytest.raises(RuntimeError, match="enable_thinking"):
+        await backend.post_processing(
+            mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
+        )
+
+
+async def test_post_processing_raises_on_empty_string_content(backend):
+    """content='' is treated the same as None when finish_reason=stop and tokens>0."""
+    mot = _build_mot_for_empty_content_check(content="")
+    with pytest.raises(RuntimeError, match="empty response"):
+        await backend.post_processing(
+            mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
+        )
+
+
+async def test_post_processing_accepts_empty_content_with_zero_tokens(backend):
+    """Empty content with zero completion_tokens is not a thinking-mode failure."""
+    mot = _build_mot_for_empty_content_check(completion_tokens=0)
+    await backend.post_processing(
+        mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
+    )
+
+
+async def test_post_processing_accepts_empty_content_with_length_finish(backend):
+    """finish_reason=length (truncated) is a different failure mode, not raised here."""
+    mot = _build_mot_for_empty_content_check(finish_reason="length")
+    await backend.post_processing(
+        mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
+    )
+
+
+async def test_post_processing_accepts_non_empty_content(backend):
+    """Normal response with content is unaffected."""
+    mot = _build_mot_for_empty_content_check(content="The answer is 4.")
+    await backend.post_processing(
+        mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
+    )
+    assert mot._underlying_value == "The answer is 4."
+
+
+async def test_post_processing_streaming_raises_on_empty_content(backend):
+    """Streaming path: oai_chat_response is choice-shaped (from delta merge)."""
+    mot = ModelOutputThunk(value=None)
+    mot._action = Message("user", "What is 2 + 2?")
+    mot._model_options = {}
+    mot._underlying_value = ""
+    choice_shaped = {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {"content": None, "role": "assistant"},
+    }
+    mot._meta["oai_chat_response"] = choice_shaped
+    mot._meta["oai_streaming_usage"] = {
+        "prompt_tokens": 10,
+        "completion_tokens": 5,
+        "total_tokens": 15,
+    }
+    with pytest.raises(RuntimeError, match="empty response"):
+        await backend.post_processing(
+            mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
+        )
+
+
+async def test_post_processing_skips_when_tool_calls_present(backend):
+    """Empty content with tool_calls should not raise — tools consumed the output."""
+    mot = _build_mot_for_empty_content_check(
+        tool_calls=[{"id": "call_1", "type": "function", "function": {"name": "f", "arguments": "{}"}}],  # type: ignore[list-item]
+    )
+    mot.tool_calls = {"call_1": object()}  # type: ignore[assignment]
+    await backend.post_processing(
+        mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
+    )
+
+
+async def test_post_processing_raises_when_thinking_present_but_no_usage(backend):
+    """When usage is unavailable (tokens=0) but _thinking is populated, still raise."""
+    mot = _build_mot_for_empty_content_check(completion_tokens=0, thinking="deep thought")
+    with pytest.raises(RuntimeError, match="empty response"):
+        await backend.post_processing(
+            mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
+        )
 
 
 if __name__ == "__main__":
