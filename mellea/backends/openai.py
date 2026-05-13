@@ -1118,28 +1118,43 @@ class OpenAIBackend(FormatterBackend, AdapterMixin):
         if usage:
             mot.generation.usage = usage
 
-        # content=None with stop+tokens means thinking-only mode; surface it rather than returning "".
-        finish_reason = choice_response.get("finish_reason")
-        completion_tokens = usage.get("completion_tokens", 0) if usage else 0
-        if (
-            not mot._underlying_value
-            and finish_reason == "stop"
-            and completion_tokens > 0
-            and not mot.tool_calls
-        ):
-            raise RuntimeError(
-                "OpenAI backend received an empty response (content=None) with "
-                f"finish_reason=stop and completion_tokens={completion_tokens}. "
-                "This typically indicates a thinking-mode model that emitted only "
-                "reasoning tokens. For OpenAI-compatible thinking models, disable "
-                "thinking via model_options, e.g.: "
-                'model_options={"extra_body": {"chat_template_kwargs": '
-                '{"enable_thinking": False}}}.'
-            )
-
         # Populate model and provider metadata
         mot.generation.model = self._model_id
         mot.generation.provider = "openai"
+
+        # content=None with stop+tokens means thinking-only mode; surface it rather than returning "".
+        finish_reason = choice_response.get("finish_reason")
+        completion_tokens = usage.get("completion_tokens", 0) if usage else 0
+        # Use _thinking as alternative evidence when usage is unavailable (some providers omit it).
+        if (
+            not mot._underlying_value
+            and finish_reason == "stop"
+            and (completion_tokens > 0 or bool(mot._thinking))
+            and not mot.tool_calls
+        ):
+            thinking_note = (
+                f" Reasoning content ({len(mot._thinking)} chars) is in mot._thinking."
+                if mot._thinking
+                else ""
+            )
+            err = RuntimeError(
+                "OpenAI backend received an empty response (content=None) with "
+                f"finish_reason=stop and completion_tokens={completion_tokens}. "
+                "This typically indicates a thinking-mode model (e.g. Qwen3 via vLLM "
+                "with --reasoning-parser) that emitted only reasoning tokens."
+                + thinking_note
+                + " For vLLM/Qwen3, disable thinking via model_options, e.g.: "
+                'model_options={"extra_body": {"chat_template_kwargs": '
+                '{"enable_thinking": False}}}.'
+                " For other providers, consult your runtime's documentation."
+            )
+            span = mot._meta.pop("_telemetry_span", None)
+            if span is not None:
+                from ..telemetry import end_backend_span, set_span_error
+
+                set_span_error(span, err)
+                end_backend_span(span)
+            raise err
 
         # Record telemetry now that response is available
         span = mot._meta.get("_telemetry_span")

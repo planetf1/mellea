@@ -320,7 +320,7 @@ def _build_mot_for_empty_content_check(
     finish_reason: str = "stop",
     content: str | None = None,
     completion_tokens: int = 9,
-    tool_calls: list | None = None,
+    tool_calls: list[dict] | None = None,
     thinking: str | None = None,
 ) -> ModelOutputThunk:
     """Construct a ModelOutputThunk in the state post_processing expects after processing()."""
@@ -394,34 +394,40 @@ async def test_post_processing_accepts_non_empty_content(backend):
 
 
 async def test_post_processing_streaming_raises_on_empty_content(backend):
-    """Streaming path: oai_chat_response is choice-shaped (from delta merge)."""
+    """Streaming path: oai_chat_response is a choice-shaped dict (chat_completion_delta_merge output); guard still fires."""
     mot = ModelOutputThunk(value=None)
     mot._action = Message("user", "What is 2 + 2?")
     mot._model_options = {}
     mot._underlying_value = ""
-    choice_shaped = {
+    # Streaming: oai_chat_response is the merged choice dict — finish_reason at the top level.
+    mot._meta["oai_chat_response"] = {
         "finish_reason": "stop",
         "index": 0,
-        "message": {"content": None, "role": "assistant"},
+        "logprobs": None,
+        "stop_reason": None,
+        "message": {
+            "content": None,
+            "reasoning_content": "2+2=4",
+            "role": "assistant",
+            "tool_calls": [],
+        },
     }
-    mot._meta["oai_chat_response"] = choice_shaped
     mot._meta["oai_streaming_usage"] = {
         "prompt_tokens": 10,
-        "completion_tokens": 5,
-        "total_tokens": 15,
+        "completion_tokens": 9,
+        "total_tokens": 19,
     }
-    with pytest.raises(RuntimeError, match="empty response"):
+    # oai_chat_response_choice intentionally absent — this is the streaming code path.
+    with pytest.raises(RuntimeError, match="enable_thinking"):
         await backend.post_processing(
             mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
         )
 
 
 async def test_post_processing_skips_when_tool_calls_present(backend):
-    """Empty content with tool_calls should not raise — tools consumed the output."""
-    mot = _build_mot_for_empty_content_check(
-        tool_calls=[{"id": "call_1", "type": "function", "function": {"name": "f", "arguments": "{}"}}],  # type: ignore[list-item]
-    )
-    mot.tool_calls = {"call_1": object()}  # type: ignore[assignment]
+    """Empty content with active tool calls must not raise — tool calls legitimately have no text."""
+    mot = _build_mot_for_empty_content_check()
+    mot.tool_calls = {"get_weather": {"name": "get_weather", "arguments": "{}"}}  # type: ignore[assignment]
     await backend.post_processing(
         mot=mot, tools={}, conversation=[], thinking=None, seed=None, _format=None
     )
