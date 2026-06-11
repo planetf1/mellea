@@ -1,7 +1,7 @@
-"""Catalog of available intrinsics.
+"""Catalog of available adapter functions.
 
-Catalog of intrinsics currently known to Mellea,including metadata about where to find
-LoRA and aLoRA adapters that implement said intrinsics.
+Catalog of adapter functions currently known to Mellea, including metadata about where
+to find LoRA and aLoRA adapters that implement them.
 """
 
 import enum
@@ -38,7 +38,7 @@ class AdapterType(enum.Enum):
 
     Attributes:
         LORA (str): Standard LoRA adapter; value ``"lora"``.
-        ALORA (str): Activated LoRA adapter; value ``"alora"``.
+        ALORA (str): aLoRA adapter (shares model KV cache across adapter functions); value ``"alora"``.
     """
 
     LORA = "lora"
@@ -46,15 +46,15 @@ class AdapterType(enum.Enum):
 
 
 class IntriniscsCatalogEntry(pydantic.BaseModel):
-    """A single row in the main intrinsics catalog table.
+    """A single row in the main adapter function catalog table.
 
     We use Pydantic for this dataclass because the rest of Mellea also uses Pydantic.
 
     Attributes:
-        name (str): User-visible name of the intrinsic.
+        name (str): User-visible name of the adapter function.
         internal_name (str | None): Internal name used for adapter loading, or
             ``None`` if the same as ``name``.
-        repo_id (str): HuggingFace repository where adapters for the intrinsic
+        repo_id (str): HuggingFace repository where adapters for the adapter function
             are located.
         revision (str): HuggingFace revision — branch name, tag, or commit SHA.
             Catalogue entries pin to commit SHAs by convention so loads are
@@ -63,11 +63,11 @@ class IntriniscsCatalogEntry(pydantic.BaseModel):
             the HuggingFace download call; wiring it through is deferred to a
             subsequent phase of the adapter-lifecycle epic (#929).
         adapter_types (tuple[AdapterType, ...]): Adapter types known to be
-            available for this intrinsic; defaults to
+            available for this adapter function; defaults to
             ``(AdapterType.LORA, AdapterType.ALORA)``.
     """
 
-    name: str = pydantic.Field(description="User-visible name of the intrinsic.")
+    name: str = pydantic.Field(description="User-visible name of the adapter function.")
     internal_name: str | None = pydantic.Field(
         default=None,
         description="Internal name used for adapter loading, or None if the name used "
@@ -75,7 +75,7 @@ class IntriniscsCatalogEntry(pydantic.BaseModel):
     )
     repo_id: str = pydantic.Field(
         description="Hugging Face repository (aka 'model') where adapters for the "
-        "intrinsic are located."
+        "adapter function are located."
     )
     revision: str = pydantic.Field(
         description="HuggingFace revision (branch name, tag, or commit SHA). "
@@ -83,7 +83,7 @@ class IntriniscsCatalogEntry(pydantic.BaseModel):
     )
     adapter_types: tuple[AdapterType, ...] = pydantic.Field(
         default=(AdapterType.LORA, AdapterType.ALORA),
-        description="Adapter types that are known to be available for this intrinsic.",
+        description="Adapter types that are known to be available for this adapter function.",
     )
 
     @pydantic.field_validator("revision")
@@ -103,7 +103,7 @@ _GUARDIAN_SHA = "773b254e98f993a605ec4b6259634906e0e64e8e"  # main @ 2026-05-26
 
 _INTRINSICS_CATALOG_ENTRIES = [
     ############################################
-    # Core Intrinsics
+    # Core adapter functions
     ############################################
     IntriniscsCatalogEntry(
         name="context-attribution", repo_id=_CORE_R1_REPO, revision=_CORE_R1_SHA
@@ -115,7 +115,7 @@ _INTRINSICS_CATALOG_ENTRIES = [
         name="uncertainty", repo_id=_CORE_R1_REPO, revision=_CORE_R1_SHA
     ),
     ############################################
-    # RAG Intrinsics
+    # RAG adapter functions
     ############################################
     IntriniscsCatalogEntry(name="answerability", repo_id=_RAG_REPO, revision=_RAG_SHA),
     IntriniscsCatalogEntry(name="citations", repo_id=_RAG_REPO, revision=_RAG_SHA),
@@ -130,7 +130,7 @@ _INTRINSICS_CATALOG_ENTRIES = [
     ),
     IntriniscsCatalogEntry(name="query_rewrite", repo_id=_RAG_REPO, revision=_RAG_SHA),
     ############################################
-    # Guardian Intrinsics
+    # Guardian adapter functions
     ############################################
     IntriniscsCatalogEntry(
         name="policy-guardrails", repo_id=_GUARDIAN_REPO, revision=_GUARDIAN_SHA
@@ -147,32 +147,32 @@ _INTRINSICS_CATALOG_ENTRIES = [
 ]
 
 _INTRINSICS_CATALOG = {e.name: e for e in _INTRINSICS_CATALOG_ENTRIES}
-"""Catalog of intrinsics that Mellea knows about.
+"""Catalog of adapter functions that Mellea knows about.
 
 Mellea code should access this catalog via :func:`fetch_intrinsic_metadata()`"""
 
 
 def known_intrinsic_names() -> list[str]:
-    """Return all known user-visible names for intrinsics.
+    """Return all known user-visible names for adapter functions.
 
     Returns:
-        List of all known user-visible intrinsic names.
+        List of all known user-visible adapter function names.
     """
     return list(_INTRINSICS_CATALOG.keys())
 
 
 def fetch_intrinsic_metadata(intrinsic_name: str) -> IntriniscsCatalogEntry:
-    """Retrieve information about the adapter that backs an intrinsic.
+    """Retrieve catalog metadata for the adapter that implements an adapter function.
 
     Args:
-        intrinsic_name (str): User-visible name of the intrinsic.
+        intrinsic_name (str): User-visible name of the adapter function.
 
     Returns:
         IntriniscsCatalogEntry: Metadata about the adapter(s) that implement the
-            intrinsic.
+            adapter function.
 
     Raises:
-        ValueError: If ``intrinsic_name`` is not a known intrinsic name.
+        ValueError: If ``intrinsic_name`` is not a known adapter function name.
     """
     if intrinsic_name not in _INTRINSICS_CATALOG:
         raise ValueError(
