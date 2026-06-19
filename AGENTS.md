@@ -121,6 +121,8 @@ Use the tool's common name (e.g., GitHub Copilot, Cursor, etc.).
 | Telemetry import errors | Run `uv sync` to install OpenTelemetry deps |
 | Silent empty strings from async backends | Check for `asyncio.gather(..., return_exceptions=True)` — exceptions become values silently; use `return_exceptions=False` unless callers explicitly handle `BaseException` values |
 | GitHub Actions workflow injection warning | Never use `${{ expression }}` directly inside `run:` shell commands — always route through `env:` (`env: MY_VAR: ${{ expr }}` then `"$MY_VAR"` in the script). This rule applies only to `run:` steps; `${{ }}` in `if:` conditions and `with:` action inputs is fine. |
+| aLoRA silently disabled during inference | PEFT's aLoRA hook looks for `input_ids=` kwarg in `model.generate()`. Passing `inputs=` instead causes aLoRA offsets to be skipped with only a warning, falling back to plain LoRA weights. Always use `input_ids=` when calling `model.generate()` with aLoRA adapters. Fixed in `mellea/formatters/granite/base/util.py`. |
+| Intrinsic test flaky on GPU (score non-determinism) | Token-level log-probability scores from binary classifiers (`requirement-check`, `uncertainty`) vary across GPU hardware. Tests should check classification direction (`score >= 0.5`) not exact float values. See issue #1291. |
 
 ## 10. Self-Review (before notifying user)
 1. `uv run pytest test/ -m "not qualitative"` passes?
