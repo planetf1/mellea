@@ -44,12 +44,20 @@ class ChunkingStrategy(ABC):
     def split(self, text: str) -> list[str]:
         """Return complete chunks from text, excluding any trailing fragment.
 
-        Each returned chunk must be a verbatim substring of `text`; the `Chunker`
-        driver rejects a strategy that mutates chunk text (e.g. normalizes
-        whitespace inside a chunk). Dropping text between chunks is fine.
+        The `Chunker` driver calls `split()` with the un-emitted suffix — the
+        text accumulated since the last chunk boundary, not the full stream.
+        Strategies must be stateless and idempotent: calling `split()` twice
+        with the same input must return the same result. State between deltas
+        (e.g. a partial word buffer) is held by the `Chunker`, not the strategy.
+
+        Each returned chunk must be a verbatim substring of `text` and must be
+        non-empty; the `Chunker` driver rejects zero-length chunks and chunks
+        that are not present verbatim in `text` (e.g. normalised whitespace).
+        Dropping text between chunks is fine.
 
         Args:
-            text: The text to split.
+            text: The un-emitted suffix of the stream since the last chunk
+                boundary. Not the full accumulated text.
 
         Returns:
             A list of complete chunks. If no chunk boundary has been reached yet,
@@ -365,8 +373,9 @@ class Chunker:
             a later `feed()` completes it or `flush()` releases it.
 
         Raises:
-            ValueError: If the strategy's `split()` returns a chunk that is not a
-                verbatim substring of the buffered text (i.e. it mutated the text).
+            ValueError: If the strategy's `split()` returns an empty string chunk
+                (zero-length) or a chunk that is not a verbatim substring of the
+                buffered text (i.e. it mutated the text).
         """
         self._pending += delta
         chunks = self._strategy.split(self._pending)
@@ -378,6 +387,11 @@ class Chunker:
         # string-subtracting, then keep the raw suffix as the new pending fragment.
         cursor = 0
         for c in chunks:
+            if not c:
+                raise ValueError(
+                    f"{type(self._strategy).__name__}.split() returned an empty chunk; "
+                    "split() must not return zero-length strings (see ChunkingStrategy.split)."
+                )
             pos = self._pending.find(c, cursor)
             if pos < 0:
                 raise ValueError(

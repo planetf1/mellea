@@ -515,3 +515,14 @@ def test_chunker_rejects_mutating_strategy() -> None:
 
     with pytest.raises(ValueError, match="verbatim substring"):
         Chunker(MutatingChunking()).feed("one   two")
+
+
+def test_chunker_rejects_empty_chunk() -> None:
+    """feed() raises if split() returns a zero-length chunk."""
+
+    class EmptyChunking(ChunkingStrategy):
+        def split(self, text: str) -> list[str]:
+            return [""] if text else []
+
+    with pytest.raises(ValueError, match="empty chunk"):
+        Chunker(EmptyChunking()).feed("hello")
