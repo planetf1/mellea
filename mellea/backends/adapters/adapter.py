@@ -33,6 +33,7 @@ from ...plugins.types import HookType
 from ._core import (
     Adapter as _AdapterCore,
     AdapterSchemaMismatchError,
+    EmbeddedBinding,
     Identity,
     IOContract,
     LocalFileBinding,
@@ -587,49 +588,6 @@ class AdapterMixin(Backend, abc.ABC):
         """
         return contextlib.nullcontext()
 
-    def render_controls(self, adapter_qualified_name: str, active: bool) -> None:
-        """Render or clear the control tokens for a baked-in embedded adapter.
-
-        Embedded/Granite Switch reality only. Weights are already baked into
-        the model; this only toggles the control-token rendering that
-        activates or deactivates the adapter's behaviour for subsequent
-        requests.
-
-        Args:
-            adapter_qualified_name (str): The `adapter.qualified_name` of the
-                adapter to activate or deactivate.
-            active (bool): `True` to render the adapter's control tokens,
-                `False` to clear them.
-
-        Raises:
-            NotImplementedError: If this backend's adapter reality is not
-                Embedded/Granite Switch.
-        """
-        raise NotImplementedError(
-            f"Backend type {type(self)} does not support render_controls()."
-        )
-
-    def set_request_adapter(self, adapter_qualified_name: str) -> None:
-        """Select the adapter to use for the next request.
-
-        ServerMediated reality only — for servers that accept an adapter
-        selection per request rather than loading/unloading weights or
-        toggling control tokens locally. No backend implements this reality
-        yet.
-
-        Args:
-            adapter_qualified_name (str): The `adapter.qualified_name` of the
-                adapter to select.
-
-        Raises:
-            NotImplementedError: Always — the ServerMediated adapter reality
-                has no implementation yet.
-        """
-        raise NotImplementedError(
-            f"Backend type {type(self)} does not support set_request_adapter(); "
-            "the ServerMediated adapter reality is not implemented yet."
-        )
-
     def resolve_adapter(self, name: str) -> _AdapterCore:
         """Find or lazily register an adapter by capability name.
 
@@ -764,6 +722,9 @@ class AdapterMixin(Backend, abc.ABC):
             adapter: The adapter to activate, or `None` (no-op).
 
         Raises:
+            TypeError: `adapter.weights` is not a `WeightsBinding` (e.g. an
+                `EmbeddedBinding`, which has no activate()/deactivate() to
+                scope — call its `apply_activation()` directly instead).
             BaseException: An error raised by activation, the `with` body, or
                 deactivation. If both the body and deactivation fail, the body
                 error remains primary and the deactivation error is chained.
@@ -789,6 +750,16 @@ class AdapterMixin(Backend, abc.ABC):
             revision = cast(str | None, getattr(adapter.weights, "revision", None))
         binding_type = adapter.weights.binding_type
         adapter_type = adapter.identity.adapter_type
+
+        # adapter_scope drives the WeightsBinding lifecycle (activate/deactivate);
+        # a binding with no lifecycle (e.g. EmbeddedBinding) activates through its
+        # own apply_activation() instead (issue #1142) and never reaches this scope.
+        if not isinstance(adapter.weights, WeightsBinding):
+            raise TypeError(
+                f"adapter_scope() requires a WeightsBinding-backed adapter; "
+                f"{binding_type!r} bindings have no activate()/deactivate() to "
+                "scope. Call apply_activation() directly instead."
+            )
 
         outcome: Literal["success", "schema_error", "error"] = "success"
         exception: BaseException | None = None
@@ -916,11 +887,12 @@ class EmbeddedIntrinsicAdapter(_AdapterCore):
         technology (str): `"lora"` or `"alora"`.
 
     .. note::
-        `identity`, `io_contract`, and `weights` are Phase 1 internal scaffolding
+        `identity`, `io_contract`, and `weights` are internal scaffolding
         populated in `__init__` to satisfy the new :class:`~mellea.backends.adapters.Adapter`
-        protocol.  They are not meaningful consumer-facing attributes; `io_contract` and
-        `weights` raise :exc:`NotImplementedError` and will be replaced in Phase 2
-        (issues #1137, #1142).
+        protocol.  They are not meaningful consumer-facing attributes.
+        `weights` is a real :class:`~mellea.backends.adapters.EmbeddedBinding`
+        as of Epic #929 Phase 2 (issue #1142); `io_contract` still raises
+        :exc:`NotImplementedError` pending #1516.
     """
 
     def __setattr__(self, name: str, value: object) -> None:
@@ -966,7 +938,7 @@ class EmbeddedIntrinsicAdapter(_AdapterCore):
                 capability=intrinsic_name,
             ),
             io_contract=_ShimIOContract(),
-            weights=_ShimWeightsBinding(),
+            weights=EmbeddedBinding(),
         )
 
     @staticmethod
