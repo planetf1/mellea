@@ -98,41 +98,37 @@ class LocalHFAdapter(Adapter):
 
 
 class _ShimIOContract(IOContract):
-    """Phase 1 placeholder; Phase 2 (issue #1137) implements real I/O."""
+    """Placeholder IOContract for the deprecated IntrinsicAdapter shims.
+
+    Both methods raise NotImplementedError; it exists only so the shims can
+    satisfy the Adapter protocol.
+    """
 
     def build_prompt(self, **kwargs: object):  # type: ignore[override]
-        raise NotImplementedError(
-            "Phase 2 (issue #1137) — IOContract not yet implemented"
-        )
+        raise NotImplementedError("IOContract not yet implemented")
 
     def parse(self, raw: str) -> dict[str, object]:
-        raise NotImplementedError(
-            "Phase 2 (issue #1137) — IOContract not yet implemented"
-        )
+        raise NotImplementedError("IOContract not yet implemented")
 
 
 class _ShimWeightsBinding(WeightsBinding):
-    """Phase 1 placeholder; Phase 2 (see epic #929) wires in real lifecycle."""
+    """Placeholder weights binding for the deprecated IntrinsicAdapter shims.
+
+    All lifecycle verbs raise NotImplementedError; it exists only so the
+    shims can satisfy the Adapter protocol.
+    """
 
     def prepare(self) -> None:
-        raise NotImplementedError(
-            "Phase 2 (see epic #929) — WeightsBinding not yet implemented"
-        )
+        raise NotImplementedError("WeightsBinding not yet implemented")
 
     def activate(self) -> None:
-        raise NotImplementedError(
-            "Phase 2 (see epic #929) — WeightsBinding not yet implemented"
-        )
+        raise NotImplementedError("WeightsBinding not yet implemented")
 
     def deactivate(self) -> None:
-        raise NotImplementedError(
-            "Phase 2 (see epic #929) — WeightsBinding not yet implemented"
-        )
+        raise NotImplementedError("WeightsBinding not yet implemented")
 
     def release(self) -> None:
-        raise NotImplementedError(
-            "Phase 2 (see epic #929) — WeightsBinding not yet implemented"
-        )
+        raise NotImplementedError("WeightsBinding not yet implemented")
 
 
 class IntrinsicAdapter(LocalHFAdapter, _AdapterCore):
@@ -173,11 +169,11 @@ class IntrinsicAdapter(LocalHFAdapter, _AdapterCore):
         config (dict): Parsed I/O transformation configuration for the adapter function.
 
     .. note::
-        `identity`, `io_contract`, and `weights` are Phase 1 internal scaffolding
-        populated in `__init__` to satisfy the new :class:`~mellea.backends.adapters.Adapter`
-        protocol.  They are not meaningful consumer-facing attributes; `io_contract` and
-        `weights` raise :exc:`NotImplementedError` and will be replaced in Phase 2
-        (issues #1137, #1141).
+        `identity`, `io_contract`, and `weights` are internal scaffolding
+        populated in `__init__` to satisfy the new
+        :class:`~mellea.backends.adapters.Adapter` protocol.  They are not
+        meaningful consumer-facing attributes; `io_contract` and `weights`
+        raise :exc:`NotImplementedError`.
     """
 
     def __setattr__(self, name: str, value: object) -> None:
@@ -888,11 +884,11 @@ class EmbeddedIntrinsicAdapter(_AdapterCore):
 
     .. note::
         `identity`, `io_contract`, and `weights` are internal scaffolding
-        populated in `__init__` to satisfy the new :class:`~mellea.backends.adapters.Adapter`
-        protocol.  They are not meaningful consumer-facing attributes.
-        `weights` is a real :class:`~mellea.backends.adapters.EmbeddedBinding`
-        as of Epic #929 Phase 2 (issue #1142); `io_contract` still raises
-        :exc:`NotImplementedError` pending #1516.
+        populated in `__init__` to satisfy the new
+        :class:`~mellea.backends.adapters.Adapter` protocol.  They are not
+        meaningful consumer-facing attributes: `weights` is a real
+        :class:`~mellea.backends.adapters.EmbeddedBinding` (activation runs
+        through it); `io_contract` still raises :exc:`NotImplementedError`.
     """
 
     def __setattr__(self, name: str, value: object) -> None:
