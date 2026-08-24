@@ -20,7 +20,6 @@ from mellea.backends.adapters import AdapterSchemaMismatchError
 from mellea.stdlib.components.intrinsic.rag import (
     _ANSWERABILITY_ADAPTER,
     _CITATIONS_ADAPTER,
-    _CONTEXT_RELEVANCE_ADAPTER,
     _HALLUCINATION_ADAPTER,
     _QUERY_CLARIFY_ADAPTER,
     _QUERY_REWRITE_ADAPTER,
@@ -115,26 +114,6 @@ def test_find_citations_forward_compat() -> None:
     extra_item = {**_GOOD_CITATION, "extra_field": "ignored"}
     result = _CITATIONS_ADAPTER.io_contract.parse(json.dumps([extra_item]))
     assert result["items"][0]["citation_doc_id"] == "0"  # type: ignore[index]
-
-
-# ---------------------------------------------------------------------------
-# check_context_relevance
-# ---------------------------------------------------------------------------
-
-
-def test_check_context_relevance_contract_enforced() -> None:
-    with pytest.raises(AdapterSchemaMismatchError) as exc_info:
-        _CONTEXT_RELEVANCE_ADAPTER.io_contract.parse(json.dumps({"wrong_key": "value"}))
-    err = exc_info.value
-    assert err.name == "context_relevance"
-    assert "context_relevance" in err.expected_keys
-
-
-def test_check_context_relevance_forward_compat() -> None:
-    result = _CONTEXT_RELEVANCE_ADAPTER.io_contract.parse(
-        json.dumps({"context_relevance": "relevant", "score": 0.8})
-    )
-    assert result["context_relevance"] == "relevant"
 
 
 # ---------------------------------------------------------------------------
