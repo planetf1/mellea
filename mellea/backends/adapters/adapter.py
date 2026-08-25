@@ -35,11 +35,11 @@ from ._core import (
     AdapterSchemaMismatchError,
     EmbeddedBinding,
     Identity,
-    IOContract,
     LocalFileBinding,
     WeightsBinding,
 )
 from .catalog import AdapterType, fetch_intrinsic_metadata
+from .io_contracts import get_io_contract
 
 
 class Adapter(abc.ABC):
@@ -97,20 +97,6 @@ class LocalHFAdapter(Adapter):
         ...
 
 
-class _ShimIOContract(IOContract):
-    """Phase 1 placeholder; Phase 2 (issue #1137) implements real I/O."""
-
-    def build_prompt(self, **kwargs: object):  # type: ignore[override]
-        raise NotImplementedError(
-            "Phase 2 (issue #1137) — IOContract not yet implemented"
-        )
-
-    def parse(self, raw: str) -> dict[str, object]:
-        raise NotImplementedError(
-            "Phase 2 (issue #1137) — IOContract not yet implemented"
-        )
-
-
 class _ShimWeightsBinding(WeightsBinding):
     """Placeholder weights binding for the deprecated IntrinsicAdapter shims.
 
@@ -134,7 +120,7 @@ class _ShimWeightsBinding(WeightsBinding):
 class IntrinsicAdapter(LocalHFAdapter, _AdapterCore):
     """Deprecated shim for adapters that implement adapter functions.
 
-    .. deprecated::
+    Deprecated:
         Use :class:`~mellea.backends.adapters.Adapter` directly.
         `IntrinsicAdapter` will be removed in a future release (Epic #929,
         issue #1144).
@@ -168,12 +154,13 @@ class IntrinsicAdapter(LocalHFAdapter, _AdapterCore):
         adapter_type (AdapterType): The adapter type (`LORA` or `ALORA`).
         config (dict): Parsed I/O transformation configuration for the adapter function.
 
-    .. note::
-        `identity`, `io_contract`, and `weights` are Phase 1 internal scaffolding
-        populated in `__init__` to satisfy the new :class:`~mellea.backends.adapters.Adapter`
-        protocol.  They are not meaningful consumer-facing attributes; `io_contract` and
-        `weights` raise :exc:`NotImplementedError` and will be replaced in Phase 2
-        (issues #1137, #1141).
+    Note:
+        `identity`, `io_contract`, and `weights` are internal scaffolding populated
+        in `__init__` to satisfy the :class:`~mellea.backends.adapters.Adapter`
+        protocol; they are not meaningful consumer-facing attributes. `io_contract`
+        is the real, declared contract for `intrinsic_name` (issue #1516); `weights`
+        remains the Phase 1 `_ShimWeightsBinding` placeholder and raises
+        `NotImplementedError` until Phase 2 (issue #1141) replaces it.
     """
 
     def __setattr__(self, name: str, value: object) -> None:
@@ -253,6 +240,9 @@ class IntrinsicAdapter(LocalHFAdapter, _AdapterCore):
         self.config: dict = config_dict
 
         # Populate the new Adapter triple so isinstance(self, _AdapterCore) holds.
+        # io_contract comes from the same registry resolve_adapter() consults
+        # (see issue #1516), not a placeholder. weights stays the Phase 2
+        # _ShimWeightsBinding placeholder; that axis is #1141/#1142.
         _AdapterCore.__init__(
             self,
             identity=Identity(
@@ -262,7 +252,7 @@ class IntrinsicAdapter(LocalHFAdapter, _AdapterCore):
                 else "lora",
                 capability=intrinsic_name,
             ),
-            io_contract=_ShimIOContract(),
+            io_contract=get_io_contract(intrinsic_name),
             weights=_ShimWeightsBinding(),
         )
 
@@ -894,7 +884,7 @@ class AdapterMixin(Backend, abc.ABC):
 class EmbeddedIntrinsicAdapter(_AdapterCore):
     """Deprecated shim for adapter functions embedded in a Granite Switch model.
 
-    .. deprecated::
+    Deprecated:
         Use :class:`~mellea.backends.adapters.Adapter` directly.
         `EmbeddedIntrinsicAdapter` will be removed in a future release
         (Epic #929, issue #1144).
@@ -925,8 +915,8 @@ class EmbeddedIntrinsicAdapter(_AdapterCore):
 
         - `identity`: always a real value.
 
-        - `io_contract`: Phase 1 `_ShimIOContract` placeholder; raises
-          `NotImplementedError` until issue #1516 replaces it.
+        - `io_contract`: the real, declared contract for `intrinsic_name`
+          (issue #1516); no longer a placeholder.
 
         - `weights`: a real `EmbeddedBinding`; activation runs through it.
     """
@@ -972,7 +962,7 @@ class EmbeddedIntrinsicAdapter(_AdapterCore):
             capability=intrinsic_name,
         )
 
-        io_contract = _ShimIOContract()
+        io_contract = get_io_contract(intrinsic_name)
 
         weights = EmbeddedBinding()
 
