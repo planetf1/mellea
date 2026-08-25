@@ -20,7 +20,7 @@ from ....core import Component
 from ...components import Document
 from ...context import ChatContext
 from ..chat import Message
-from ..docs.document import _coerce_to_document, _coerce_to_documents
+from ..docs.document import _coerce_to_documents
 from ._util import _resolve_question, _resolve_response, call_intrinsic
 
 # ---------------------------------------------------------------------------
