@@ -5,8 +5,8 @@
 
 Verifies that:
   - the reality-specific verbs (`load_peft_adapter`, `unload_peft_adapter`,
-    `activate_peft_adapter`, `deactivate_peft_adapter`) raise
-    `NotImplementedError` by default on the mixin
+    `remove_adapter`, `activate_peft_adapter`, `deactivate_peft_adapter`,
+    ) raise `NotImplementedError` by default on the mixin
   - each concrete backend overrides only the verb(s) matching its own adapter
     reality, leaving the others on the default (raising) implementation
 
@@ -25,6 +25,7 @@ from mellea.backends.openai import OpenAIBackend
 _REALITY_SPECIFIC_VERBS = (
     "load_peft_adapter",
     "unload_peft_adapter",
+    "remove_adapter",
     "activate_peft_adapter",
     "deactivate_peft_adapter",
 )
@@ -44,6 +45,7 @@ def test_hf_backend_overrides_only_peft_verbs():
     """LocalHFBackend (LocalFile/PEFT reality) overrides the PEFT verbs only."""
     assert "load_peft_adapter" in vars(LocalHFBackend)
     assert "unload_peft_adapter" in vars(LocalHFBackend)
+    assert "remove_adapter" in vars(LocalHFBackend)
     assert "activate_peft_adapter" in vars(LocalHFBackend)
     assert "deactivate_peft_adapter" in vars(LocalHFBackend)
 
@@ -55,6 +57,7 @@ def test_openai_backend_overrides_no_reality_specific_verbs():
     assert "unload_peft_adapter" not in vars(OpenAIBackend)
     assert "activate_peft_adapter" not in vars(OpenAIBackend)
     assert "deactivate_peft_adapter" not in vars(OpenAIBackend)
+    assert "remove_adapter" not in vars(OpenAIBackend)
 
 
 def test_default_adapter_activation_lock_is_a_noop():
