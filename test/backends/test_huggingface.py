@@ -53,20 +53,37 @@ from mellea.stdlib.requirements import ALoraRequirement, LLMaJRequirement
 from test.conftest import hf_skip
 
 
+def _hf_model_for_eval() -> "model_ids.ModelIdentifier":
+    """Return the HF ModelIdentifier driven by GRANITE42_MODEL env var.
+
+    Defaults to 3B. Set GRANITE42_MODEL=ibm-granite/granite-4.2-8b or
+    ibm-granite/granite-4.2-30b on LSF jobs to test larger sizes.
+    """
+    name = os.environ.get("GRANITE42_MODEL", "")
+    if "8b" in name or "8B" in name:
+        return model_ids.IBM_GRANITE_4_2_8B
+    if "30b" in name or "30B" in name:
+        return model_ids.IBM_GRANITE_4_2_30B
+    return model_ids.IBM_GRANITE_4_2_3B
+
+
 @pytest.fixture(scope="module")
 def backend():
     """Shared HuggingFace backend for all tests in this module.
 
-    Uses Granite 3.3-8b for aLoRA adapter compatibility.
+    The model is selected by the GRANITE42_MODEL environment variable:
+      - unset / ibm-granite/granite-4.2-3b  → IBM_GRANITE_4_2_3B  (default)
+      - ibm-granite/granite-4.2-8b           → IBM_GRANITE_4_2_8B
+      - ibm-granite/granite-4.2-30b          → IBM_GRANITE_4_2_30B
+
     Note: as of #1135, the "requirement-check" intrinsic catalogue entry points to
     granitelib-core-r1.0 (granite-4.x adapters). Tests that exercise requirement-check
-    against this granite-3.3 backend will fail once revision pinning is wired through
+    against this backend will fail once revision pinning is wired through
     in phase-2.2 (#1141). Other intrinsics are not affected.
     """
+    selected = _hf_model_for_eval()
     with hf_skip():
-        backend = LocalHFBackend(
-            model_id=model_ids.IBM_GRANITE_4_1_3B, cache=SimpleLRUCache(5)
-        )
+        backend = LocalHFBackend(model_id=selected, cache=SimpleLRUCache(5))
         backend.add_adapter(
             IntrinsicAdapter(
                 "requirement-check", base_model_name=backend.base_model_name

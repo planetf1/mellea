@@ -9,7 +9,7 @@ pytest.importorskip(
     "llguidance", reason="llguidance not installed — install mellea[hf]"
 )
 from mellea.backends.huggingface import LocalHFBackend
-from mellea.backends.model_ids import IBM_GRANITE_4_1_3B
+from mellea.backends.model_ids import IBM_GRANITE_4_2_3B
 from mellea.core import CBlock
 from mellea.stdlib.components import SimpleComponent
 from mellea.stdlib.context import ChatContext
@@ -17,7 +17,7 @@ from mellea.stdlib.session import MelleaSession, start_session
 from test.conftest import hf_skip
 from test.predicates import require_gpu
 
-# Module-level markers for all tests using Granite 4.1 3B model
+# Module-level markers for all tests using Granite 4.2 3B model
 pytestmark = [pytest.mark.huggingface, require_gpu(min_vram_gb=12), pytest.mark.e2e]
 
 
@@ -27,7 +27,7 @@ def m_session(gh_run):
     with hf_skip():
         m = start_session(
             "hf",
-            model_id=IBM_GRANITE_4_1_3B,
+            model_id=IBM_GRANITE_4_2_3B,
             model_options={ModelOption.MAX_NEW_TOKENS: 64},
         )
     yield m

@@ -599,13 +599,14 @@ def pytest_runtest_setup(item):
             logger.info(
                 "Warming up ollama models before ollama group (keep_alive=-1)..."
             )
-            for model in ["granite4.1:3b", "granite3.2-vision"]:
+            for model in ["granite-4.2-3b:latest", "granite3.2-vision"]:
                 try:
                     requests.post(
                         f"{ollama_base}/api/generate",
                         json={
                             "model": model,
                             "prompt": "hi",
+                            "options": {"num_ctx": 2048, "num_predict": 1},
                             "stream": False,
                             "keep_alive": -1,
                         },
@@ -625,7 +626,7 @@ def pytest_runtest_setup(item):
                 port = os.environ.get("OLLAMA_PORT", "11434")
                 ollama_base = f"http://{host_str}:{port}"
             logger.info("Evicting ollama models from VRAM after ollama group...")
-            for model in ["granite4.1:3b", "granite3.2-vision"]:
+            for model in ["granite-4.2-3b:latest", "granite3.2-vision"]:
                 try:
                     requests.post(
                         f"{ollama_base}/api/generate",

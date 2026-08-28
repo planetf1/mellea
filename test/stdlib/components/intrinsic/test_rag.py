@@ -13,7 +13,7 @@ import pytest
 torch = pytest.importorskip("torch", reason="torch not installed — install mellea[hf]")
 
 from mellea.backends.huggingface import LocalHFBackend
-from mellea.backends.model_ids import IBM_GRANITE_4_1_3B, IBM_GRANITE_4_MICRO_3B
+from mellea.backends.model_ids import IBM_GRANITE_4_2_3B, IBM_GRANITE_4_MICRO_3B
 from mellea.core import ModelOutputThunk
 from mellea.stdlib.components import Document, Message
 from mellea.stdlib.components.intrinsic import rag
@@ -47,7 +47,7 @@ def _backend():
 
     # No adapters for hybrid version.
     with hf_skip():
-        backend_ = LocalHFBackend(model_id=IBM_GRANITE_4_1_3B.hf_model_name)
+        backend_ = LocalHFBackend(model_id=IBM_GRANITE_4_2_3B.hf_model_name)
     yield backend_
 
     from test.conftest import cleanup_gpu_backend
