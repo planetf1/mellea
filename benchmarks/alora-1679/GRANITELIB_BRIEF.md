@@ -2,13 +2,14 @@
 
 Shared with the granitelib team. All measurements: granite-4.1 at 3b/8b/30b,
 BlueVela H100, mellea LocalHFBackend, single-shot greedy inference
-(deterministic; the intrinsic path does not sample — see note 5 below).
+(deterministic per setting — likelihood-scored intrinsics return the same value on every call; see note 5 below).
 Every number below is reproducible from the probe files and scripts cited in
 the appendix.
 
 Scope: judgement quality of the published adapter functions (requirement-
-check, uncertainty, answerability, query_rewrite, policy-guardrails,
-factuality-detection, factuality-correction) as aLoRA (PEFT-loaded) and as
+check, uncertainty, answerability, query_rewrite, query_clarification,
+policy-guardrails, factuality-detection, factuality-correction, guardian-
+core) as aLoRA (PEFT-loaded) and as
 Granite Switch embedded adapters, versus LoRA where published and versus the
 base model given the same io.yaml instruction.
 
@@ -118,6 +119,30 @@ nothing separates (base within noise).**
 - When triggered, it did not remove the unsupported claim: the corrected
   answer kept the solstice framing. Correction strength at 3b is limited.
 
+**query_clarification (aLoRA)**
+- 8 probes (3 answerable, 4 ambiguous, 1 docs-cannot-answer): accuracy is
+  identical to base at every size (3b 3/8, 8b 5/8, 30b 6/8; LoRA matches
+  too). switch-3b is the outlier at 5/8, switch-8b the low at 3/8.
+- No arm under-clarifies (answerable items always come back CLEAR); the
+  error is systematic over-CLEAR on the ambiguous items - every arm
+  over-CLEARs the docs-cannot-answer probe and the multi-option ambiguity.
+  The adapter buys no accuracy over base here.
+
+**guardian-core (aLoRA) - the strongest adapter in this data, with a role
+asymmetry**
+- Assistant-response risk: 3/3 in every size and arm, mostly >= 0.85;
+  base is weak (0-1/3). Clean adapter win.
+- User-prompt harm: the adapters flatten scores to ~0 at 3b and 30b
+  (<= 0.294) while still detecting assistant-side risk; only 8b detects
+  both sides (0.88-1.0). Base 3b/30b scores the same user prompts higher
+  (2-3/3 detected).
+- Specificity is clean: the highest score on any non-risk item (benign,
+  self-care, fiction) across all 12 cells is 0.321 (switch-8b fiction,
+  soft label).
+- Practical: do not route user prompts through guardian-core at 3b/30b;
+  use 8b (or the base model) for both-sides coverage. n = 10 probes per
+  arm - direction and magnitude are robust, precision is not estimated.
+
 ## 3. What base models do right (context for the above)
 
 - 8b/30b base + io.yaml instruction is competitive on requirement-checking
@@ -143,12 +168,21 @@ nothing separates (base within noise).**
   aLoRA/switch variants on some content - treat near-0.5 verdicts with
   care.
 - 8b/30b: pick the judge per capability (the table in §1-2); do not assume
-  aLoRA ≡ LoRA — they are different adapters with different profiles.
-  At 30b no judge beats base significantly - choose on serving mechanics.
+  aLoRA ≡ LoRA - they are different adapters with different profiles.
+  Policy: use the base model at both sizes - it beats every adapter
+  variant (8b 0.900 vs 0.533-0.800; 30b 0.867 vs 0.567-0.733). At 30b no
+  judge beats base significantly on requirement - choose on serving
+  mechanics; the one 30b-specific adapter win is that the base certainty
+  call crashes (malformed-JSON leak) while the adapters work (0.60-0.70,
+  over-confident on some baits).
 - In multi-judge pipelines (AND gates), quality caps at the weakest judge:
   our 6-response AND-gate topped out at 4-5/6 in every arm configuration.
 - aLoRA ≈ switch in judgement quality everywhere; choose between them on
   serving mechanics.
+- guardian-core: assistant-side risk detection is a clean win at every
+  size; user-prompt harm scoring works with the adapter only at 8b (base
+  model at 3b/30b). query_clarification: no accuracy case over base at any
+  size - it inherits the base model's over-CLEAR behaviour on ambiguity.
 
 ## 5. What the switch design buys (measured, per size)
 
@@ -170,11 +204,14 @@ identical (same weights).
 
 ## 6. Notes for interpreting
 
-- Single-shot greedy scoring (the mellea intrinsic path drops
-  `model_options` temperature on LocalHF — filed as a mellea follow-up),
-  so no per-draw variance is visible; item-level variance across
-  paraphrases is the remaining unknown (the 149-probe wave-8 set is
-  running to address this).
+- Single-shot scoring: the requirement/certainty intrinsics use the
+  io.yaml likelihood transform, so each call returns the same value
+  however the sampled label comes out (per-draw variance is not
+  measurable from the returned score); temperature rescales the score
+  (sharper/flatter) but adds no randomness (mellea docs follow-up). item-level variance across
+  paraphrases was addressed by waves 8-9 (the combined 261-item set in
+  section 1; do_sample is also dropped, so per-draw variance remains
+  unmeasurable until the mellea follow-up lands).
 - "Ambiguous" is counted as not-compliant in policy accuracy; the raw
   Ambiguous rate is reported alongside.
 - Soft items (tone/audience) carry best-judgement labels; strict accuracy
@@ -183,12 +220,13 @@ identical (same weights).
 ## 7. Appendix: reproduction
 
 - Probe sets: `probes2.json` (86), `probes3_full.json` (149),
-  `policy_probes.json` (10), `policy2.json` (30) in
-  `scratchpad/alora-activation-1678/eval_1679/benchmark/` (mellea repo
-  worktree for issue #1679).
+  `policy_probes.json` (10), `policy2.json` (30) in this repository
+  (`mellea-alora-eval`, root).
 - Scripts: `bench_probes.py` (labelled probes, `--kind requirement|policy`),
   `bench_scenarios.py` (S1 gating, S2/S2b rewrite loops, S3/S3b RAG gates),
   `bench_edges.py` (adversarial edges), `bench_pipeline.py` (S4 AND-gate,
-  S5 iterative RAG), `bench_switchvalue.py` (load/memory/latency).
-- Full raw data: `results/wave{1..7}{,a,c,d}/*.json` in the same folder;
+  S5 iterative RAG), `bench_switchvalue.py` (load/memory/latency),
+  `bench_coverage.py` (wave 10: query_clarification + guardian-core).
+- Full raw data: `results/wave{1..7}{,a,c,d}/*.json` and
+  `results/wave{8a,8b,9a,9b,10}/*.json` in the same folder;
   narrative: `REPORT.md` in the same folder.

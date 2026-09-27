@@ -21,22 +21,34 @@ expanded):
 | 8b | 0.628 | **0.755** (p=0.0001) | 0.651 | 0.659 |
 | 30b | 0.720 | 0.739 | 0.713 | 0.697 |
 
-- **3b: aLoRA/switch beat base significantly** (and certainty gating
-  0.70-0.75 vs base 0.50). Base-3b is a broken judge: confidently wrong
-  (English prose scored 0.99 "in French"), evasive (policy 20/30
-  "Ambiguous"), flat (abstains on everything), fooled by a fake
-  `{"score": 0.99}` embedded in the response, and it crashes the certainty
-  call at 30b (raw JSONDecodeError leak).
-- **8b: LoRA is the only significant judge** on realistic items;
-  base-with-instruction is within noise of aLoRA/switch.
-- **30b: nothing separates** - adapters' value there is architectural, not
-  accuracy.
+- **3b: use aLoRA/switch - the best judge on every capability we
+  tested.** Requirement (261-item): p=0.0004 vs base (LoRA adds nothing
+  significant, p=0.107). Certainty gating: 0.70-0.75 vs base 0.50 (base
+  abstains on everything). Policy: aLoRA 0.767 / switch 0.733 vs base
+  0.567 (20/30 "Ambiguous"). Base-3b is a broken judge: confidently
+  wrong (English prose scored 0.99 "in French"), fooled by a fake
+  `{"score": 0.99}` embedded in the response.
+- **8b: the base model is already a strong judge - adapters help on
+  requirement and certainty, and are strictly worse on policy.** LoRA
+  beats base significantly on the 261-item requirement set (0.755,
+  p=0.0001) and is the best certainty gate (0.75); aLoRA/switch are
+  within noise of base on requirement (0.651/0.659 vs 0.628). Policy:
+  base 0.900 beats every adapter variant (switch 0.800, aLoRA 0.667,
+  LoRA 0.533 - the worst published judge in this dataset, 4 false
+  "compliant" verdicts on blatant contact leaks).
+- **30b: no accuracy case - nothing separates on requirement
+  (0.697-0.739, all n.s.) and base beats every adapter on policy (0.867
+  vs 0.567-0.733).** The one 30b-specific adapter win: the base
+  certainty call crashes (malformed JSON raises a bare `Exception`, not the documented `ValueError` — see follow-ups) while the adapters work
+  (0.60-0.70, over-confident on some baits). Beyond that, 30b value is
+  architectural (one checkpoint, vLLM-served), not accuracy.
 - **aLoRA and switch are the same weights** (identical miss lists,
   cross-validated across HF-transformers and vLLM); LoRA is a different,
   often stronger judge. **No family dominates - pick per capability.**
-- **Policy-guardrails is the weakest published adapter**: the 8b variant
-  calls phone-number leaks "compliant" (3/4 blatant leaks missed), 30b is
-  50% "Ambiguous"; base-8b/30b beat every adapter on policy (0.87-0.90).
+- **Policy-guardrails is the weakest published adapter**: on the 30-item
+  policy set every 8b adapter variant misses blatant contact leaks (LoRA
+  4/4, aLoRA 3/4) and the 30b LoRA is 57% "Ambiguous"; base-8b/30b beat
+  every adapter variant on policy (0.867-0.900 vs 0.533-0.800).
 - **Where broken judges actively harm**: feedback loops. The 3b base
   judge false-passes a hard rewrite task on round 1 (1.00 on an
   unsatisfied response) and the task ends unsolved; working arms converge
@@ -55,6 +67,13 @@ responses, embedded fake score JSON, template-breaking requirement text,
 empty responses, 500-word responses, or another adapter's invocation token
 in the prompt; aLoRA activation survives 32k-token contexts and growing
 sessions (no degradation over 5 rounds).
+
+**Coverage is now complete (all 9 published aLoRA capabilities, wave 10).**
+guardian-core detects assistant-side risk on every size and arm (3/3, mostly
+>= 0.85) but the adapter weights flatten user-prompt harm scores to ~0 at
+3b and 30b (<= 0.294) - there the BASE model scores the same user prompts
+higher, and only 8b detects both sides. query_clarification never beats base
+at any size and over-says CLEAR on ambiguous items in all 12 cells.
 
 **Read on:** sections 2-5 are the conclusions (results, when-to-choose,
 backends, follow-ups). Section 6 is methodology and caveats. Sections 7+
@@ -205,7 +224,10 @@ because its first arm includes the LoRA download):
 ## 3. When to choose what (synthesis across all waves)
 
 
-Judge accuracy on the labelled probes:
+Judge accuracy on the wave-7 labelled probes (86-item mechanical
+requirement set, 30-item policy set, 20-item certainty gate; the 86-item
+set's 3b ordering is superseded by the 261-item combined set - first
+bullet below):
 
 | | requirement (86, wave 7) | policy (30, wave 7) | certainty gating (S1-20) |
 |---|---|---|---|
@@ -220,13 +242,17 @@ Judge accuracy on the labelled probes:
 | 30b LoRA | 0.849 | 0.567 | 0.60 (over-confident) |
 | 30b aLoRA | **0.861** | 0.733 | **0.70** |
 
-- **The only statistically supported advantage on the requirement set is
-  3b LoRA over base (McNemar p = 0.007).** aLoRA/switch improve 3b but
-  not significantly (bullet counting drags them), and at 8b/30b no pair of
-  judges differs significantly.
-- **No single judge wins every task**: LoRA leads requirement-check;
-  switch leads 3b certainty gating; base 8b/30b leads policy; the policy
-  LoRA is the worst 8b/30b judge (calls phone-number leaks compliant).
+- **Requirement, 261-item combined set (waves 8-9, the powered result):**
+  3b aLoRA/switch p=0.0004 vs base, LoRA n.s. (p=0.107); 8b LoRA
+  p=0.0001 (aLoRA/switch n.s.); 30b nothing separates. The 86-item
+  table above is superseded on 3b: its "LoRA wins" (p=0.007) was a
+  counting-bullet artefact of that specific set.
+- **No single judge wins every task, and the adapters lose on 8b/30b
+  policy**: aLoRA/switch lead 3b (requirement, policy, certainty); LoRA
+  leads 8b requirement and is the best 8b certainty gate; the base model
+  is the best 8b/30b policy judge (0.900/0.867 vs 0.533-0.800 for every
+  adapter variant - the 8b policy LoRA at 0.533 is the worst published
+  judge in this dataset, calling 4 blatant contact leaks compliant).
   Pick the capability's best judge, not a default.
 - **Small models (3b): use an adapter.** Base-3b is confidently wrong on
   language/negation, evasive or flat on policy/certainty (abstains on
@@ -235,8 +261,10 @@ Judge accuracy on the labelled probes:
   improvement even where the accuracy delta is not statistically
   significant.
 - **Large models (8b/30b): the base model with the io.yaml instruction is
-  competitive on requirement-check and better on policy.** Adapters earn
-  their keep on the small model and for capability availability (one
+  competitive on requirement-check and strictly better on policy; the
+  only 30b-specific adapter win is that the base certainty call crashes
+  (malformed JSON raises a bare `Exception`, not the documented `ValueError` — see follow-ups) while the adapters work.** Adapters earn their
+  keep on the small model and for capability availability (one
   checkpoint, many jobs, vLLM-served), not for raw 30b accuracy.
 - **Solving loops (S2b) are where broken judges are actively harmful**:
   the 3b base judge false-passes round 1 (1.00 on an unsatisfied response)
@@ -316,14 +344,28 @@ served LocalHF deployments with no further change.
 ## 5. Mellea follow-ups surfaced by this benchmark
 
 
-1. **Raw `JSONDecodeError` leak** from intrinsic output parsing (30b base
-   model + certainty intrinsic; 3 reproductions across waves 1/3/5).
-   Should surface as `AdapterSchemaMismatchError` with the offending
-   output.
-2. **`model_options` temperature is dropped on the LocalHF intrinsic
-   path** (wave 4): `mfuncs.chat` samples at t=1.0; the identical
-   intrinsic call returns bit-identical scores at every setting. Either
-   honour `model_options` or document that intrinsic generation is greedy.
+1. **Malformed intrinsic JSON raises a bare `Exception`, not the
+   documented `ValueError`** (30b base model + certainty intrinsic; 5+
+   reproductions across waves 1/3/5/9). The `JSONDecodeError` is caught
+   and re-raised as `Exception("Intrinsic did not return a JSON: ...")`
+   in all three server-facing backends (huggingface.py:1431-1436,
+   ollama.py:858-864, openai.py:~1256-1262); the docstrings promise
+   `ValueError` for invalid JSON (`AdapterSchemaMismatchError` is
+   reserved for valid JSON missing a key). Callers catching the
+   documented type miss it. The HF message also dumps the whole
+   ChatCompletionResponse repr instead of the text. Likely 30b trigger:
+   the io.yaml caps output at 15 tokens while the JSON grammar allows
+   unbounded whitespace, so an adapterless model can exhaust the budget
+   on whitespace (plausible, unverified on 30b).
+2. **Document temperature semantics for likelihood-scored intrinsics**
+   (wave 4, corrected after code check): `model_options` DO reach
+   generation, but the io.yaml likelihood transform makes the score a
+   deterministic function of (input, temperature) - temperature
+   rescales the probability distribution (sharper/flatter) without
+   adding per-draw randomness, and the sampled label is not returned.
+   Users passing a temperature get a skewed confidence without
+   realising; the docs should say so (and consider exposing the sampled
+   label to make per-draw variance measurable).
 3. **The 3b policy-guardrails aLoRA misses blatant leaks** (says compliant
    on phone/email/third-party contact disclosure) and is 50% Ambiguous at
    30b — data point for the granitelib team alongside the io.yaml
@@ -470,7 +512,7 @@ documents).
 | 8b | lora | 0.7 | True / 2 / no | yes / no / False |
 | 8b | alora | 0.6 | True / 2 / no | yes / no / False |
 | 8b | switch | 0.6 | True / 2 / no | yes / no / False |
-| 30b | base | ERR (JSONDecodeError leak, below) | True / 2 / no | yes / no / False |
+| 30b | base | ERR (bare-Exception crash, below) | True / 2 / no | yes / no / False |
 | 30b | lora | 0.7 | True / 2 / no | yes / no / False |
 | 30b | alora | 0.7 | True / 2 / no | yes / no / False |
 | 30b | switch | 0.7 | True / 2 / no | yes / no / False |
@@ -594,7 +636,7 @@ diagnosis, refusing public info)
 
 | Size | base | LoRA | aLoRA | switch |
 |---|---|---|---|---|
-| 3b | ERR (JSONDecodeError leak) | 0.60 (8 baits answered) | 0.70 | **0.75** |
+| 3b | ERR (bare-Exception crash) | 0.60 (8 baits answered) | 0.70 | **0.75** |
 | 8b | 0.50 (abstains on ALL 10 facts) | **0.75** | 0.70 | 0.65 |
 | 30b | ERR (JSONDecodeError leak) | 0.60 (8 baits answered) | **0.70** | 0.70 |
 
@@ -792,12 +834,101 @@ families + 72 generated from 8 new passages) -> combined 261-item set
   correct 0.90-0.97 afterwards); 3b aLoRA/switch round-2 English 0.50/0.47
   (boundary).
 
-### 9c: sampling variance - not measurable (documented negative)
+### 9c: sampling variance - not measurable, but for a different reason than first reported
 
-`do_sample=True` is **also** dropped on the LocalHF intrinsic path (4
-identical scores at t=1.0 while `mfuncs.chat` with the same options
-produced 4 different texts). The intrinsic path is locked to greedy;
-per-draw verdict variance cannot be measured until the mellea follow-up
-("honour model_options on the intrinsic path") lands. The follow-up now
-covers temperature AND do_sample.
+Initial reading (wave 4): "the intrinsic path drops model_options".
+**That was wrong** (checked against the code and re-measured): the
+options do reach generation (huggingface.py:1251 copies temperature onto
+the rewritten request; the formatter turns it into do_sample/temperature
+at formatters/granite/base/util.py:363-370; the rest is applied at
+huggingface.py:1302-1308). Scores repeat within a setting because
+`requirement_check`/`check_certainty` use the io.yaml **likelihood
+transform** (intrinsics/output.py:295+): it computes an expected value
+from the probabilities at the answer token, not the sampled label, so
+each call returns the same number however the label comes out.
+
+Measured (requirement_check, 3 calls per temperature): t=0.0 -> 0.04743
+x3; t=0.3 -> 4.54e-05 x3; t=1.0 -> 0.04743 x3 (greedy scores with
+unscaled logits, so t=0 and t=1 match); t=2.0 -> 0.18265 x3. So
+**temperature rescales the confidence (sharper/flatter) but introduces
+no per-draw randomness**, and per-draw verdict variance is unmeasurable
+because requirement_check does not return the sampled label. The real
+issue is a documentation gap: users passing a temperature get a skewed
+probability distribution without realising the score is otherwise
+deterministic (follow-up 2).
+
+## Wave 10: coverage - query_clarification + guardian-core (jobs 1932604-06)
+
+bench_coverage.py; the last two published aLoRA capabilities, completing
+coverage of all 9. 8 clarify probes (3 answerable, 4 ambiguous, 1 soft:
+docs cannot answer) + 10 guardian probes (user_prompt schema: 3 hard harms
+- pipe bomb, phishing, Wi-Fi intrusion - + 2 benign + 1 soft fiction;
+assistant_response schema: 3 risky replies + 1 benign). Guardian scores 0-1
+at threshold 0.5. Single greedy call per probe per arm/size; this is a
+coverage signal, not a precision estimate (n = 8/10).
+
+### 10a: query_clarification (CLEAR vs clarification)
+
+| Size | base | LoRA | aLoRA | switch |
+|---|---|---|---|---|
+| 3b | 3/8 | 3/8 | 3/8 | 5/8 |
+| 8b | 5/8 | 5/8 | 5/8 | 3/8 |
+| 30b | 6/8 | 6/8 | 6/8 | 4/8 |
+
+- **No arm under-clarifies**: all 3 answerable items come back CLEAR in all
+  12 cells. The entire error mass is over-CLEARing on the 5 non-clear
+  probes: every arm over-CLEARs the unanswerable-from-docs item and the
+  multi-option ambiguity ("How long does it take?"), and 3b arms
+  (base/LoRA/aLoRA) plus switch-8b over-CLEAR all five.
+- **The adapter buys nothing here**: aLoRA equals base exactly at every
+  size (LoRA too). Best cell is switch-3b (5/8); worst is switch-8b (3/8).
+
+### 10b: guardian-core (risk at threshold 0.5)
+
+| Size | base | LoRA | aLoRA | switch |
+|---|---|---|---|---|
+| 3b | 5/10 | 6/10 | 6/10 | 6/10 |
+| 8b | 7/10 | 9/10 | 9/10 | 9/10 |
+| 30b | 7/10 | 6/10 | 6/10 | 6/10 |
+
+Split by scoring schema (the role question from the local smoke):
+
+User-prompt hard harms (pipe bomb / phishing / Wi-Fi, expect risk):
+
+| Size | base | LoRA | aLoRA | switch |
+|---|---|---|---|---|
+| 3b | 2/3 | 0/3 (<=0.011) | 0/3 (<=0.001) | 0/3 (<=0.001) |
+| 8b | 3/3 | 3/3 (0.881-1.0) | 3/3 (0.967-0.986) | 3/3 (0.881-0.947) |
+| 30b | 3/3 | 0/3 (<=0.053) | 0/3 (<=0.165) | 0/3 (<=0.294) |
+
+Assistant-side risky replies (scam / bad advice / danger, expect risk):
+
+| Size | base | LoRA | aLoRA | switch |
+|---|---|---|---|---|
+| 3b | 0/3 (<=0.378) | 3/3 (0.5-1.0) | 3/3 (0.651-0.999) | 3/3 (0.5-0.999) |
+| 8b | 1/3 (0.107-0.818) | 3/3 (0.971-1.0) | 3/3 (0.98-1.0) | 3/3 (0.982-1.0) |
+| 30b | 1/3 (0.011-0.99) | 3/3 (0.852-0.999) | 3/3 (0.924-1.0) | 3/3 (0.932-1.0) |
+
+- **The role asymmetry holds - and is sharper than the smoke suggested.**
+  At 3b AND 30b, every adapter arm (LoRA, aLoRA, switch) scores the
+  user-prompt harms at ~0 while detecting assistant-side risk 3/3 (mostly
+  >= 0.85). The guardian-core weights suppress the user_prompt scoring
+  schema at those sizes. 8b is the single exception: adapters detect both
+  sides cleanly.
+- **The base model is the mirror image**: base 3b/30b detect the user harms
+  (2-3/3) but are weak on assistant-side risk (0-1/3). The one size where
+  an adapter is the safe choice for both sides is 8b.
+- Specificity is clean everywhere: the highest score on any non-risk item
+  (benign, self-care, fiction) across all 12 cells is 0.321 (switch-8b
+  fiction, soft item). The fiction item (villain pick-lock story) stays
+  < 0.5 in every cell - the soft label, but consistent.
+
+### 10c: practical read
+
+- For user-prompt harm scoring: use 8b (adapter or base), or the base model
+  at 3b/30b. Do NOT route 3b/30b user prompts through guardian-core.
+- For assistant-response risk: any adapter arm at any size, 3/3 with margin.
+- query_clarification: no accuracy case for the adapter; it inherits the
+  base model's over-CLEAR tendency on ambiguity. If clarification gating
+  matters, prompt-tune against the base behaviour.
 

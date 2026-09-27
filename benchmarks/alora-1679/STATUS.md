@@ -579,6 +579,11 @@ but harmless.
 
 ## Files and where everything lives
 
+(Migrated 2026-09-27: the benchmark folder and this file now live in the
+standalone repo `mellea-alora-eval`; the session-1 harness described below
+is in `wave1/` there. The scratchpad copy remains but is no longer the
+source of truth.)
+
 - **This directory**, `scratchpad/alora-activation-1678/eval_1679/`
   (gitignored, nothing committed anywhere, confirmed clean repeatedly):
   - `probes.py` — probe-set generator (140 items, 12 responses). Run
@@ -1157,6 +1162,123 @@ Ranked by how much they'd change the conclusion if answered:
      stop with `bv stop` when no longer needed.
    - Remaining optional (not approved): vLLM-served PEFT aLoRA probe,
      concurrency test, real-traffic sample from granitelib.
+
+20. **Overnight continuation (Opus feedback on the two mellea issue
+   candidates; verified against code + re-measured).**
+   - **Weights question RESOLVED (measured, not assumed).** Opus observed
+     a transformers load report listing requirement-check_lora weights as
+     "MISSING ... newly initialized" when a second LoRA (uncertainty) was
+     loaded after it. Weight-integrity test (/tmp/weight_integrity.py,
+     walker needs nn.ModuleDict + d[adapter] is a plain Linear): 3b,
+     load requirement-check LoRA, snapshot (320 tensors, sum -112.257),
+     load uncertainty LoRA, re-snapshot -> IDENTICAL (-112.257, 320
+     tensors). The report line is load-report NOISE from multi-adapter
+     loading; weights are intact. Not a bug; corroborated by the whole
+     benchmark's reproducible multi-adapter scores. Do NOT file.
+   - **Opus was right on both drafts; my originals corrected:**
+     Issue 1: model_options are NOT dropped (huggingface.py:1251,
+     formatters/granite/base/util.py:363-370, huggingface.py:1302-1308).
+     Repeats-within-setting come from the io.yaml likelihood transform
+     (intrinsics/output.py, YAML_NAME="likelihood": expected value from
+     probabilities at the answer token, not the sampled label).
+     Measured: t=0 0.04743x3 / t=0.3 4.54e-05x3 / t=1.0 0.04743x3 /
+     t=2.0 0.18265x3. Correct issue = DOCS: temperature rescales the
+     confidence without adding randomness; sampled label not returned.
+     Issue 2: the raised type is bare builtins.Exception
+     (huggingface.py:1431-1436, ollama.py:858-864, openai.py:~1256-1262),
+     JSONDecodeError is only __cause__; docstrings promise ValueError for
+     invalid JSON (AdapterSchemaMismatchError is valid-JSON-missing-key
+     only). Correct issue = raise ValueError(+raw text) in all three
+     backends + type-asserting test; HF message should use the text, not
+     the chunk repr.
+   - REPORT.md + GRANITELIB_BRIEF.md corrected for both (wave-9 9c
+     rewritten, follow-ups 1-2 replaced, TL;DR crash phrasing fixed,
+     brief note 5 + header fixed).
+   - **CLEAR DRAFTS READY for operator review (NOT filed; no GitHub
+     posts without explicit approval):**
+     benchmark/issue_drafts/mellea_docs_likelihood_temperature.md
+     benchmark/issue_drafts/mellea_bug_bare_exception_intrinsic_json.md
+   - Wave 10 is COMPLETE in REPORT.md (10a/10b/10c: clarify - no arm
+     under-clarifies, all error mass is over-CLEARing, adapter buys
+     nothing vs base; guardian-core - user_prompt schema SUPPRESSED at
+     3b AND 30b for every adapter arm (scores ~0) while assistant-side
+     detection is 3/3; 8b is the only size where adapters detect both
+     sides; base model is the mirror image; specificity clean, max
+     non-risk score 0.321). Brief already carries these (its 2nd/4th
+     sections).
+   - **REMAINING for operator:** (a) review the two drafts -> file when
+     approved (mellea repo, normal issues per repo conventions);
+     (b) the repo-migration task (section 19) still applies, plus the
+     issue_drafts/ folder and the corrected REPORT.md should go with it;
+     (c) optional: a granitelib-side note on guardian-core user_prompt
+     suppression (belongs in the brief, already there - their call
+     whether it becomes their issue).
+
+19. **DECISION PENDING (operator, 2026-09-26 evening): move the benchmark to a
+   NEW standalone repo** - agreed direction, timing = top of next session,
+   AFTER wave 10 is pulled but BEFORE the re-push (so the new repo gets the
+   complete dataset in one shot). Migration: create repo (operator to name
+   it; internal - may carry BlueVela/job details), move contents of
+   `benchmarks/alora-1679/` (scripts, probes, results, REPORT.md,
+   GRANITELIB_BRIEF.md, STATUS.md), add a README setup section documenting
+   the mellea dependency: scripts run from mellea checkouts at three pinned
+   commits (before=2894863a7, middle=119a1b230, after/switch=1c5b04aef,
+   `uv sync --frozen --extra backends`[+switch for the switch arm]),
+   cluster home /proj/dmfexp/eiger/users/jonesn/issue-1679-bench/. Then
+   delete or keep the staging branch planetf1/mellea:bench/alora-1679
+   (commit 62cb2ba4e) per operator. The bench/alora-1679 branch is the
+   migration SOURCE - do not add further commits to it after the move.
+
+---
+
+20. **Wave 10 pulled and analysed (2026-09-27, session 3).** All 12
+   files in (30b switch landed ~08:00 UTC, job 1932606 DONE; 3b/8b jobs
+   DONE earlier). Zero row errors. Findings (full detail in REPORT.md
+   wave-10 section + GRANITELIB_BRIEF §2/§4):
+   - **Guardian role asymmetry confirmed and sharper than the smoke:** at
+     3b AND 30b every adapter arm (lora/alora/switch) scores user-prompt
+     harms ~0 (<= 0.294) while detecting assistant-side risk 3/3 (mostly
+     >= 0.85). 8b is the only size where adapters detect both sides.
+     Base models are the mirror image (detect user harms at 3b/30b, weak
+     on assistant risk). Specificity clean: max non-risk score 0.321
+     (switch-8b fiction, soft). Fiction item < 0.5 in all 12 cells.
+   - **Clarify:** no arm under-clarifies; error is systematic over-CLEAR
+     on ambiguous items (all 12 cells). Accuracy identical to base at
+     every size (3b 3/8, 8b 5/8, 30b 6/8; LoRA matches; switch-3b 5/8
+     high, switch-8b 3/8 low).
+   - Practical: user-prompt harm scoring -> 8b (or base at 3b/30b), never
+     guardian-core at 3b/30b; assistant-side risk -> any adapter arm any
+     size; clarify -> no accuracy case for the adapter.
+   - REPORT.md: wave-10 section added (§7) + one TL;DR bullet.
+     GRANITELIB_BRIEF.md: scope extended, two adapter entries, guidance,
+     appendix updated.
+   - Note: brief §6 note 1 still says the 149-probe wave-8 set is
+     "running" - stale leftover from session 2, harmless but worth a
+     cleanup pass at repo migration.
+
+---
+
+21. **Repo migration + problem reports (2026-09-27, session 3, later).**
+   - New standalone repo `jonesn/mellea-alora-eval` on github.ibm.com
+     (private): complete dataset (132 result files incl. all 12 wave-10
+     cov JSONs), reports, scripts, probes, plus `wave1/` (session-1
+     harness - added so the wave-1 numbers are reproducible from the
+     repo; not in the original move list). README documents the mellea
+     pins and cluster layout. Pushed, secret-scan clean.
+   - `problems/` directory (operator request): one-file problem reports
+     per actionable defect, owner-addressed, minimal evidence + repro.
+     P-001..P-007: requirement-check invocation mismatch (granitelib,
+     mitigated in #1685), guardian-core user-prompt flattening at
+     3b/30b, policy-guardrails 8b LoRA contact leaks, query_clarification
+     over-CLEAR, LocalHF aLoRA activation (mellea, fixed in #1685),
+     intrinsic-path sampling drop (mellea), granite-switch transformers
+     range (granitelib, minor). All figures recomputed from raw JSON
+     during drafting; one correction: the 140-item McNemar p=0.0266 is
+     alora_manual vs the PATCHED non-activating controls (110/140), vs
+     unpatched base it is 0.0784; mechanical-family net is +10/80
+     (14/4), not the "+12/80" stated in the session-2 narrative.
+   - Staging branch bench/alora-1679 delete/keep: pending operator.
+     Switch-3b vLLM job 47233 stop: pending operator.
 
 ---
 
