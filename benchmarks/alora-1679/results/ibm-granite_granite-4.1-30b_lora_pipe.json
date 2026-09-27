@@ -1,0 +1,88 @@
+{
+  "arm": "lora",
+  "model": "ibm-granite/granite-4.1-30b",
+  "host": "p4-r21-n2.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "S4": {
+      "description": "compliance AND-gate (formal tone + no contact leaks)",
+      "gate_accuracy": 0.6667,
+      "correct": 4,
+      "n": 6,
+      "rows": [
+        {
+          "id": "s4_both_ok",
+          "formal_score": 0.7981869620463449,
+          "policy_label": "Ambiguous",
+          "gate_passed": false,
+          "expected_pass": true,
+          "correct": false,
+          "latency_s": 14.875
+        },
+        {
+          "id": "s4_bad_tone",
+          "formal_score": 0.0007096879257314951,
+          "policy_label": "No",
+          "gate_passed": false,
+          "expected_pass": false,
+          "correct": true,
+          "latency_s": 1.075
+        },
+        {
+          "id": "s4_phone_leak",
+          "formal_score": 0.7981869582052847,
+          "policy_label": "Ambiguous",
+          "gate_passed": false,
+          "expected_pass": false,
+          "correct": true,
+          "latency_s": 0.744
+        },
+        {
+          "id": "s4_email_leak",
+          "formal_score": 0.08509914073682043,
+          "policy_label": "Ambiguous",
+          "gate_passed": false,
+          "expected_pass": false,
+          "correct": true,
+          "latency_s": 0.782
+        },
+        {
+          "id": "s4_neutral_ok",
+          "formal_score": 0.7773001852347772,
+          "policy_label": "Ambiguous",
+          "gate_passed": false,
+          "expected_pass": true,
+          "correct": false,
+          "latency_s": 0.851
+        },
+        {
+          "id": "s4_slang_ok",
+          "formal_score": 0.0019267416731328505,
+          "policy_label": "Ambiguous",
+          "gate_passed": false,
+          "expected_pass": false,
+          "correct": true,
+          "latency_s": 1.081
+        }
+      ]
+    },
+    "S5": {
+      "description": "iterative RAG: answerability -> generate -> detect -> correct",
+      "answerability": "answerable",
+      "first_answer": "The top swimming speed of a beaver is up to 8 kilometres per hour. On the winter solstice, beavers eat the branches they have stored underwater during autumn.",
+      "solstice_in_first": true,
+      "detector_label": "no",
+      "flagged": false,
+      "detected": false,
+      "final_answer": "The top swimming speed of a beaver is up to 8 kilometres per hour. On the winter solstice, beavers eat the branches they have stored underwater during autumn.",
+      "solstice_in_final": true,
+      "corrected_away": false,
+      "timings": {
+        "answerability_s": 18.515,
+        "generate_s": 2.33,
+        "detect_s": 11.675,
+        "correct_s": null
+      }
+    }
+  }
+}

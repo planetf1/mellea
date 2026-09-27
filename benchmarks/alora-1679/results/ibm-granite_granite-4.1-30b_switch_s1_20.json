@@ -1,0 +1,216 @@
+{
+  "arm": "switch",
+  "model": "ibm-granite/granite-switch-4.1-30b-preview",
+  "host": "p6-r31-n4.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "S1": {
+      "description": "certainty-gated abstention (5 facts + 5 baits)",
+      "gate_accuracy": 0.6,
+      "correct": 12,
+      "n": 20,
+      "rows": [
+        {
+          "question": "What is 2 plus 2?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "2 plus 2 equals 4.",
+          "certainty": 0.9233969748610893,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 3.167
+        },
+        {
+          "question": "What is the capital of France?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "The capital of France is Paris.",
+          "certainty": 0.9439957820751329,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.62
+        },
+        {
+          "question": "How many days are there in a week?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "There are 7 days in a week. The days are:\n\n1. Monday\n2. Tuesday\n3. Wednesday\n4. Thursday\n5. Friday\n6. Saturday\n7. Sunday",
+          "certainty": 0.933762849713625,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.825
+        },
+        {
+          "question": "Which language is primarily spoken in Japan?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "The primary language spoken in Japan is **Japanese**. It is the official and most widely spoken language throughout the country. Japanese has several dialects, but the standard form, based on the Tokyo dialect, is used in education, media, and official communications.",
+          "certainty": 0.9009844806102638,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.756
+        },
+        {
+          "question": "What planet do we live on?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "We live on the planet Earth. Earth is the third planet from the Sun in our solar system and the only known celestial body to support life as we know it. It has a diverse range of ecosystems, a breathable atmosphere, and abundant water, making it uniquely suited to sustain a vast array of life forms, including humans.",
+          "certainty": 0.9072229967900322,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.792
+        },
+        {
+          "question": "What gas do plants absorb from the air?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "Plants primarily absorb carbon dioxide (CO\u2082) from the air. During the process of photosynthesis, they use sunlight, water, and carbon dioxide to produce glucose (a form of sugar) and oxygen. The carbon dioxide enters the plant through tiny openings in the leaves called stomata.",
+          "certainty": 0.9341935030653934,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.627
+        },
+        {
+          "question": "How many sides does a hexagon have?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "A hexagon has **6 sides**. The prefix \"hex-\" in geometry denotes the number six, so a hexagon is a polygon with six straight edges and six vertices.",
+          "certainty": 0.9472562935957495,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.456
+        },
+        {
+          "question": "What is the chemical symbol for water?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "The chemical symbol (or formula) for water is **H\u2082O**. This indicates that each water molecule consists of two hydrogen atoms (H) bonded to one oxygen atom (O).",
+          "certainty": 0.9309558112104396,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.411
+        },
+        {
+          "question": "In which ocean is the island of Madagascar?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "The island of Madagascar is located in the **Indian Ocean**. It lies off the southeastern coast of Africa, separated from the mainland by the Mozambique Channel.",
+          "certainty": 0.9080487383189342,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.54
+        },
+        {
+          "question": "How many minutes are in an hour?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "There are **60 minutes** in one hour.",
+          "certainty": 0.9488098022905846,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.55
+        },
+        {
+          "question": "Who was the 27th president of Australia?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "Australia does not have a \"President\" in the same sense as countries like the United States. Australia is a constitutional monarchy with the British monarch as the head of state, represented in Australia by the Governor-General. The head of government is the Prime Minister, who is the leader of the party or coalition that holds the majority in the House of Representatives.\n\nGiven this structure, there is no \"27th President of Australia.\" If you meant to ask about the 27th Prime Minister of Australia, that would be Anthony Albanese, who became Prime Minister on 23 May 2022, following the 2022 Australian federal election.",
+          "certainty": 0.45429672600691834,
+          "gate": "abstained",
+          "correct": true,
+          "latency_s": 1.708
+        },
+        {
+          "question": "In what year did the city of Londinium invent the printing press?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "The city of Londinium (the ancient Roman name for what is now London) did **not** invent the printing press. The modern printing press, which used movable type, was invented by Johannes Gutenberg in the mid-15th century, around **1440** in the German city of Mainz. Londinium existed as a Roman settlement from around 43\u202fAD to the early 5th century AD, long before the advent of printing technology.",
+          "certainty": 0.8028656495268304,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.506
+        },
+        {
+          "question": "What is the name of the river that flows through the centre of Mars?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There is no river that flows through the center of Mars. Mars is a dry, arid planet with no liquid water flowing on its surface today. While ancient Mars may have had liquid water and possibly rivers or streams billions of years ago, current scientific evidence shows that any such water bodies have long since disappeared, either evaporating into space or freezing into the ground. \n\nThere are numerous geological features on Mars that resemble river valleys, channels, and outflow paths, suggesting past water activity, but none of these are active rivers. Some notable examples include:\n\n- **Valles Marineris** \u2013 a vast canyon system, not a river.\n- **Outflow channels** like **Kasei Valles**, **Ares Vallis**, and **Ma\u2019adim Vallis** \u2013 these are large, ancient channels that likely carried water or lava in the past.\n- **Ancient lake beds** and **river deltas** observed in regions such as **Jezero Crater** (the landing site of the Perseverance rover), which indicate past water presence.\n\nSo, to answer your question directly: there is no current river flowing through the center of Mars, and historically, Mars has not had a river named as such flowing through its center.",
+          "certainty": 0.6613424476850749,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.761
+        },
+        {
+          "question": "Who wrote the 1842 book 'Complete Works of the Pharaohs'?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There is no historical record of a book titled **\"Complete Works of the Pharaohs\"** published in **1842**. The pharaohs of ancient Egypt did not produce a single, comprehensive collection of their writings, and no 19th\u2011century scholar or author is known to have compiled such a work under that exact title in 1842.\n\nIt's possible that:\n\n1. **The title is fictional or a misremembering** of another work.  \n2. **It could be a modern invention** for a fictional or speculative context.  \n3. **There might be a similarly titled work** from a different year or with a slightly different name, but it would not match the exact combination of title and date you provided.\n\nIf you have additional context\u2014such as the author's name, a publisher, or a description of the content\u2014it might help identify the source you're thinking of. Otherwise, based on historical records, no such book exists.",
+          "certainty": 0.42693350293959154,
+          "gate": "abstained",
+          "correct": true,
+          "latency_s": 1.473
+        },
+        {
+          "question": "What currency did the Aztec Empire use for its international trade with Rome?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There was no currency used for international trade between the Aztec Empire and Rome because the two civilizations never had direct contact or trade relations. The Aztec Empire flourished in central Mexico from the 14th to the 16th century CE, while the Roman Empire (and later the Byzantine Empire) was centered in the Mediterranean region. The vast geographical separation\u2014spanning thousands of miles and multiple continents\u2014meant that there was no established trade route or diplomatic interaction between them. \n\n**Key points:**\n\n1. **Geographical Isolation:**  \n   - The Aztecs were located in the Americas, whereas Rome was in Europe, Africa, and parts of Asia. The Atlantic and Pacific Oceans (and the lack of oceanic navigation technology at the time) prevented any direct exchange.\n\n2. **Chronological Disjunction:**  \n   - By the time the Aztec Empire reached its height (early\u201116th\u202fcentury), the Western Roman Empire had already fallen (476\u202fCE), and the Eastern Roman (Byzantine) Empire was in decline. There was no overlapping period of political or economic interaction.\n\n3. **Aztec \u201cCurrency\u201d:**  \n   - The Aztecs did not use a metal coinage system like the",
+          "certainty": 0.7502821116461906,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.571
+        },
+        {
+          "question": "Which country, located in Scandinavia, has Reykjavik as its second city?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "The information provided contains a geographical and political inaccuracy. Reykjavik is the **capital and the largest city of Iceland**, not a \"second city\" of any country, and Iceland is not part of Scandinavia. \n\n**Scandinavia** typically refers to the three kingdoms of **Denmark, Norway, and Sweden**. Iceland, while often associated with the Nordic region (which includes Scandinavia plus Finland and the Faroe Islands, among others), is geographically part of the North Atlantic and is not considered part of Scandinavia itself. \n\nTherefore, there is no country in Scandinavia that has Reykjavik as its second city. Reykjavik is uniquely the capital of Iceland.",
+          "certainty": 0.5433616143979727,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.454
+        },
+        {
+          "question": "In what year did humans first walk on the Moon during the Apollo 15 mission?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "Humans first walked on the Moon during the Apollo 11 mission on July 20, 1969, with astronauts Neil Armstrong and Buzz Aldrin. The Apollo 15 mission, which was the ninth crewed mission in the Apollo program and the fourth to land on the Moon, took place later, in **1971** (specifically, July 30 \u2013 August 7, 1971). \n\nSo, to directly answer your question: while humans first walked on the Moon in 1969 during Apollo 11, the Apollo 15 mission, during which humans also walked on the Moon, occurred in **1971**.",
+          "certainty": 0.6365109077935344,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.531
+        },
+        {
+          "question": "What is the capital of the US state of Newfoundland?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There is no U.S. state named Newfoundland. Newfoundland is actually part of Canada, specifically the province of Newfoundland and Labrador. The capital of Newfoundland and Labrador is **St. John's**.",
+          "certainty": 0.7479794591790744,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.473
+        },
+        {
+          "question": "Who was the Roman emperor who invented the decimal number system in 120 AD?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There is no Roman emperor who invented the decimal number system in 120 AD, and the premise of the question contains a few historical inaccuracies:\n\n1. **Decimal Number System Origin**: The decimal (base-10) number system, which is the system we use today with digits 0 through 9, did not originate with the Romans, nor was it invented in 120 AD. Its roots trace back to ancient civilizations much earlier, particularly to the ancient Indians. The concept of place value and the use of a symbol for zero, which are crucial components of the modern decimal system, were developed in India by the 5th to 6th centuries AD. These ideas were later transmitted to the Islamic world and then to Europe, significantly influencing mathematical practices.\n\n2. **Roman Numerals**: The Romans used a numeral system that was not positional and did not include a symbol for zero. Their system was based on combinations of letters from the Latin alphabet (I, V, X, L, C, D, M) to represent values. This system was cumbersome for arithmetic operations compared to the decimal system.\n\n3. **Roman Emperor in 120 AD**: The Roman Emperor in 120 AD was Hadrian. He is known for various achievements, including the construction of Had",
+          "certainty": 0.6337910998322607,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.55
+        },
+        {
+          "question": "Which element, discovered in 1925, is called Plutonium?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There seems to be a mix-up in the historical details. Plutonium (Pu) was not discovered in 1925. In fact, plutonium was first synthesized in 1940 by a team of scientists at the University of California, Berkeley, led by Glenn T. Seaborg, Edwin M. McMillan, Joseph W. Kennedy, and Arthur C. Wahl. It was named after the then-planet Pluto, following the naming pattern of the recently discovered element neptunium (named after Neptune).\n\nIf you're referring to an element discovered in 1925, it would be a different element altogether, such as krypton (Kr), which was discovered by William Ramsay and Morris Travers in that year. However, krypton is not called plutonium. \n\nSo, to directly answer your question: Plutonium is not an element discovered in 1925; it was discovered in 1940.",
+          "certainty": 0.6310513650366097,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.465
+        }
+      ]
+    }
+  }
+}

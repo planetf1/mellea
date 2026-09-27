@@ -1,0 +1,121 @@
+{
+  "arm": "before",
+  "model": "ibm-granite/granite-4.1-8b",
+  "host": "p5-r30-n2.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "adapters_loaded": [
+      "answerability_alora",
+      "query_rewrite_alora",
+      "requirement-check_alora",
+      "requirement-check_lora",
+      "uncertainty_alora"
+    ],
+    "L0": {
+      "description": "LoRA auto-resolution sanity (arm-invariant expected)",
+      "french": {
+        "value": 0.029312234234603312,
+        "latency_s": 7.499
+      },
+      "bullets": {
+        "value": 0.037326893013160875,
+        "latency_s": 0.302
+      },
+      "timings": {
+        "L0": 7.8
+      }
+    },
+    "L1": {
+      "description": "check_certainty on confident vs hedged context",
+      "certain": {
+        "value": 0.11712584300801866,
+        "latency_s": 0.857
+      },
+      "hedged": {
+        "value": 0.07281482234584126,
+        "latency_s": 0.749
+      },
+      "timings": {
+        "L1": 1.61
+      }
+    },
+    "L2": {
+      "description": "requirement-check (french, bullets) + certainty",
+      "french": {
+        "value": 0.08509905689704647,
+        "latency_s": 0.286
+      },
+      "bullets": {
+        "value": 0.009708475272346482,
+        "latency_s": 0.283
+      },
+      "certainty": {
+        "value": 0.0837374176788782,
+        "latency_s": 0.663
+      },
+      "timings": {
+        "L2": 1.23
+      }
+    },
+    "L3": {
+      "description": "answerability -> rewrite -> generate -> requirement-check",
+      "answerability": {
+        "value": "answerable",
+        "latency_s": 0.418
+      },
+      "rewritten_query": {
+        "value": "What is the capital of Australia?",
+        "latency_s": 1.53,
+        "prompt_tokens": 7
+      },
+      "generated": {
+        "latency_s": 0.412,
+        "prompt_tokens": 79,
+        "completion_tokens": 8
+      },
+      "generated_answer": "Canberra is the capital of Australia.",
+      "grounded_check": {
+        "value": 0.904650489446367,
+        "latency_s": 0.322,
+        "completion_tokens": 8
+      },
+      "timings": {
+        "L3": 2.68
+      }
+    },
+    "L4": {
+      "description": "retry until requirement met (max 3)",
+      "requirement": "The response uses bullet points and is written in French.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "response": "Cardiff is the capital and largest city of Wales, located on the southern coast of the country.",
+          "score": 0.005911069567583546,
+          "gen_latency_s": 0.457,
+          "gen_tokens": 20,
+          "check_latency_s": 0.502
+        },
+        {
+          "attempt": 2,
+          "response": "Cardiff is the capital and largest city of Wales, situated on the southern coast of the United Kingdom",
+          "score": 0.009708476029146415,
+          "gen_latency_s": 1.055,
+          "gen_tokens": 20,
+          "check_latency_s": 0.51
+        },
+        {
+          "attempt": 3,
+          "response": "Cardiff is the vibrant capital city of Wales, known for its rich history, cultural attractions, and",
+          "score": 0.00522012678620963,
+          "gen_latency_s": 0.877,
+          "gen_tokens": 20,
+          "check_latency_s": 0.505
+        }
+      ],
+      "passed": false,
+      "timings": {
+        "L4": 3.91
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "arm": "before",
+  "model": "ibm-granite/granite-4.1-30b",
+  "host": "p4-r05-n3.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "adapters_loaded": [
+      "answerability_alora",
+      "query_rewrite_alora",
+      "requirement-check_alora",
+      "requirement-check_lora",
+      "uncertainty_alora"
+    ],
+    "L0": {
+      "description": "LoRA auto-resolution sanity (arm-invariant expected)",
+      "french": {
+        "value": 0.014063643037710316,
+        "latency_s": 87.002
+      },
+      "bullets": {
+        "value": 0.2689416290342873,
+        "latency_s": 0.476
+      },
+      "timings": {
+        "L0": 87.48
+      }
+    },
+    "L1": {
+      "error": "Exception: Intrinsic did not return a JSON: choices=[ChatCompletionResponseChoice(index=0, message=AssistantMessage(content='{  \\n  \"score\":         ', role='assistant', tool_calls=None, reasoning_content=None), logprobs=ChatCompletionLogProbs(content=[ChatCompletionLogProbsContent(token='{', logprob=-0.5809735059738159, bytes=[123], top_logprobs=[ChatCompletionLogProb(token='{', logprob=-0.5809735059738159, bytes=[123]), ChatCompletionLogProb(token='{\\n', logprob=-0.8309735059738159, bytes=[123, 10]), ChatCompletionLogProb(token='{\\n\\n', logprob=-5.9559736251831055, bytes=[123, 10, 10]), ChatCompletionLogProb(token='{\"', logprob=-6.0809736251831055, bytes=[123, 34]), ChatCompletionLogProb(token='{\\r\\n', logprob=-8.893473625183105, bytes=[123, 13, 10]), ChatCompletionLogProb(token='{\\n\\n\\n', logprob=-11.955973625183105, bytes=[123, 10, 10, 10]), ChatCompletionLogProb(token='{\\r\\n\\r\\n', logprob=-13.424723625183105, bytes=[123, 13, 10, 13, 10]), ChatCompletionLogProb(token='#', logprob=-3.4028234663852886e+38, bytes=[35]), ChatCompletionLogProb(token='\"', logprob=-3.4028234663852886e+38, bytes=[34]), ChatCompletionLogProb(token='!', logprob=-3.4028234663852886e+38, bytes=[33])]), ChatCompletionLogProbsContent(token='  \\n', logprob=-0.6654061079025269, bytes=[32, 32, 10], top_logprobs=[ChatCompletionLogProb(token='  \\n', logprob=-0.6654061079025269, bytes=[32, 32, 10]), ChatCompletionLogProb(token='  ', logprob=-0.9154061079025269, bytes=[32, 32]), ChatCompletionLogProb(token=' \\n', logprob=-2.7904062271118164, bytes=[32, 10]), ChatCompletionLogProb(token=' \"', logprob=-4.540406227111816, bytes=[32, 34]), ChatCompletionLogProb(token=' ', logprob=-4.665406227111816, bytes=[32]), ChatCompletionLogProb(token='   \\n', logprob=-5.915406227111816, bytes=[32, 32, 32, 10]), ChatCompletionLogProb(token='   ', logprob=-7.290406227111816, bytes=[32, 32, 32]), ChatCompletionLogProb(token='    \\n', logprob=-7.915406227111816, bytes=[32, 32, 32, 32, 10]), ChatCompletionLogProb(token=' \\n\\n', logprob=-9.290406227111816, bytes=[32, 10, 10]), ChatCompletionLogProb(token='  \\n\\n', logprob=-9.415406227111816, bytes=[32, 32, 10, 10])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.1075783297419548, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.1075783297419548, bytes=[32]), ChatCompletionLogProb(token=' \"', logprob=-2.3575782775878906, bytes=[32, 34]), ChatCompletionLogProb(token='  ', logprob=-5.107578277587891, bytes=[32, 32]), ChatCompletionLogProb(token='   ', logprob=-7.232578277587891, bytes=[32, 32, 32]), ChatCompletionLogProb(token='\"', logprob=-7.482578277587891, bytes=[34]), ChatCompletionLogProb(token='    ', logprob=-11.73257827758789, bytes=[32, 32, 32, 32]), ChatCompletionLogProb(token='\\t', logprob=-14.85757827758789, bytes=[9]), ChatCompletionLogProb(token='     ', logprob=-17.10757827758789, bytes=[32, 32, 32, 32, 32]), ChatCompletionLogProb(token='       ', logprob=-17.23257827758789, bytes=[32, 32, 32, 32, 32, 32, 32]), ChatCompletionLogProb(token='\"s', logprob=-17.60757827758789, bytes=[34, 115])]), ChatCompletionLogProbsContent(token=' \"', logprob=0.0, bytes=[32, 34], top_logprobs=[ChatCompletionLogProb(token=' \"', logprob=0.0, bytes=[32, 34]), ChatCompletionLogProb(token='\\t', logprob=-25.25, bytes=[9]), ChatCompletionLogProb(token='\"', logprob=-26.5, bytes=[34]), ChatCompletionLogProb(token=' ', logprob=-27.75, bytes=[32]), ChatCompletionLogProb(token='  ', logprob=-29.0, bytes=[32, 32]), ChatCompletionLogProb(token='\\r', logprob=-30.125, bytes=[13]), ChatCompletionLogProb(token='\\n', logprob=-31.125, bytes=[10]), ChatCompletionLogProb(token=' \\n', logprob=-31.125, bytes=[32, 10]), ChatCompletionLogProb(token='  \\n', logprob=-32.875, bytes=[32, 32, 10]), ChatCompletionLogProb(token='   ', logprob=-33.125, bytes=[32, 32, 32])]), ChatCompletionLogProbsContent(token='score', logprob=0.0, bytes=[115, 99, 111, 114, 101], top_logprobs=[ChatCompletionLogProb(token='score', logprob=0.0, bytes=[115, 99, 111, 114, 101]), ChatCompletionLogProb(token='\"', logprob=-3.4028234663852886e+38, bytes=[34]), ChatCompletionLogProb(token='$', logprob=-3.4028234663852886e+38, bytes=[36]), ChatCompletionLogProb(token=\"'\", logprob=-3.4028234663852886e+38, bytes=[39]), ChatCompletionLogProb(token='(', logprob=-3.4028234663852886e+38, bytes=[40]), ChatCompletionLogProb(token='!', logprob=-3.4028234663852886e+38, bytes=[33]), ChatCompletionLogProb(token='#', logprob=-3.4028234663852886e+38, bytes=[35]), ChatCompletionLogProb(token='&', logprob=-3.4028234663852886e+38, bytes=[38]), ChatCompletionLogProb(token=')', logprob=-3.4028234663852886e+38, bytes=[41]), ChatCompletionLogProb(token='%', logprob=-3.4028234663852886e+38, bytes=[37])]), ChatCompletionLogProbsContent(token='\":', logprob=-0.00010918975021922961, bytes=[34, 58], top_logprobs=[ChatCompletionLogProb(token='\":', logprob=-0.00010918975021922961, bytes=[34, 58]), ChatCompletionLogProb(token='\"', logprob=-9.12510871887207, bytes=[34]), ChatCompletionLogProb(token='\":\"', logprob=-16.37510871887207, bytes=[34, 58, 34]), ChatCompletionLogProb(token='\":\\n', logprob=-16.37510871887207, bytes=[34, 58, 10]), ChatCompletionLogProb(token='\":\\n\\n', logprob=-16.75010871887207, bytes=[34, 58, 10, 10]), ChatCompletionLogProb(token='\"\\n', logprob=-18.68760871887207, bytes=[34, 10]), ChatCompletionLogProb(token='\"\\n\\n', logprob=-19.00010871887207, bytes=[34, 10, 10]), ChatCompletionLogProb(token='\":\\r\\n', logprob=-20.25010871887207, bytes=[34, 58, 13, 10]), ChatCompletionLogProb(token='\"\\r\\n', logprob=-23.75010871887207, bytes=[34, 13, 10]), ChatCompletionLogProb(token='\"\\n\\n\\n', logprob=-25.17198371887207, bytes=[34, 10, 10, 10])]), ChatCompletionLogProbsContent(token=' ', logprob=-1.4305104514278355e-06, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-1.4305104514278355e-06, bytes=[32]), ChatCompletionLogProb(token=' \"', logprob=-13.500000953674316, bytes=[32, 34]), ChatCompletionLogProb(token='  ', logprob=-22.625001907348633, bytes=[32, 32]), ChatCompletionLogProb(token='  \\n', logprob=-24.875001907348633, bytes=[32, 32, 10]), ChatCompletionLogProb(token='\\t', logprob=-25.125001907348633, bytes=[9]), ChatCompletionLogProb(token=' \\n', logprob=-25.375001907348633, bytes=[32, 10]), ChatCompletionLogProb(token='   ', logprob=-26.500001907348633, bytes=[32, 32, 32]), ChatCompletionLogProb(token='    ', logprob=-28.625001907348633, bytes=[32, 32, 32, 32]), ChatCompletionLogProb(token='     ', logprob=-29.750001907348633, bytes=[32, 32, 32, 32, 32]), ChatCompletionLogProb(token='\\n', logprob=-29.875001907348633, bytes=[10])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.0009572691051289439, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.0009572691051289439, bytes=[32]), ChatCompletionLogProb(token=' \"', logprob=-7.125957489013672, bytes=[32, 34]), ChatCompletionLogProb(token='\\t', logprob=-9.250957489013672, bytes=[9]), ChatCompletionLogProb(token='  ', logprob=-10.188457489013672, bytes=[32, 32]), ChatCompletionLogProb(token='   ', logprob=-12.063457489013672, bytes=[32, 32, 32]), ChatCompletionLogProb(token='  \\n', logprob=-12.750957489013672, bytes=[32, 32, 10]), ChatCompletionLogProb(token=' \\n', logprob=-13.063457489013672, bytes=[32, 10]), ChatCompletionLogProb(token='\\n', logprob=-13.125957489013672, bytes=[10]), ChatCompletionLogProb(token='       ', logprob=-14.063457489013672, bytes=[32, 32, 32, 32, 32, 32, 32]), ChatCompletionLogProb(token='\\r', logprob=-14.125957489013672, bytes=[13])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.9063164591789246, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.9063164591789246, bytes=[32]), ChatCompletionLogProb(token='\"', logprob=-1.4063165187835693, bytes=[34]), ChatCompletionLogProb(token='\\r', logprob=-2.5313165187835693, bytes=[13]), ChatCompletionLogProb(token='\\n', logprob=-2.6563165187835693, bytes=[10]), ChatCompletionLogProb(token='\\t', logprob=-2.9063165187835693, bytes=[9]), ChatCompletionLogProb(token=' \"', logprob=-3.4063165187835693, bytes=[32, 34]), ChatCompletionLogProb(token='  ', logprob=-4.46881628036499, bytes=[32, 32]), ChatCompletionLogProb(token='   ', logprob=-4.46881628036499, bytes=[32, 32, 32]), ChatCompletionLogProb(token='\\n\\n\\n\\n\\n\\n', logprob=-4.68756628036499, bytes=[10, 10, 10, 10, 10, 10]), ChatCompletionLogProb(token='\\r\\n\\n', logprob=-4.71881628036499, bytes=[13, 10, 10])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.35653218626976013, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.35653218626976013, bytes=[32]), ChatCompletionLogProb(token='\\n', logprob=-2.731532096862793, bytes=[10]), ChatCompletionLogProb(token=' \"', logprob=-2.794032096862793, bytes=[32, 34]), ChatCompletionLogProb(token='\"', logprob=-3.231532096862793, bytes=[34]), ChatCompletionLogProb(token='\\r', logprob=-3.794032096862793, bytes=[13]), ChatCompletionLogProb(token='\\t', logprob=-4.044032096862793, bytes=[9]), ChatCompletionLogProb(token='   ', logprob=-4.106532096862793, bytes=[32, 32, 32]), ChatCompletionLogProb(token='  ', logprob=-4.731532096862793, bytes=[32, 32]), ChatCompletionLogProb(token='\\n\\n\\n\\n\\n\\n', logprob=-4.825282096862793, bytes=[10, 10, 10, 10, 10, 10]), ChatCompletionLogProb(token='  \\n', logprob=-4.887782096862793, bytes=[32, 32, 10])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.6866276264190674, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.6866276264190674, bytes=[32]), ChatCompletionLogProb(token=' \"', logprob=-1.9991276264190674, bytes=[32, 34]), ChatCompletionLogProb(token='\\n', logprob=-2.4991276264190674, bytes=[10]), ChatCompletionLogProb(token='\\r', logprob=-2.8741276264190674, bytes=[13]), ChatCompletionLogProb(token='\"', logprob=-3.2491276264190674, bytes=[34]), ChatCompletionLogProb(token='\\t', logprob=-3.4678776264190674, bytes=[9]), ChatCompletionLogProb(token='   ', logprob=-3.7178776264190674, bytes=[32, 32, 32]), ChatCompletionLogProb(token='  \\n', logprob=-4.155377388000488, bytes=[32, 32, 10]), ChatCompletionLogProb(token='  ', logprob=-4.280377388000488, bytes=[32, 32]), ChatCompletionLogProb(token=' \\n', logprob=-4.811627388000488, bytes=[32, 10])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.5766257047653198, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.5766257047653198, bytes=[32]), ChatCompletionLogProb(token=' \"', logprob=-2.2641258239746094, bytes=[32, 34]), ChatCompletionLogProb(token='\\r', logprob=-2.7641258239746094, bytes=[13]), ChatCompletionLogProb(token='\\n', logprob=-2.8266258239746094, bytes=[10]), ChatCompletionLogProb(token='   ', logprob=-3.3891258239746094, bytes=[32, 32, 32]), ChatCompletionLogProb(token='\"', logprob=-3.6391258239746094, bytes=[34]), ChatCompletionLogProb(token='  ', logprob=-3.7016258239746094, bytes=[32, 32]), ChatCompletionLogProb(token='\\t', logprob=-3.9203758239746094, bytes=[9]), ChatCompletionLogProb(token='  \\n', logprob=-3.9828758239746094, bytes=[32, 32, 10]), ChatCompletionLogProb(token=' \\n', logprob=-4.545375823974609, bytes=[32, 10])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.5380301475524902, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.5380301475524902, bytes=[32]), ChatCompletionLogProb(token=' \"', logprob=-2.4755301475524902, bytes=[32, 34]), ChatCompletionLogProb(token='\\r', logprob=-2.6005301475524902, bytes=[13]), ChatCompletionLogProb(token='  ', logprob=-2.9755301475524902, bytes=[32, 32]), ChatCompletionLogProb(token='   ', logprob=-3.4130301475524902, bytes=[32, 32, 32]), ChatCompletionLogProb(token='\\t', logprob=-3.6005301475524902, bytes=[9]), ChatCompletionLogProb(token='\\n', logprob=-3.6630301475524902, bytes=[10]), ChatCompletionLogProb(token='  \\n', logprob=-4.13178014755249, bytes=[32, 32, 10]), ChatCompletionLogProb(token=' \\n', logprob=-4.91303014755249, bytes=[32, 10]), ChatCompletionLogProb(token='\\r\\n\\n', logprob=-4.97553014755249, bytes=[13, 10, 10])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.5800483822822571, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.5800483822822571, bytes=[32]), ChatCompletionLogProb(token='\\r', logprob=-2.1425483226776123, bytes=[13]), ChatCompletionLogProb(token=' \"', logprob=-2.2050483226776123, bytes=[32, 34]), ChatCompletionLogProb(token='  ', logprob=-3.2675483226776123, bytes=[32, 32]), ChatCompletionLogProb(token='\\t', logprob=-3.2675483226776123, bytes=[9]), ChatCompletionLogProb(token='   ', logprob=-3.8300483226776123, bytes=[32, 32, 32]), ChatCompletionLogProb(token='\\n', logprob=-4.298798561096191, bytes=[10]), ChatCompletionLogProb(token='\\r\\n\\n', logprob=-4.298798561096191, bytes=[13, 10, 10]), ChatCompletionLogProb(token='  \\n', logprob=-5.361298561096191, bytes=[32, 32, 10]), ChatCompletionLogProb(token=' \\n', logprob=-5.392548561096191, bytes=[32, 10])]), ChatCompletionLogProbsContent(token=' ', logprob=-0.7832637429237366, bytes=[32], top_logprobs=[ChatCompletionLogProb(token=' ', logprob=-0.7832637429237366, bytes=[32]), ChatCompletionLogProb(token='\\r', logprob=-1.4082636833190918, bytes=[13]), ChatCompletionLogProb(token=' \"', logprob=-2.345763683319092, bytes=[32, 34]), ChatCompletionLogProb(token='\\t', logprob=-3.033263683319092, bytes=[9]), ChatCompletionLogProb(token='\\r\\n\\n', logprob=-3.658263683319092, bytes=[13, 10, 10]), ChatCompletionLogProb(token='\\n', logprob=-4.283263683319092, bytes=[10]), ChatCompletionLogProb(token='  ', logprob=-4.408263683319092, bytes=[32, 32]), ChatCompletionLogProb(token='   ', logprob=-4.595763683319092, bytes=[32, 32, 32]), ChatCompletionLogProb(token='\\n\\n\\n\\n\\n\\n', logprob=-5.002013683319092, bytes=[10, 10, 10, 10, 10, 10]), ChatCompletionLogProb(token='\\n\\n\\n\\n\\n\\n\\n\\n\\n', logprob=-5.377013683319092, bytes=[10, 10, 10, 10, 10, 10, 10, 10, 10])])]), finish_reason='stop')] prompt_logprobs=None"
+    },
+    "L2": {
+      "description": "requirement-check (french, bullets) + certainty",
+      "french": {
+        "value": 2.3823698422548786e-07,
+        "latency_s": 0.54
+      },
+      "bullets": {
+        "value": 1.855391752369844e-07,
+        "latency_s": 0.469
+      },
+      "certainty": {
+        "value": 0.08100041185949139,
+        "latency_s": 0.772
+      },
+      "timings": {
+        "L2": 1.78
+      }
+    },
+    "L3": {
+      "description": "answerability -> rewrite -> generate -> requirement-check",
+      "answerability": {
+        "value": "answerable",
+        "latency_s": 0.62
+      },
+      "rewritten_query": {
+        "value": "What is the capital city of Australia?",
+        "latency_s": 12.118,
+        "prompt_tokens": 7
+      },
+      "generated": {
+        "latency_s": 0.432,
+        "prompt_tokens": 79,
+        "completion_tokens": 8
+      },
+      "generated_answer": "Canberra is the capital of Australia.",
+      "grounded_check": {
+        "value": 0.999989870010229,
+        "latency_s": 0.518,
+        "completion_tokens": 8
+      },
+      "timings": {
+        "L3": 13.69
+      }
+    },
+    "L4": {
+      "description": "retry until requirement met (max 3)",
+      "requirement": "The response uses bullet points and is written in French.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "response": "Cardiff is the capital and largest city of Wales, located in the United Kingdom. It serves as",
+          "score": 4.6911642060131413e-08,
+          "gen_latency_s": 0.727,
+          "gen_tokens": 20,
+          "check_latency_s": 0.556
+        },
+        {
+          "attempt": 2,
+          "response": "Cardiff is the vibrant capital city of Wales, situated in the United Kingdom. Known for its rich",
+          "score": 3.466327476661353e-07,
+          "gen_latency_s": 1.372,
+          "gen_tokens": 20,
+          "check_latency_s": 0.706
+        },
+        {
+          "attempt": 3,
+          "response": "Cardiff, the capital of Wales, is a dynamic city in the United Kingdom. It boasts a",
+          "score": 5.043476508967889e-07,
+          "gen_latency_s": 0.775,
+          "gen_tokens": 20,
+          "check_latency_s": 0.758
+        }
+      ],
+      "passed": false,
+      "timings": {
+        "L4": 4.9
+      }
+    }
+  }
+}

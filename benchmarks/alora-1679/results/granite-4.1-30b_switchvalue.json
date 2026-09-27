@@ -1,0 +1,103 @@
+{
+  "host": "p1-r32-n3.bluevela.rmf.ibm.com",
+  "peft": {
+    "kind": "peft_alora",
+    "load_model_s": 67.72,
+    "register_adapters_s": 86.56,
+    "gpu_mem_gib": 54.49,
+    "set_adapter_s": 0.01428,
+    "calls": [
+      {
+        "call": "uncertainty0",
+        "latency_s": 2.642
+      },
+      {
+        "call": "requirement0",
+        "latency_s": 1.106
+      },
+      {
+        "call": "answerability0",
+        "latency_s": 1.075
+      },
+      {
+        "call": "policy0",
+        "latency_s": 1.004
+      },
+      {
+        "call": "gen0",
+        "latency_s": 1.206
+      },
+      {
+        "call": "uncertainty1",
+        "latency_s": 0.853
+      },
+      {
+        "call": "requirement1",
+        "latency_s": 0.865
+      },
+      {
+        "call": "answerability1",
+        "latency_s": 0.901
+      },
+      {
+        "call": "policy1",
+        "latency_s": 0.751
+      },
+      {
+        "call": "gen1",
+        "latency_s": 0.696
+      }
+    ],
+    "n_adapters_loaded": 4
+  },
+  "switch": {
+    "kind": "switch_embedded",
+    "load_model_s": 68.07,
+    "register_adapters_s": 0.0,
+    "gpu_mem_gib": 60.08,
+    "set_adapter_s": null,
+    "calls": [
+      {
+        "call": "uncertainty0",
+        "latency_s": 1.414
+      },
+      {
+        "call": "requirement0",
+        "latency_s": 1.413
+      },
+      {
+        "call": "answerability0",
+        "latency_s": 1.194
+      },
+      {
+        "call": "policy0",
+        "latency_s": 1.451
+      },
+      {
+        "call": "gen0",
+        "latency_s": 1.168
+      },
+      {
+        "call": "uncertainty1",
+        "latency_s": 1.335
+      },
+      {
+        "call": "requirement1",
+        "latency_s": 1.343
+      },
+      {
+        "call": "answerability1",
+        "latency_s": 0.961
+      },
+      {
+        "call": "policy1",
+        "latency_s": 1.16
+      },
+      {
+        "call": "gen1",
+        "latency_s": 1.174
+      }
+    ],
+    "n_adapters_loaded": null
+  }
+}

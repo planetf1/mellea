@@ -1,0 +1,72 @@
+{
+  "arm": "lora",
+  "model": "ibm-granite/granite-4.1-30b",
+  "host": "p5-r15-n3.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "description": "5-round growing session, 2 requirement-checks per round",
+    "rounds": [
+      {
+        "round": 1,
+        "context_tokens_approx": null,
+        "english_score": 0.5621766957482559,
+        "english_correct": true,
+        "french_score": 0.015906417660576145,
+        "french_correct": true,
+        "latency_s": [
+          9.337,
+          0.361
+        ]
+      },
+      {
+        "round": 2,
+        "context_tokens_approx": null,
+        "english_score": 0.8519528719464179,
+        "english_correct": true,
+        "french_score": 0.029312266720074757,
+        "french_correct": true,
+        "latency_s": [
+          0.599,
+          0.49
+        ]
+      },
+      {
+        "round": 3,
+        "context_tokens_approx": null,
+        "english_score": 0.8354837911451304,
+        "english_correct": true,
+        "french_score": 0.022977403185649045,
+        "french_correct": true,
+        "latency_s": [
+          0.575,
+          0.509
+        ]
+      },
+      {
+        "round": 4,
+        "context_tokens_approx": null,
+        "english_score": 0.9241418178253603,
+        "english_correct": true,
+        "french_score": 0.012431662013504007,
+        "french_correct": true,
+        "latency_s": [
+          0.571,
+          0.385
+        ]
+      },
+      {
+        "round": 5,
+        "context_tokens_approx": null,
+        "english_score": 0.974042627754351,
+        "english_correct": true,
+        "french_score": 0.020332369998814697,
+        "french_correct": true,
+        "latency_s": [
+          0.577,
+          0.351
+        ]
+      }
+    ],
+    "all_correct": true
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "arm": "lora",
+  "model": "ibm-granite/granite-4.1-30b",
+  "host": "p2-r01-n4.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "E1_empty": {
+      "value": 0.02033236272397481,
+      "latency_s": 9.846,
+      "error": null
+    },
+    "E2_template_braces": {
+      "value": 0.005220130524889375,
+      "latency_s": 0.597,
+      "error": null
+    },
+    "E2b_template_open": {
+      "value": 0.010986952582534812,
+      "latency_s": 0.434,
+      "error": null
+    },
+    "E2c_newline": {
+      "value": 0.03308602953095106,
+      "latency_s": 0.43,
+      "error": null
+    },
+    "E3_cross_invocation": {
+      "value": 0.8349848616409026,
+      "latency_s": 6.205,
+      "error": null
+    },
+    "E4_repeat_first": {
+      "value": 0.01798623346690123,
+      "latency_s": 0.414,
+      "error": null
+    },
+    "E4_repeat_second": {
+      "value": 0.01798623346690123,
+      "latency_s": 0.37,
+      "error": null
+    },
+    "E4_repeat_identical": true,
+    "E5_self_ref": {
+      "value": 0.010986968980047845,
+      "latency_s": 0.592,
+      "error": null
+    },
+    "E6_fake_json": {
+      "value": 0.014063762668509412,
+      "latency_s": 0.442,
+      "error": null
+    },
+    "E7_long_response": {
+      "value": 0.014063674792276144,
+      "latency_s": 0.676,
+      "error": null
+    }
+  }
+}

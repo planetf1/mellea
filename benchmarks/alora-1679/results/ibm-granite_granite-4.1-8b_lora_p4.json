@@ -1,0 +1,920 @@
+{
+  "kind": "requirement",
+  "mode": "lora",
+  "model": "ibm-granite/granite-4.1-8b",
+  "host": "p5-r15-n4.bluevela.rmf.ibm.com",
+  "n_probes": 112,
+  "correct": 82,
+  "accuracy": 0.7321,
+  "n_strict": 104,
+  "strict_correct": 76,
+  "strict_accuracy": 0.7308,
+  "ambiguous": 0,
+  "total_latency_s": 37.64,
+  "probes": [
+    {
+      "id": "p_cite5_met",
+      "label": "score=0.6792",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 8.463
+    },
+    {
+      "id": "p_cite5_not",
+      "label": "score=0.0675",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.424
+    },
+    {
+      "id": "p_cite6_met",
+      "label": "score=0.3208",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.3
+    },
+    {
+      "id": "p_cite6_not",
+      "label": "score=0.0180",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.268
+    },
+    {
+      "id": "p_cs_es1_not",
+      "label": "score=0.9770",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.271
+    },
+    {
+      "id": "p_cs_es1_met",
+      "label": "score=0.9914",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.254
+    },
+    {
+      "id": "p_cs_ja_not",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.282
+    },
+    {
+      "id": "p_cs_ja_met",
+      "label": "score=0.9579",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.24
+    },
+    {
+      "id": "p_2part3_met",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.339
+    },
+    {
+      "id": "p_2part3_not",
+      "label": "score=0.0025",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.274
+    },
+    {
+      "id": "p_2part4_met",
+      "label": "score=0.9526",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.457
+    },
+    {
+      "id": "p_2part4_not",
+      "label": "score=0.2451",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.274
+    },
+    {
+      "id": "p_jargon3_met",
+      "label": "score=0.9627",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.332,
+      "soft": true
+    },
+    {
+      "id": "p_jargon3_not",
+      "label": "score=0.1480",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.239,
+      "soft": true
+    },
+    {
+      "id": "p_jargon4_met",
+      "label": "score=0.5927",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.238,
+      "soft": true
+    },
+    {
+      "id": "p_jargon4_not",
+      "label": "score=0.0759",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.253,
+      "soft": true
+    },
+    {
+      "id": "p_neg_phone_not",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.255
+    },
+    {
+      "id": "p_neg_phone_met",
+      "label": "score=0.9627",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.323
+    },
+    {
+      "id": "p_neg_email_not",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_neg_email_met",
+      "label": "score=0.9399",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.31
+    },
+    {
+      "id": "p_neg_link_not",
+      "label": "score=0.1480",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.245
+    },
+    {
+      "id": "p_neg_link_met",
+      "label": "score=0.4073",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.244
+    },
+    {
+      "id": "p_comp4_met",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.28
+    },
+    {
+      "id": "p_comp4_not",
+      "label": "score=0.2227",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.281
+    },
+    {
+      "id": "p_comp5_met",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.281
+    },
+    {
+      "id": "p_comp5_not",
+      "label": "score=0.5927",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.46
+    },
+    {
+      "id": "p_comp6_not",
+      "label": "score=0.0032",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.24
+    },
+    {
+      "id": "p_comp6_met",
+      "label": "score=0.8933",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.241
+    },
+    {
+      "id": "p_tone_elder_met",
+      "label": "score=0.3486",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.395,
+      "soft": true
+    },
+    {
+      "id": "p_tone_elder_not",
+      "label": "score=0.0421",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.239,
+      "soft": true
+    },
+    {
+      "id": "p_tone_exec_met",
+      "label": "score=0.2451",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.375,
+      "soft": true
+    },
+    {
+      "id": "p_tone_exec_not",
+      "label": "score=0.2018",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.462,
+      "soft": true
+    },
+    {
+      "id": "p_sent3_met",
+      "label": "score=0.9241",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.243
+    },
+    {
+      "id": "p_sent3_not",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_quote2_met",
+      "label": "score=0.7549",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_quote2_not",
+      "label": "score=0.3486",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_capsword_met",
+      "label": "score=0.9876",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_capsword_not",
+      "label": "score=0.9770",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_emoji_ban_not",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_emoji_ban_met",
+      "label": "score=0.9740",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.457
+    },
+    {
+      "id": "p_w_0_maxmet",
+      "label": "score=0.6792",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.278
+    },
+    {
+      "id": "p_w_0_maxnot",
+      "label": "score=0.1480",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.241
+    },
+    {
+      "id": "p_b_0_3met",
+      "label": "score=0.3775",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.287
+    },
+    {
+      "id": "p_b_0_3not2",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.242
+    },
+    {
+      "id": "p_b_0_3not4",
+      "label": "score=0.7773",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.275
+    },
+    {
+      "id": "p_n_0_not",
+      "label": "score=0.0159",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.24
+    },
+    {
+      "id": "p_n_0_nummet",
+      "label": "score=0.6225",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.278
+    },
+    {
+      "id": "p_s_0_2met",
+      "label": "score=0.1067",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.241
+    },
+    {
+      "id": "p_s_0_1not",
+      "label": "score=0.3775",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.279
+    },
+    {
+      "id": "p_w_1_maxmet",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.244
+    },
+    {
+      "id": "p_w_1_maxnot",
+      "label": "score=0.0534",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.241
+    },
+    {
+      "id": "p_b_1_3met",
+      "label": "score=0.7982",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.273
+    },
+    {
+      "id": "p_b_1_3not2",
+      "label": "score=0.1824",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.275
+    },
+    {
+      "id": "p_b_1_3not4",
+      "label": "score=0.8670",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.278
+    },
+    {
+      "id": "p_n_1_not",
+      "label": "score=0.0260",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.24
+    },
+    {
+      "id": "p_n_1_nummet",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.24
+    },
+    {
+      "id": "p_s_1_2met",
+      "label": "score=0.0180",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_s_1_1not",
+      "label": "score=0.0759",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.28
+    },
+    {
+      "id": "p_w_2_maxmet",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.241
+    },
+    {
+      "id": "p_w_2_maxnot",
+      "label": "score=0.1645",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.275
+    },
+    {
+      "id": "p_b_2_3met",
+      "label": "score=0.9466",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_b_2_3not2",
+      "label": "score=0.1824",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.274
+    },
+    {
+      "id": "p_b_2_3not4",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_n_2_not",
+      "label": "score=0.0293",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_n_2_nummet",
+      "label": "score=0.8933",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_s_2_2met",
+      "label": "score=0.0293",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.24
+    },
+    {
+      "id": "p_s_2_1not",
+      "label": "score=0.1645",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_w_3_maxmet",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_w_3_maxnot",
+      "label": "score=0.1067",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.242
+    },
+    {
+      "id": "p_b_3_3met",
+      "label": "score=0.8176",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.241
+    },
+    {
+      "id": "p_b_3_3not2",
+      "label": "score=0.2451",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_b_3_3not4",
+      "label": "score=0.9466",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_n_3_not",
+      "label": "score=0.0230",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_n_3_nummet",
+      "label": "score=0.9526",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_s_3_2met",
+      "label": "score=0.3775",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_s_3_1not",
+      "label": "score=0.5312",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_w_4_maxmet",
+      "label": "score=0.7058",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_w_4_maxnot",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_b_4_3met",
+      "label": "score=0.8670",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_b_4_3not2",
+      "label": "score=0.1480",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.236
+    },
+    {
+      "id": "p_b_4_3not4",
+      "label": "score=0.8176",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.236
+    },
+    {
+      "id": "p_n_4_not",
+      "label": "score=0.0534",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.24
+    },
+    {
+      "id": "p_n_4_nummet",
+      "label": "score=0.8176",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.239
+    },
+    {
+      "id": "p_s_4_2met",
+      "label": "score=0.2451",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_s_4_1not",
+      "label": "score=0.2227",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_w_5_maxmet",
+      "label": "score=0.6225",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.235
+    },
+    {
+      "id": "p_w_5_maxnot",
+      "label": "score=0.0331",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.236
+    },
+    {
+      "id": "p_b_5_3met",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_b_5_3not2",
+      "label": "score=0.3208",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.236
+    },
+    {
+      "id": "p_b_5_3not4",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_n_5_not",
+      "label": "score=0.0373",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_n_5_nummet",
+      "label": "score=0.7549",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_s_5_2met",
+      "label": "score=0.1192",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_s_5_1not",
+      "label": "score=0.4378",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_w_6_maxmet",
+      "label": "score=0.6225",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_w_6_maxnot",
+      "label": "score=0.0373",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.355
+    },
+    {
+      "id": "p_b_6_3met",
+      "label": "score=0.7549",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.24
+    },
+    {
+      "id": "p_b_6_3not2",
+      "label": "score=0.2942",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_b_6_3not4",
+      "label": "score=0.7773",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_n_6_not",
+      "label": "score=0.0230",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.236
+    },
+    {
+      "id": "p_n_6_nummet",
+      "label": "score=0.8933",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.235
+    },
+    {
+      "id": "p_s_6_2met",
+      "label": "score=0.0601",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.236
+    },
+    {
+      "id": "p_s_6_1not",
+      "label": "score=0.1645",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.235
+    },
+    {
+      "id": "p_w_7_maxmet",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.236
+    },
+    {
+      "id": "p_w_7_maxnot",
+      "label": "score=0.1824",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.236
+    },
+    {
+      "id": "p_b_7_3met",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.235
+    },
+    {
+      "id": "p_b_7_3not2",
+      "label": "score=0.4073",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.237
+    },
+    {
+      "id": "p_b_7_3not4",
+      "label": "score=0.8808",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.235
+    },
+    {
+      "id": "p_n_7_not",
+      "label": "score=0.0331",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.234
+    },
+    {
+      "id": "p_n_7_nummet",
+      "label": "score=0.6225",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.238
+    },
+    {
+      "id": "p_s_7_2met",
+      "label": "score=0.1480",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.275
+    },
+    {
+      "id": "p_s_7_1not",
+      "label": "score=0.1192",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.236
+    }
+  ]
+}

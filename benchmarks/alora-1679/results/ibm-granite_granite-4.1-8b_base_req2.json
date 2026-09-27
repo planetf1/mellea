@@ -1,0 +1,701 @@
+{
+  "kind": "requirement",
+  "mode": "base",
+  "model": "ibm-granite/granite-4.1-8b",
+  "host": "p6-r31-n4.bluevela.rmf.ibm.com",
+  "n_probes": 86,
+  "correct": 64,
+  "accuracy": 0.7442,
+  "ambiguous": 0,
+  "total_latency_s": 35.56,
+  "probes": [
+    {
+      "id": "lang_de_met",
+      "label": "score=1.0000",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 4.51
+    },
+    {
+      "id": "lang_de_not",
+      "label": "score=0.0067",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.47
+    },
+    {
+      "id": "lang_es_met",
+      "label": "score=0.9996",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.359
+    },
+    {
+      "id": "lang_es_not",
+      "label": "score=0.0032",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.351
+    },
+    {
+      "id": "lang_it_met",
+      "label": "score=0.9997",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.415
+    },
+    {
+      "id": "lang_ja_met",
+      "label": "score=0.9999",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.557
+    },
+    {
+      "id": "lang_ja_not",
+      "label": "score=0.0067",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.339
+    },
+    {
+      "id": "lang_zh_met",
+      "label": "score=0.9999",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.462
+    },
+    {
+      "id": "lang_ko_met",
+      "label": "score=0.9999",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.348
+    },
+    {
+      "id": "lang_nl_met",
+      "label": "score=0.9994",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.352
+    },
+    {
+      "id": "lang_pt_met",
+      "label": "score=0.9972",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.377
+    },
+    {
+      "id": "lang_fr_met",
+      "label": "score=0.9993",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.392
+    },
+    {
+      "id": "lang_fr_not",
+      "label": "score=0.0052",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.372
+    },
+    {
+      "id": "lang_en_met",
+      "label": "score=0.9994",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.362
+    },
+    {
+      "id": "lang_en_not",
+      "label": "score=0.0017",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.352
+    },
+    {
+      "id": "lang_noteng_met",
+      "label": "score=0.9998",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.428
+    },
+    {
+      "id": "lang_noteng_not",
+      "label": "score=0.0953",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.344
+    },
+    {
+      "id": "bul2_met",
+      "label": "score=0.9993",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.491
+    },
+    {
+      "id": "bul4_met",
+      "label": "score=0.9924",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.346
+    },
+    {
+      "id": "bul3_exact",
+      "label": "score=0.9992",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.472
+    },
+    {
+      "id": "bul2_exact_not",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.469
+    },
+    {
+      "id": "bul4_exact_not",
+      "label": "score=0.9933",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.384
+    },
+    {
+      "id": "numlist_bul_not",
+      "label": "score=0.9981",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.325
+    },
+    {
+      "id": "num3_exact",
+      "label": "score=0.9999",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.331
+    },
+    {
+      "id": "prose_bul_not",
+      "label": "score=0.0052",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.342
+    },
+    {
+      "id": "mixed_bullet_prose",
+      "label": "score=0.9797",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.52
+    },
+    {
+      "id": "star_bullets_met",
+      "label": "score=0.9948",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.343
+    },
+    {
+      "id": "w4_max5_met",
+      "label": "score=0.9669",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.327
+    },
+    {
+      "id": "w5_max5_met",
+      "label": "score=0.4378",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.346
+    },
+    {
+      "id": "w6_max5_not",
+      "label": "score=0.9770",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.348
+    },
+    {
+      "id": "w9_min10_not",
+      "label": "score=0.9579",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.35
+    },
+    {
+      "id": "w10_min10_met",
+      "label": "score=0.9992",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.346
+    },
+    {
+      "id": "w11_min10_met",
+      "label": "score=0.9993",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.343
+    },
+    {
+      "id": "w3_max3_met",
+      "label": "score=0.9325",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.45
+    },
+    {
+      "id": "w4_max3_not",
+      "label": "score=0.9149",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.372
+    },
+    {
+      "id": "w1_min1_met",
+      "label": "score=0.9964",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.413
+    },
+    {
+      "id": "caps_not_lower",
+      "label": "score=0.9770",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.333
+    },
+    {
+      "id": "lower_met",
+      "label": "score=0.9981",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.331
+    },
+    {
+      "id": "title_met",
+      "label": "score=0.8176",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.336
+    },
+    {
+      "id": "title_not",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.337
+    },
+    {
+      "id": "caps_upper_met",
+      "label": "score=0.9859",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.421
+    },
+    {
+      "id": "mixed_upper_not",
+      "label": "score=0.7982",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.431
+    },
+    {
+      "id": "neg_paris_not",
+      "label": "score=0.2942",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.334
+    },
+    {
+      "id": "neg_rome_met",
+      "label": "score=0.9740",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.333
+    },
+    {
+      "id": "neg_rome2_met",
+      "label": "score=0.9740",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.334
+    },
+    {
+      "id": "neg_number_not",
+      "label": "score=0.9903",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.335
+    },
+    {
+      "id": "nonumber_met",
+      "label": "score=0.9740",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.332
+    },
+    {
+      "id": "neg_twice_met",
+      "label": "score=0.8520",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.33
+    },
+    {
+      "id": "neg_twice_not",
+      "label": "score=0.5312",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.333
+    },
+    {
+      "id": "neg_and_not",
+      "label": "score=0.2942",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.336
+    },
+    {
+      "id": "neg_or_met",
+      "label": "score=0.9466",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.335
+    },
+    {
+      "id": "mixed_met",
+      "label": "score=0.9707",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.49
+    },
+    {
+      "id": "mixed_half_bullets",
+      "label": "score=0.0086",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.331
+    },
+    {
+      "id": "mixed_half_fr",
+      "label": "score=0.3486",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.341
+    },
+    {
+      "id": "mixed_none",
+      "label": "score=0.0067",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.327
+    },
+    {
+      "id": "en_year_met",
+      "label": "score=0.9859",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.33
+    },
+    {
+      "id": "en_year_not",
+      "label": "score=0.0331",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.329
+    },
+    {
+      "id": "year_not_en",
+      "label": "score=0.2018",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.371
+    },
+    {
+      "id": "neither_en_year",
+      "label": "score=0.0059",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.331
+    },
+    {
+      "id": "formal_short_met",
+      "label": "score=0.8808",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.329
+    },
+    {
+      "id": "formal_short_not",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.328
+    },
+    {
+      "id": "informal_short_met",
+      "label": "score=0.9890",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.327
+    },
+    {
+      "id": "bullet_en_met",
+      "label": "score=0.8933",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.328
+    },
+    {
+      "id": "year4_met",
+      "label": "score=0.9987",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.333
+    },
+    {
+      "id": "year3_not",
+      "label": "score=0.9579",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.326
+    },
+    {
+      "id": "nodigit_met",
+      "label": "score=0.9998",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.324
+    },
+    {
+      "id": "digit_not",
+      "label": "score=0.9983",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.327
+    },
+    {
+      "id": "phone_not",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.324
+    },
+    {
+      "id": "nophone_met",
+      "label": "score=0.9983",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.325
+    },
+    {
+      "id": "tone_formal_met",
+      "label": "score=0.9914",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.328
+    },
+    {
+      "id": "tone_formal_not",
+      "label": "score=0.0002",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.328
+    },
+    {
+      "id": "tone_neutral_met",
+      "label": "score=0.9972",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.328
+    },
+    {
+      "id": "tone_neutral_not",
+      "label": "score=0.3208",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.332
+    },
+    {
+      "id": "polite_met",
+      "label": "score=0.9399",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.336
+    },
+    {
+      "id": "polite_not",
+      "label": "score=0.8520",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.338
+    },
+    {
+      "id": "quote_met",
+      "label": "score=0.9975",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.335
+    },
+    {
+      "id": "quote_not",
+      "label": "score=0.9968",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.338
+    },
+    {
+      "id": "ref_met",
+      "label": "score=0.9954",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.337
+    },
+    {
+      "id": "ref_not",
+      "label": "score=0.0759",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.328
+    },
+    {
+      "id": "one_sent_met",
+      "label": "score=0.8355",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.333
+    },
+    {
+      "id": "two_sent_not",
+      "label": "score=0.8933",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.331
+    },
+    {
+      "id": "question_met",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.332
+    },
+    {
+      "id": "question_not",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.333
+    },
+    {
+      "id": "emoji_eng",
+      "label": "score=0.9999",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.337
+    },
+    {
+      "id": "emoji_only",
+      "label": "score=0.9998",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.34
+    },
+    {
+      "id": "long_prose_bul",
+      "label": "score=0.0022",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.798
+    }
+  ]
+}

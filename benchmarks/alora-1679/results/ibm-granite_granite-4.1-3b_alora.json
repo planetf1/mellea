@@ -1,0 +1,1231 @@
+{
+  "kind": "requirement",
+  "mode": "alora",
+  "model": "ibm-granite/granite-4.1-3b",
+  "host": "p2-r05-n4.bluevela.rmf.ibm.com",
+  "n_probes": 149,
+  "correct": 105,
+  "accuracy": 0.7047,
+  "n_strict": 126,
+  "strict_correct": 90,
+  "strict_accuracy": 0.7143,
+  "ambiguous": 0,
+  "total_latency_s": 97.32,
+  "probes": [
+    {
+      "id": "cite1_met",
+      "label": "score=0.0953",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 2.441
+    },
+    {
+      "id": "cite1_not",
+      "label": "score=0.0076",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.88
+    },
+    {
+      "id": "cite2_met",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.82
+    },
+    {
+      "id": "cite2_not",
+      "label": "score=0.0086",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.658
+    },
+    {
+      "id": "cite3_met",
+      "label": "score=0.0331",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.636
+    },
+    {
+      "id": "cite3_not",
+      "label": "score=0.0159",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.674
+    },
+    {
+      "id": "cite4_met",
+      "label": "score=0.0159",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.608
+    },
+    {
+      "id": "cite4_not",
+      "label": "score=0.0076",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.611
+    },
+    {
+      "id": "len30a_met",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.605
+    },
+    {
+      "id": "len30a_not",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.863
+    },
+    {
+      "id": "len100a_met",
+      "label": "score=0.7982",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.85
+    },
+    {
+      "id": "len100a_not",
+      "label": "score=0.0759",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.94
+    },
+    {
+      "id": "sent2_met",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.631
+    },
+    {
+      "id": "sent2_not",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.622
+    },
+    {
+      "id": "jargon1_met",
+      "label": "score=0.1192",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.977,
+      "soft": true
+    },
+    {
+      "id": "jargon1_not",
+      "label": "score=0.0032",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.696,
+      "soft": true
+    },
+    {
+      "id": "jargon2_met",
+      "label": "score=0.8176",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.782,
+      "soft": true
+    },
+    {
+      "id": "jargon2_not",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.633,
+      "soft": true
+    },
+    {
+      "id": "fr_loans1_met",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.672
+    },
+    {
+      "id": "fr_loans1_near",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.638
+    },
+    {
+      "id": "de_mix_not",
+      "label": "score=0.8355",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.62
+    },
+    {
+      "id": "de_mix_met",
+      "label": "score=0.9526",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.623
+    },
+    {
+      "id": "neg_product1_not",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.612
+    },
+    {
+      "id": "neg_product1_met",
+      "label": "score=0.8670",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.625
+    },
+    {
+      "id": "neg_number1_not",
+      "label": "score=0.4073",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.633
+    },
+    {
+      "id": "neg_number1_met",
+      "label": "score=0.7773",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.702
+    },
+    {
+      "id": "neg_url_not",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.577
+    },
+    {
+      "id": "neg_url_met",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.611
+    },
+    {
+      "id": "neg_question_not",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.608
+    },
+    {
+      "id": "neg_question_met",
+      "label": "score=0.7549",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.573
+    },
+    {
+      "id": "neg_excl_not",
+      "label": "score=0.5312",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.598
+    },
+    {
+      "id": "neg_excl_met",
+      "label": "score=0.8808",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.607
+    },
+    {
+      "id": "mention_date_not",
+      "label": "score=0.1645",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.638
+    },
+    {
+      "id": "mention_date_met",
+      "label": "score=0.7773",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.577
+    },
+    {
+      "id": "mention_entity_met",
+      "label": "score=0.9241",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.59
+    },
+    {
+      "id": "mention_entity_not",
+      "label": "score=0.0015",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.713
+    },
+    {
+      "id": "rec_met",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.617,
+      "soft": true
+    },
+    {
+      "id": "rec_not",
+      "label": "score=0.0474",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.569,
+      "soft": true
+    },
+    {
+      "id": "caveat_met",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.571,
+      "soft": true
+    },
+    {
+      "id": "caveat_not",
+      "label": "score=0.1192",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.614,
+      "soft": true
+    },
+    {
+      "id": "two_part_met",
+      "label": "score=0.5312",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.6
+    },
+    {
+      "id": "two_part_not",
+      "label": "score=0.0041",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.599
+    },
+    {
+      "id": "two_part_not2",
+      "label": "score=0.0110",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.569
+    },
+    {
+      "id": "md_header_met",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.575
+    },
+    {
+      "id": "md_header_not",
+      "label": "score=0.0373",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.586,
+      "soft": true
+    },
+    {
+      "id": "codeblock_met",
+      "label": "score=0.9399",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.587
+    },
+    {
+      "id": "codeblock_not",
+      "label": "score=0.1480",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.626
+    },
+    {
+      "id": "nomaindonote_met",
+      "label": "score=0.9149",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.584,
+      "soft": true
+    },
+    {
+      "id": "nomaindonote_not",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.586,
+      "soft": true
+    },
+    {
+      "id": "compound1_met",
+      "label": "score=0.9325",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.586
+    },
+    {
+      "id": "compound1_not",
+      "label": "score=0.8176",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.633
+    },
+    {
+      "id": "compound1_not2",
+      "label": "score=0.1192",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.574
+    },
+    {
+      "id": "compound2_met",
+      "label": "score=0.7058",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.571
+    },
+    {
+      "id": "compound2_not",
+      "label": "score=0.4688",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.688
+    },
+    {
+      "id": "compound2_not2",
+      "label": "score=0.2451",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.578
+    },
+    {
+      "id": "compound3_met",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.571
+    },
+    {
+      "id": "compound3_not",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.573
+    },
+    {
+      "id": "tone_child_met",
+      "label": "score=0.0601",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.624,
+      "soft": true
+    },
+    {
+      "id": "tone_child_not",
+      "label": "score=0.0012",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.63,
+      "soft": true
+    },
+    {
+      "id": "formal_email_met",
+      "label": "score=0.3208",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.575,
+      "soft": true
+    },
+    {
+      "id": "formal_email_not",
+      "label": "score=0.0076",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.584,
+      "soft": true
+    },
+    {
+      "id": "summary1_met",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.622,
+      "soft": true
+    },
+    {
+      "id": "summary1_not",
+      "label": "score=0.1192",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.842,
+      "soft": true
+    },
+    {
+      "id": "answer_direct_met",
+      "label": "score=0.2227",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.66,
+      "soft": true
+    },
+    {
+      "id": "answer_direct_not",
+      "label": "score=0.0180",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.709,
+      "soft": true
+    },
+    {
+      "id": "both_names_met",
+      "label": "score=0.9241",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.593
+    },
+    {
+      "id": "both_names_not",
+      "label": "score=0.0293",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.598
+    },
+    {
+      "id": "no_first_person_met",
+      "label": "score=0.8355",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.579
+    },
+    {
+      "id": "no_first_person_not",
+      "label": "score=0.0373",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.606
+    },
+    {
+      "id": "imperative_met",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.584,
+      "soft": true
+    },
+    {
+      "id": "imperative_not",
+      "label": "score=0.0953",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.584,
+      "soft": true
+    },
+    {
+      "id": "date_order_met",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.592
+    },
+    {
+      "id": "date_order_not",
+      "label": "score=0.0180",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.57
+    },
+    {
+      "id": "price_both_met",
+      "label": "score=0.7058",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.594
+    },
+    {
+      "id": "price_both_not",
+      "label": "score=0.0046",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.592
+    },
+    {
+      "id": "no_contradict_met",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.581,
+      "soft": true
+    },
+    {
+      "id": "no_contradict_not",
+      "label": "score=0.2451",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.597,
+      "soft": true
+    },
+    {
+      "id": "gen_w_0_maxmet",
+      "label": "score=0.6225",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.573
+    },
+    {
+      "id": "gen_w_0_maxnot",
+      "label": "score=0.2018",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.614
+    },
+    {
+      "id": "gen_b_0_3met",
+      "label": "score=0.8355",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.566
+    },
+    {
+      "id": "gen_b_0_3not2",
+      "label": "score=0.2018",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.576
+    },
+    {
+      "id": "gen_b_0_3not4",
+      "label": "score=0.7311",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.6
+    },
+    {
+      "id": "gen_n_0_not",
+      "label": "score=0.0759",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.624
+    },
+    {
+      "id": "gen_n_0_nummet",
+      "label": "score=0.8520",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.621
+    },
+    {
+      "id": "gen_s_0_2met",
+      "label": "score=0.1645",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.574
+    },
+    {
+      "id": "gen_s_0_1not",
+      "label": "score=0.2227",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.63
+    },
+    {
+      "id": "gen_w_1_maxmet",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.585
+    },
+    {
+      "id": "gen_w_1_maxnot",
+      "label": "score=0.2227",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.616
+    },
+    {
+      "id": "gen_b_1_3met",
+      "label": "score=0.8808",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.59
+    },
+    {
+      "id": "gen_b_1_3not2",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.575
+    },
+    {
+      "id": "gen_b_1_3not4",
+      "label": "score=0.9325",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.609
+    },
+    {
+      "id": "gen_n_1_not",
+      "label": "score=0.0230",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.65
+    },
+    {
+      "id": "gen_n_1_nummet",
+      "label": "score=0.8808",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.619
+    },
+    {
+      "id": "gen_s_1_2met",
+      "label": "score=0.2018",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.608
+    },
+    {
+      "id": "gen_s_1_1not",
+      "label": "score=0.3486",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.64
+    },
+    {
+      "id": "gen_w_2_maxmet",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.6
+    },
+    {
+      "id": "gen_w_2_maxnot",
+      "label": "score=0.1192",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.626
+    },
+    {
+      "id": "gen_b_2_3met",
+      "label": "score=0.9859",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.611
+    },
+    {
+      "id": "gen_b_2_3not2",
+      "label": "score=0.8933",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.598
+    },
+    {
+      "id": "gen_b_2_3not4",
+      "label": "score=0.9797",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.616
+    },
+    {
+      "id": "gen_n_2_not",
+      "label": "score=0.0293",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.591
+    },
+    {
+      "id": "gen_n_2_nummet",
+      "label": "score=0.9859",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.591
+    },
+    {
+      "id": "gen_s_2_2met",
+      "label": "score=0.1645",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.587
+    },
+    {
+      "id": "gen_s_2_1not",
+      "label": "score=0.0953",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.933
+    },
+    {
+      "id": "gen_w_3_maxmet",
+      "label": "score=0.7058",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.633
+    },
+    {
+      "id": "gen_w_3_maxnot",
+      "label": "score=0.1330",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.93
+    },
+    {
+      "id": "gen_b_3_3met",
+      "label": "score=0.8520",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.607
+    },
+    {
+      "id": "gen_b_3_3not2",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.762
+    },
+    {
+      "id": "gen_b_3_3not4",
+      "label": "score=0.9707",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.626
+    },
+    {
+      "id": "gen_n_3_not",
+      "label": "score=0.0124",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.749
+    },
+    {
+      "id": "gen_n_3_nummet",
+      "label": "score=0.8670",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.593
+    },
+    {
+      "id": "gen_s_3_2met",
+      "label": "score=0.1480",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.683
+    },
+    {
+      "id": "gen_s_3_1not",
+      "label": "score=0.5000",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.629
+    },
+    {
+      "id": "gen_w_4_maxmet",
+      "label": "score=0.6225",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.594
+    },
+    {
+      "id": "gen_w_4_maxnot",
+      "label": "score=0.3208",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.715
+    },
+    {
+      "id": "gen_b_4_3met",
+      "label": "score=0.9627",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.656
+    },
+    {
+      "id": "gen_b_4_3not2",
+      "label": "score=0.3208",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.599
+    },
+    {
+      "id": "gen_b_4_3not4",
+      "label": "score=0.8520",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.673
+    },
+    {
+      "id": "gen_n_4_not",
+      "label": "score=0.0373",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.601
+    },
+    {
+      "id": "gen_n_4_nummet",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.612
+    },
+    {
+      "id": "gen_s_4_2met",
+      "label": "score=0.1067",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.576
+    },
+    {
+      "id": "gen_s_4_1not",
+      "label": "score=0.2018",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.651
+    },
+    {
+      "id": "gen_w_5_maxmet",
+      "label": "score=0.6514",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.583
+    },
+    {
+      "id": "gen_w_5_maxnot",
+      "label": "score=0.0953",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.757
+    },
+    {
+      "id": "gen_b_5_3met",
+      "label": "score=0.9149",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.708
+    },
+    {
+      "id": "gen_b_5_3not2",
+      "label": "score=0.5622",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.656
+    },
+    {
+      "id": "gen_b_5_3not4",
+      "label": "score=0.9047",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.585
+    },
+    {
+      "id": "gen_n_5_not",
+      "label": "score=0.0474",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.727
+    },
+    {
+      "id": "gen_n_5_nummet",
+      "label": "score=0.8808",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.614
+    },
+    {
+      "id": "gen_s_5_2met",
+      "label": "score=0.2689",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.6
+    },
+    {
+      "id": "gen_s_5_1not",
+      "label": "score=0.4378",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.588
+    },
+    {
+      "id": "gen_w_6_maxmet",
+      "label": "score=0.5927",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.61
+    },
+    {
+      "id": "gen_w_6_maxnot",
+      "label": "score=0.0675",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.65
+    },
+    {
+      "id": "gen_b_6_3met",
+      "label": "score=0.4688",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.617
+    },
+    {
+      "id": "gen_b_6_3not2",
+      "label": "score=0.0851",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.679
+    },
+    {
+      "id": "gen_b_6_3not4",
+      "label": "score=0.7982",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.651
+    },
+    {
+      "id": "gen_n_6_not",
+      "label": "score=0.0373",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.598
+    },
+    {
+      "id": "gen_n_6_nummet",
+      "label": "score=0.7982",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.626
+    },
+    {
+      "id": "gen_s_6_2met",
+      "label": "score=0.1192",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.602
+    },
+    {
+      "id": "gen_s_6_1not",
+      "label": "score=0.2018",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.617
+    },
+    {
+      "id": "gen_w_7_maxmet",
+      "label": "score=0.4073",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.689
+    },
+    {
+      "id": "gen_w_7_maxnot",
+      "label": "score=0.1330",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.626
+    },
+    {
+      "id": "gen_b_7_3met",
+      "label": "score=0.8355",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.699
+    },
+    {
+      "id": "gen_b_7_3not2",
+      "label": "score=0.1824",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.67
+    },
+    {
+      "id": "gen_b_7_3not4",
+      "label": "score=0.6225",
+      "verdict": true,
+      "expected": false,
+      "correct": false,
+      "latency_s": 0.643
+    },
+    {
+      "id": "gen_n_7_not",
+      "label": "score=0.0373",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.634
+    },
+    {
+      "id": "gen_n_7_nummet",
+      "label": "score=0.8808",
+      "verdict": true,
+      "expected": true,
+      "correct": true,
+      "latency_s": 0.647
+    },
+    {
+      "id": "gen_s_7_2met",
+      "label": "score=0.0759",
+      "verdict": false,
+      "expected": true,
+      "correct": false,
+      "latency_s": 0.885
+    },
+    {
+      "id": "gen_s_7_1not",
+      "label": "score=0.2018",
+      "verdict": false,
+      "expected": false,
+      "correct": true,
+      "latency_s": 0.912
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "arm": "switch",
+  "model": "ibm-granite/granite-switch-4.1-8b-preview",
+  "host": "p6-r31-n4.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "S1": {
+      "description": "certainty-gated abstention (5 facts + 5 baits)",
+      "gate_accuracy": 0.65,
+      "correct": 13,
+      "n": 20,
+      "rows": [
+        {
+          "question": "What is 2 plus 2?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "2 plus 2 equals 4.",
+          "certainty": 0.947500784956651,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 2.153
+        },
+        {
+          "question": "What is the capital of France?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "The capital of France is Paris.",
+          "certainty": 0.9470248785802999,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 0.948
+        },
+        {
+          "question": "How many days are there in a week?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "There are 7 days in a week. The days are typically named Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, and Sunday.",
+          "certainty": 0.9380983582965543,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.048
+        },
+        {
+          "question": "Which language is primarily spoken in Japan?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "The primary language spoken in Japan is Japanese. It is the official and predominant language of the country, used in government, education, media, and daily communication. Japanese has several dialects, but the standard form, known as \"Hy\u014djungo\" (\u6a19\u6e96\u8a9e), is based on the Tokyo dialect and is taught in schools nationwide.",
+          "certainty": 0.8551564305557934,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.062
+        },
+        {
+          "question": "What planet do we live on?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "We live on the planet Earth.",
+          "certainty": 0.916178316363195,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 0.803
+        },
+        {
+          "question": "What gas do plants absorb from the air?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "Plants absorb carbon dioxide (CO\u2082) from the air during the process of photosynthesis. In this process, plants use sunlight to convert carbon dioxide and water into glucose (a type of sugar) and oxygen (O\u2082), which is released back into the atmosphere as a byproduct.",
+          "certainty": 0.913567955049198,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 1.041
+        },
+        {
+          "question": "How many sides does a hexagon have?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "A hexagon has 6 sides.",
+          "certainty": 0.9489901211511315,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 0.84
+        },
+        {
+          "question": "What is the chemical symbol for water?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "The chemical symbol for water is **H\u2082O**. This represents one molecule of water composed of two hydrogen atoms (H) and one oxygen atom (O).",
+          "certainty": 0.9181923140426196,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 0.841
+        },
+        {
+          "question": "In which ocean is the island of Madagascar?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "Madagascar is located in the Indian Ocean, off the southeastern coast of Africa. It is separated from the African mainland by the Mozambique Channel.",
+          "certainty": 0.9430437814370773,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 0.823
+        },
+        {
+          "question": "How many minutes are in an hour?",
+          "kind": "fact",
+          "expected": "answer",
+          "answer_text": "There are 60 minutes in an hour.",
+          "certainty": 0.9481073504002783,
+          "gate": "answered",
+          "correct": true,
+          "latency_s": 0.841
+        },
+        {
+          "question": "Who was the 27th president of Australia?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "Australia does not have a president. It is a constitutional monarchy with a parliamentary system, where the head of state is the monarch of the United Kingdom (currently King Charles III), represented by a Governor-General. The head of government is the Prime Minister. Therefore, there is no concept of a \"27th president\" in Australian politics.",
+          "certainty": 0.7511259339700217,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 0.905
+        },
+        {
+          "question": "In what year did the city of Londinium invent the printing press?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "The city of Londinium (modern-day London) did not invent the printing press. The printing press was invented by Johannes Gutenberg in Mainz, Germany, around 1440. The technology then spread to other parts of Europe, including England, where it was adopted and further developed. The first known printing press in London was established by William Caxton in 1476. Therefore, there is no year associated with Londinium inventing the printing press.",
+          "certainty": 0.7114163100655505,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 1.068
+        },
+        {
+          "question": "What is the name of the river that flows through the centre of Mars?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There is no known river flowing through the center of Mars. Mars is a planet with a thin atmosphere and very little liquid water on its surface today. While ancient river valleys and lake beds have been observed, indicating that liquid water may have existed in the past, there is currently no evidence of a river or any significant body of flowing water in the center of the planet. The idea of a river through the center of Mars is a fictional concept, not supported by scientific observations.",
+          "certainty": 0.6775983010217739,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 0.976
+        },
+        {
+          "question": "Who wrote the 1842 book 'Complete Works of the Pharaohs'?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "The 1842 book titled \"The Complete Works of the Pharaohs\" is not a standard or widely recognized title in the field of Egyptology, and there is no well-documented author associated with such a specific work from that year. It is possible that the title is a misrepresentation or a fictional reference, as major works on ancient Egyptian pharaohs from the mid-19th century were typically authored by prominent Egyptologists of the time, such as:\n\n1. **Sir William Matthew Flinders Petrie** (1853\u20131942) \u2013 Known for his extensive archaeological work in Egypt and his contributions to the understanding of Egyptian chronology and culture.\n2. **E. A. Wallis Budge** (1857\u20131934) \u2013 Renowned for his translations of Egyptian texts and his publications on ancient Egyptian religion and literature.\n3. **Gaston Maspero** (1846\u20131916) \u2013 A French Egyptologist who wrote extensively on Egyptian history and archaeology.\n\nHowever, none of these scholars published a work titled \"The Complete Works of the Pharaohs\" in 1842. The publication year 1842 predates the careers of these major figures, and it is more likely that earlier works on Egyptian pharaohs",
+          "certainty": 0.45000066018248974,
+          "gate": "abstained",
+          "correct": true,
+          "latency_s": 1.064
+        },
+        {
+          "question": "What currency did the Aztec Empire use for its international trade with Rome?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "The Aztec Empire, located in what is now central Mexico, and ancient Rome, located in the Italian Peninsula, were separated by vast geographical distances and existed in different time periods (the Aztecs flourished from the 14th to the 16th century, while Rome was dominant from the 8th century BC to the 5th century AD). Consequently, there was **no direct trade** between the Aztec Empire and Rome, nor could there have been any exchange of currency between them.\n\nThe Aztecs primarily used a system of barter and trade goods such as cacao beans, feathers, jade, and textiles for their internal and external trade within Mesoamerica. They did not have a standardized coinage system like the Romans, who used coins such as the denarius, aureus, and others for their extensive trade networks across Europe, North Africa, and the Near East.\n\nTherefore, the question of what currency the Aztec Empire used for international trade with Rome is historically irrelevant, as such a trade relationship never existed.",
+          "certainty": 0.6064502988388071,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 0.853
+        },
+        {
+          "question": "Which country, located in Scandinavia, has Reykjavik as its second city?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "Reykjavik is the capital and largest city of Iceland. Iceland is not part of Scandinavia, which typically refers to the countries of Denmark, Norway, and Sweden (and sometimes Finland and the Faroe Islands). Therefore, there is no Scandinavian country that has Reykjavik as its second city. Iceland is an island nation in the North Atlantic Ocean, distinct from the Scandinavian region.",
+          "certainty": 0.5165252009951918,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 0.857
+        },
+        {
+          "question": "In what year did humans first walk on the Moon during the Apollo 15 mission?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "Humans first walked on the Moon during the Apollo 11 mission in 1969, not Apollo 15. Apollo 15 was the fourth mission in which humans walked on the Moon, and it occurred in 1971. Therefore, the year humans first walked on the Moon during an Apollo mission was 1969.",
+          "certainty": 0.5392937078775712,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 0.851
+        },
+        {
+          "question": "What is the capital of the US state of Newfoundland?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There is no U.S. state called Newfoundland. Newfoundland is a large island off the east coast of North America, and it is part of the Canadian province of Newfoundland and Labrador. The capital of the province of Newfoundland and Labrador is St. John's. \n\nIf you meant a different state or province, please provide more context or clarify your question.",
+          "certainty": 0.49486440160265993,
+          "gate": "abstained",
+          "correct": true,
+          "latency_s": 0.84
+        },
+        {
+          "question": "Who was the Roman emperor who invented the decimal number system in 120 AD?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "There is no historical record of a Roman emperor inventing the decimal number system in 120 AD. The decimal (base-10) number system, which is the most widely used numeral system today, has its origins in ancient civilizations long before the Roman Empire, particularly in the Indian subcontinent and later transmitted to the Islamic world and Europe through various cultural exchanges.\n\nThe Roman numeral system, used by the Romans, is a different numeral system based on combinations of letters from the Latin alphabet (I, V, X, L, C, D, M) to signify values. It does not use a positional decimal system like the one we use today.\n\nThe concept of a positional decimal system with a symbol for zero (which is crucial for its functionality) was developed in India by mathematicians such as Brahmagupta in the 7th century AD. This system was later transmitted to the Islamic world and then to Europe, where it became the foundation of the modern decimal system.\n\nTherefore, the claim that a Roman emperor invented the decimal number system in 120 AD is historically inaccurate.",
+          "certainty": 0.6798363395675746,
+          "gate": "answered",
+          "correct": false,
+          "latency_s": 0.849
+        },
+        {
+          "question": "Which element, discovered in 1925, is called Plutonium?",
+          "kind": "bait",
+          "expected": "abstain",
+          "answer_text": "The element discovered in 1940 (not 1925) that is called Plutonium is element 94 on the periodic table, with the symbol Pu. It was first synthesized and isolated by a team of scientists led by Glenn T. Seaborg, Edwin M. McMillan, Joseph W. Kennedy, and Arthur C. Wahl at the University of California, Berkeley. The discovery was made during research on nuclear fission and the production of new transuranium elements. Plutonium is a radioactive, metallic element that is notable for its role in nuclear weapons and as a fuel in nuclear reactors.",
+          "certainty": 0.4733554208654155,
+          "gate": "abstained",
+          "correct": true,
+          "latency_s": 0.863
+        }
+      ]
+    }
+  }
+}

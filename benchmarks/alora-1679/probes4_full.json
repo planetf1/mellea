@@ -1,0 +1,685 @@
+{
+  "note": "Wave 9a: item-variance set. 72 generated instances (8 NEW passages x 9 constraint families) + 38 hand-authored paraphrases of the realistic families that drove the wave-8 conclusions. Run alongside wave-8a (149) for a combined ~287-item analysis.",
+  "probes": [
+    {
+      "id": "p_cite5_met",
+      "response": "The inspector's report from last autumn lists the wiring as the primary hazard.",
+      "requirement": "The response names where the claim comes from.",
+      "met": true
+    },
+    {
+      "id": "p_cite5_not",
+      "response": "The wiring in that building is the primary hazard.",
+      "requirement": "The response names where the claim comes from.",
+      "met": false
+    },
+    {
+      "id": "p_cite6_met",
+      "response": "In our own numbers from the May audit, churn fell to four percent.",
+      "requirement": "The response attributes the figure to a specific source.",
+      "met": true
+    },
+    {
+      "id": "p_cite6_not",
+      "response": "Churn has fallen to about four percent recently.",
+      "requirement": "The response attributes the figure to a specific source.",
+      "met": false
+    },
+    {
+      "id": "p_cs_es1_not",
+      "response": "El informe ser\u00e1 enviado el lunes. The meeting is confirmed.",
+      "requirement": "The response is written entirely in Spanish.",
+      "met": false
+    },
+    {
+      "id": "p_cs_es1_met",
+      "response": "El informe ser\u00e1 enviado el lunes y la reuni\u00f3n est\u00e1 confirmada.",
+      "requirement": "The response is written entirely in Spanish.",
+      "met": true
+    },
+    {
+      "id": "p_cs_ja_not",
+      "response": "\u4f1a\u8b70\u306f\u6708\u66dc\u65e5\u3067\u3059\u3002Please confirm the agenda.",
+      "requirement": "The response is written entirely in Japanese.",
+      "met": false
+    },
+    {
+      "id": "p_cs_ja_met",
+      "response": "\u4f1a\u8b70\u306f\u6708\u66dc\u65e5\u306b\u4e88\u5b9a\u3055\u308c\u3066\u3044\u307e\u3059\u3002",
+      "requirement": "The response is written entirely in Japanese.",
+      "met": true
+    },
+    {
+      "id": "p_2part3_met",
+      "response": "The course costs 60 pounds and runs on Tuesdays and Thursdays.",
+      "requirement": "The response gives both the price and the days it runs.",
+      "met": true
+    },
+    {
+      "id": "p_2part3_not",
+      "response": "The course costs 60 pounds per person.",
+      "requirement": "The response gives both the price and the days it runs.",
+      "met": false
+    },
+    {
+      "id": "p_2part4_met",
+      "response": "Departures are at 8:15 and 11:40. Tickets go on sale next Monday.",
+      "requirement": "The response states both the departure times and when tickets go on sale.",
+      "met": true
+    },
+    {
+      "id": "p_2part4_not",
+      "response": "Tickets go on sale next Monday at nine in the morning.",
+      "requirement": "The response states both the departure times and when tickets go on sale.",
+      "met": false
+    },
+    {
+      "id": "p_jargon3_met",
+      "response": "The box that holds your things is in the building next door, and it is kept locked.",
+      "requirement": "The response avoids specialist terms a general reader would not know.",
+      "met": true,
+      "soft": true
+    },
+    {
+      "id": "p_jargon3_not",
+      "response": "The data resides in the co-located facility with at-rest encryption applied.",
+      "requirement": "The response avoids specialist terms a general reader would not know.",
+      "met": false,
+      "soft": true
+    },
+    {
+      "id": "p_jargon4_met",
+      "response": "We checked the machine and found nothing wrong with it.",
+      "requirement": "The response is free of technical terms.",
+      "met": true,
+      "soft": true
+    },
+    {
+      "id": "p_jargon4_not",
+      "response": "We triaged the host and the root cause was a kernel panic.",
+      "requirement": "The response is free of technical terms.",
+      "met": false,
+      "soft": true
+    },
+    {
+      "id": "p_neg_phone_not",
+      "response": "You can reach the office on 029 5550 1234.",
+      "requirement": "The response contains no telephone number.",
+      "met": false
+    },
+    {
+      "id": "p_neg_phone_met",
+      "response": "You can reach the office through the main switchboard.",
+      "requirement": "The response contains no telephone number.",
+      "met": true
+    },
+    {
+      "id": "p_neg_email_not",
+      "response": "Write to sales@example.com for a quote.",
+      "requirement": "The response must not include an email address.",
+      "met": false
+    },
+    {
+      "id": "p_neg_email_met",
+      "response": "Visit the contact page for a quote.",
+      "requirement": "The response must not include an email address.",
+      "met": true
+    },
+    {
+      "id": "p_neg_link_not",
+      "response": "The full list is at https://council.gov.uk/bins.",
+      "requirement": "The response must not link to a website.",
+      "met": false
+    },
+    {
+      "id": "p_neg_link_met",
+      "response": "The full list is on the council's website under bins.",
+      "requirement": "The response must not link to a website.",
+      "met": true
+    },
+    {
+      "id": "p_comp4_met",
+      "response": "- Bitte kommen Sie p\u00fcnktlich.\n- Der Saal ist im ersten Stock.",
+      "requirement": "The response is in German and has exactly two bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_comp4_not",
+      "response": "Bitte kommen Sie p\u00fcnktlich. Der Saal ist im ersten Stock.",
+      "requirement": "The response is in German and has exactly two bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_comp5_met",
+      "response": "The refund arrives next week, and the coupon code is B10.",
+      "requirement": "The response is in English, under 15 words, and includes the code B10.",
+      "met": true
+    },
+    {
+      "id": "p_comp5_not",
+      "response": "The refund arrives next week, the coupon code is B10, and the invoice has been re-sent to your address on file.",
+      "requirement": "The response is in English, under 15 words, and includes the code B10.",
+      "met": false
+    },
+    {
+      "id": "p_comp6_not",
+      "response": "La facture est disponible. Elle s'\u00e9l\u00e8ve \u00e0 120 euros.",
+      "requirement": "The response is in English and states the amount in pounds.",
+      "met": false
+    },
+    {
+      "id": "p_comp6_met",
+      "response": "The invoice is available. It totals 120 pounds.",
+      "requirement": "The response is in English and states the amount in pounds.",
+      "met": true
+    },
+    {
+      "id": "p_tone_elder_met",
+      "response": "Good morning. The bus leaves from stand four, just outside the station. Allow ten minutes for the journey.",
+      "requirement": "The response is polite and slow-paced, suitable to read aloud to an elderly person.",
+      "met": true,
+      "soft": true
+    },
+    {
+      "id": "p_tone_elder_not",
+      "response": "Bus: stand 4. 10 min.",
+      "requirement": "The response is polite and slow-paced, suitable to read aloud to an elderly person.",
+      "met": false,
+      "soft": true
+    },
+    {
+      "id": "p_tone_exec_met",
+      "response": "Headline: revenue up 8% on stronger enterprise uptake. Risk: supplier concentration in the logistics line. Ask: sign-off on the Q3 hiring freeze exception.",
+      "requirement": "The response is concise and decision-oriented, suitable for a busy executive.",
+      "met": true,
+      "soft": true
+    },
+    {
+      "id": "p_tone_exec_not",
+      "response": "So basically the numbers went up a bit which is nice, and there's this thing with the suppliers that we kind of need to look at, and also maybe we should double check the hiring stuff before the big meeting?",
+      "requirement": "The response is concise and decision-oriented, suitable for a busy executive.",
+      "met": false,
+      "soft": true
+    },
+    {
+      "id": "p_sent3_met",
+      "response": "The gate opens at eight. Check-in closes at eight thirty. The first call is at nine.",
+      "requirement": "The response is exactly three sentences.",
+      "met": true
+    },
+    {
+      "id": "p_sent3_not",
+      "response": "The gate opens at eight and check-in closes at eight thirty, with the first call at nine.",
+      "requirement": "The response is exactly three sentences.",
+      "met": false
+    },
+    {
+      "id": "p_quote2_met",
+      "response": "The terms are simple: \"no refunds after 30 days.\"",
+      "requirement": "The response contains text in quotation marks.",
+      "met": true
+    },
+    {
+      "id": "p_quote2_not",
+      "response": "The terms are simple: no refunds after 30 days.",
+      "requirement": "The response contains text in quotation marks.",
+      "met": false
+    },
+    {
+      "id": "p_capsword_met",
+      "response": "Send the file to RECEPTION for filing.",
+      "requirement": "The response contains the word RECEPTION in capitals.",
+      "met": true
+    },
+    {
+      "id": "p_capsword_not",
+      "response": "Send the file to reception for filing.",
+      "requirement": "The response contains the word RECEPTION in capitals.",
+      "met": false
+    },
+    {
+      "id": "p_emoji_ban_not",
+      "response": "Enjoy your holiday! \ud83c\udfd6\ufe0f\ud83c\udf79",
+      "requirement": "The response contains no emoji.",
+      "met": false
+    },
+    {
+      "id": "p_emoji_ban_met",
+      "response": "Enjoy your holiday.",
+      "requirement": "The response contains no emoji.",
+      "met": true
+    },
+    {
+      "id": "p_w_0_maxmet",
+      "response": "The library will close early on Friday because of the staff training day, and the returns desk will remain open until six in the evening..",
+      "requirement": "The response uses at most 29 words.",
+      "met": true
+    },
+    {
+      "id": "p_w_0_maxnot",
+      "response": "The library will close early on Friday because of the staff training day, and the returns desk will remain open until six in the evening. The library will close early on Friday because of the staff ",
+      "requirement": "The response uses at most 27 words.",
+      "met": false
+    },
+    {
+      "id": "p_b_0_3met",
+      "response": "- The library will close early on Friday because\n- of the staff training day, and the returns\n- desk will remain open until six in the evening.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_b_0_3not2",
+      "response": "- The library will close early on Friday because of the staff training\n- day, and the returns desk will remain open until six in the evening.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_b_0_3not4",
+      "response": "- The library will close early on\n- Friday because of the staff training\n- day, and the returns desk will\n- remain open until six in the evening.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_n_0_not",
+      "response": "1. The library will close early on Friday because\n2. of the staff training day, and the returns\n3. desk will remain open until six in the evening.",
+      "requirement": "The response uses bullet points, not numbered items.",
+      "met": false
+    },
+    {
+      "id": "p_n_0_nummet",
+      "response": "1. The library will close early on Friday because\n2. of the staff training day, and the returns\n3. desk will remain open until six in the evening.",
+      "requirement": "The response uses exactly 3 numbered items.",
+      "met": true
+    },
+    {
+      "id": "p_s_0_2met",
+      "response": "The library will close early on Friday because of the staff training. Day, and the returns desk will remain open until six in the evening..",
+      "requirement": "The response is exactly two sentences.",
+      "met": true
+    },
+    {
+      "id": "p_s_0_1not",
+      "response": "The library will close early on Friday because of the staff training day, and the returns desk will remain open until six in the evening..",
+      "requirement": "The response is exactly two sentences.",
+      "met": false
+    },
+    {
+      "id": "p_w_1_maxmet",
+      "response": "Your appointment with the dentist has been confirmed for the morning of the ninth, and you should arrive ten minutes early for the forms..",
+      "requirement": "The response uses at most 28 words.",
+      "met": true
+    },
+    {
+      "id": "p_w_1_maxnot",
+      "response": "Your appointment with the dentist has been confirmed for the morning of the ninth, and you should arrive ten minutes early for the forms. Your appointment with the dentist has been confirmed for the",
+      "requirement": "The response uses at most 26 words.",
+      "met": false
+    },
+    {
+      "id": "p_b_1_3met",
+      "response": "- Your appointment with the dentist has been confirmed\n- for the morning of the ninth, and you\n- should arrive ten minutes early for the forms.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_b_1_3not2",
+      "response": "- Your appointment with the dentist has been confirmed for the morning of\n- the ninth, and you should arrive ten minutes early for the forms.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_b_1_3not4",
+      "response": "- Your appointment with the dentist has\n- been confirmed for the morning of\n- the ninth, and you should arrive\n- ten minutes early for the forms.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_n_1_not",
+      "response": "1. Your appointment with the dentist has been confirmed\n2. for the morning of the ninth, and you\n3. should arrive ten minutes early for the forms.",
+      "requirement": "The response uses bullet points, not numbered items.",
+      "met": false
+    },
+    {
+      "id": "p_n_1_nummet",
+      "response": "1. Your appointment with the dentist has been confirmed\n2. for the morning of the ninth, and you\n3. should arrive ten minutes early for the forms.",
+      "requirement": "The response uses exactly 3 numbered items.",
+      "met": true
+    },
+    {
+      "id": "p_s_1_2met",
+      "response": "Your appointment with the dentist has been confirmed for the morning of. The ninth, and you should arrive ten minutes early for the forms..",
+      "requirement": "The response is exactly two sentences.",
+      "met": true
+    },
+    {
+      "id": "p_s_1_1not",
+      "response": "Your appointment with the dentist has been confirmed for the morning of the ninth, and you should arrive ten minutes early for the forms..",
+      "requirement": "The response is exactly two sentences.",
+      "met": false
+    },
+    {
+      "id": "p_w_2_maxmet",
+      "response": "The new cycle route opens next weekend, linking the river path with the old railway line and adding four kilometres of quiet traffic..",
+      "requirement": "The response uses at most 27 words.",
+      "met": true
+    },
+    {
+      "id": "p_w_2_maxnot",
+      "response": "The new cycle route opens next weekend, linking the river path with the old railway line and adding four kilometres of quiet traffic. The new cycle route opens next weekend, linking the river pa",
+      "requirement": "The response uses at most 25 words.",
+      "met": false
+    },
+    {
+      "id": "p_b_2_3met",
+      "response": "- The new cycle route opens next weekend,\n- linking the river path with the old\n- railway line and adding four kilometres of quiet traffic.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_b_2_3not2",
+      "response": "- The new cycle route opens next weekend, linking the river path\n- with the old railway line and adding four kilometres of quiet traffic.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_b_2_3not4",
+      "response": "- The new cycle route opens\n- next weekend, linking the river\n- path with the old railway\n- line and adding four kilometres of quiet traffic.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_n_2_not",
+      "response": "1. The new cycle route opens next weekend,\n2. linking the river path with the old\n3. railway line and adding four kilometres of quiet traffic.",
+      "requirement": "The response uses bullet points, not numbered items.",
+      "met": false
+    },
+    {
+      "id": "p_n_2_nummet",
+      "response": "1. The new cycle route opens next weekend,\n2. linking the river path with the old\n3. railway line and adding four kilometres of quiet traffic.",
+      "requirement": "The response uses exactly 3 numbered items.",
+      "met": true
+    },
+    {
+      "id": "p_s_2_2met",
+      "response": "The new cycle route opens next weekend, linking the river path. With the old railway line and adding four kilometres of quiet traffic..",
+      "requirement": "The response is exactly two sentences.",
+      "met": true
+    },
+    {
+      "id": "p_s_2_1not",
+      "response": "The new cycle route opens next weekend, linking the river path with the old railway line and adding four kilometres of quiet traffic..",
+      "requirement": "The response is exactly two sentences.",
+      "met": false
+    },
+    {
+      "id": "p_w_3_maxmet",
+      "response": "The software update installs automatically overnight, and most users will notice the new settings panel when they sign in on Monday..",
+      "requirement": "The response uses at most 25 words.",
+      "met": true
+    },
+    {
+      "id": "p_w_3_maxnot",
+      "response": "The software update installs automatically overnight, and most users will notice the new settings panel when they sign in on Monday. The software update installs automatically overnight, and mo",
+      "requirement": "The response uses at most 23 words.",
+      "met": false
+    },
+    {
+      "id": "p_b_3_3met",
+      "response": "- The software update installs automatically overnight, and\n- most users will notice the new settings\n- panel when they sign in on Monday.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_b_3_3not2",
+      "response": "- The software update installs automatically overnight, and most users will\n- notice the new settings panel when they sign in on Monday.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_b_3_3not4",
+      "response": "- The software update installs automatically\n- overnight, and most users will\n- notice the new settings panel\n- when they sign in on Monday.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_n_3_not",
+      "response": "1. The software update installs automatically overnight, and\n2. most users will notice the new settings\n3. panel when they sign in on Monday.",
+      "requirement": "The response uses bullet points, not numbered items.",
+      "met": false
+    },
+    {
+      "id": "p_n_3_nummet",
+      "response": "1. The software update installs automatically overnight, and\n2. most users will notice the new settings\n3. panel when they sign in on Monday.",
+      "requirement": "The response uses exactly 3 numbered items.",
+      "met": true
+    },
+    {
+      "id": "p_s_3_2met",
+      "response": "The software update installs automatically overnight, and most users will. Notice the new settings panel when they sign in on Monday..",
+      "requirement": "The response is exactly two sentences.",
+      "met": true
+    },
+    {
+      "id": "p_s_3_1not",
+      "response": "The software update installs automatically overnight, and most users will notice the new settings panel when they sign in on Monday..",
+      "requirement": "The response is exactly two sentences.",
+      "met": false
+    },
+    {
+      "id": "p_w_4_maxmet",
+      "response": "The community orchard needs volunteers on Saturday for the autumn pruning, and tools are provided for anyone who wishes to take part..",
+      "requirement": "The response uses at most 26 words.",
+      "met": true
+    },
+    {
+      "id": "p_w_4_maxnot",
+      "response": "The community orchard needs volunteers on Saturday for the autumn pruning, and tools are provided for anyone who wishes to take part. The community orchard needs volunteers on Saturday for the a",
+      "requirement": "The response uses at most 24 words.",
+      "met": false
+    },
+    {
+      "id": "p_b_4_3met",
+      "response": "- The community orchard needs volunteers on Saturday\n- for the autumn pruning, and tools are\n- provided for anyone who wishes to take part.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_b_4_3not2",
+      "response": "- The community orchard needs volunteers on Saturday for the autumn pruning,\n- and tools are provided for anyone who wishes to take part.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_b_4_3not4",
+      "response": "- The community orchard needs volunteers\n- on Saturday for the autumn\n- pruning, and tools are provided\n- for anyone who wishes to take part.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_n_4_not",
+      "response": "1. The community orchard needs volunteers on Saturday\n2. for the autumn pruning, and tools are\n3. provided for anyone who wishes to take part.",
+      "requirement": "The response uses bullet points, not numbered items.",
+      "met": false
+    },
+    {
+      "id": "p_n_4_nummet",
+      "response": "1. The community orchard needs volunteers on Saturday\n2. for the autumn pruning, and tools are\n3. provided for anyone who wishes to take part.",
+      "requirement": "The response uses exactly 3 numbered items.",
+      "met": true
+    },
+    {
+      "id": "p_s_4_2met",
+      "response": "The community orchard needs volunteers on Saturday for the autumn pruning,. And tools are provided for anyone who wishes to take part..",
+      "requirement": "The response is exactly two sentences.",
+      "met": true
+    },
+    {
+      "id": "p_s_4_1not",
+      "response": "The community orchard needs volunteers on Saturday for the autumn pruning, and tools are provided for anyone who wishes to take part..",
+      "requirement": "The response is exactly two sentences.",
+      "met": false
+    },
+    {
+      "id": "p_w_5_maxmet",
+      "response": "The concert was moved indoors because of the forecast, and the extra seats released by the change are available at the door only..",
+      "requirement": "The response uses at most 27 words.",
+      "met": true
+    },
+    {
+      "id": "p_w_5_maxnot",
+      "response": "The concert was moved indoors because of the forecast, and the extra seats released by the change are available at the door only. The concert was moved indoors because of the forecast, and t",
+      "requirement": "The response uses at most 25 words.",
+      "met": false
+    },
+    {
+      "id": "p_b_5_3met",
+      "response": "- The concert was moved indoors because of\n- the forecast, and the extra seats released\n- by the change are available at the door only.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_b_5_3not2",
+      "response": "- The concert was moved indoors because of the forecast, and the\n- extra seats released by the change are available at the door only.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_b_5_3not4",
+      "response": "- The concert was moved indoors\n- because of the forecast, and\n- the extra seats released by\n- the change are available at the door only.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_n_5_not",
+      "response": "1. The concert was moved indoors because of\n2. the forecast, and the extra seats released\n3. by the change are available at the door only.",
+      "requirement": "The response uses bullet points, not numbered items.",
+      "met": false
+    },
+    {
+      "id": "p_n_5_nummet",
+      "response": "1. The concert was moved indoors because of\n2. the forecast, and the extra seats released\n3. by the change are available at the door only.",
+      "requirement": "The response uses exactly 3 numbered items.",
+      "met": true
+    },
+    {
+      "id": "p_s_5_2met",
+      "response": "The concert was moved indoors because of the forecast, and the. Extra seats released by the change are available at the door only..",
+      "requirement": "The response is exactly two sentences.",
+      "met": true
+    },
+    {
+      "id": "p_s_5_1not",
+      "response": "The concert was moved indoors because of the forecast, and the extra seats released by the change are available at the door only..",
+      "requirement": "The response is exactly two sentences.",
+      "met": false
+    },
+    {
+      "id": "p_w_6_maxmet",
+      "response": "The water main works will run for three days, and households on the east street may notice a slight discoloration on the first refill..",
+      "requirement": "The response uses at most 28 words.",
+      "met": true
+    },
+    {
+      "id": "p_w_6_maxnot",
+      "response": "The water main works will run for three days, and households on the east street may notice a slight discoloration on the first refill. The water main works will run for three days, and households",
+      "requirement": "The response uses at most 26 words.",
+      "met": false
+    },
+    {
+      "id": "p_b_6_3met",
+      "response": "- The water main works will run for three\n- days, and households on the east street may\n- notice a slight discoloration on the first refill.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_b_6_3not2",
+      "response": "- The water main works will run for three days, and households on\n- the east street may notice a slight discoloration on the first refill.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_b_6_3not4",
+      "response": "- The water main works will run\n- for three days, and households on\n- the east street may notice a\n- slight discoloration on the first refill.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_n_6_not",
+      "response": "1. The water main works will run for three\n2. days, and households on the east street may\n3. notice a slight discoloration on the first refill.",
+      "requirement": "The response uses bullet points, not numbered items.",
+      "met": false
+    },
+    {
+      "id": "p_n_6_nummet",
+      "response": "1. The water main works will run for three\n2. days, and households on the east street may\n3. notice a slight discoloration on the first refill.",
+      "requirement": "The response uses exactly 3 numbered items.",
+      "met": true
+    },
+    {
+      "id": "p_s_6_2met",
+      "response": "The water main works will run for three days, and households on. The east street may notice a slight discoloration on the first refill..",
+      "requirement": "The response is exactly two sentences.",
+      "met": true
+    },
+    {
+      "id": "p_s_6_1not",
+      "response": "The water main works will run for three days, and households on the east street may notice a slight discoloration on the first refill..",
+      "requirement": "The response is exactly two sentences.",
+      "met": false
+    },
+    {
+      "id": "p_w_7_maxmet",
+      "response": "The scholarship applications close at midnight on the fifteenth, and late entries will not be considered under any circumstances..",
+      "requirement": "The response uses at most 23 words.",
+      "met": true
+    },
+    {
+      "id": "p_w_7_maxnot",
+      "response": "The scholarship applications close at midnight on the fifteenth, and late entries will not be considered under any circumstances. The scholarship applications close at midnight on the fiftee",
+      "requirement": "The response uses at most 21 words.",
+      "met": false
+    },
+    {
+      "id": "p_b_7_3met",
+      "response": "- The scholarship applications close at midnight\n- on the fifteenth, and late entries\n- will not be considered under any circumstances.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": true
+    },
+    {
+      "id": "p_b_7_3not2",
+      "response": "- The scholarship applications close at midnight on the fifteenth,\n- and late entries will not be considered under any circumstances.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_b_7_3not4",
+      "response": "- The scholarship applications close\n- at midnight on the\n- fifteenth, and late entries\n- will not be considered under any circumstances.",
+      "requirement": "The response uses exactly 3 bullet points.",
+      "met": false
+    },
+    {
+      "id": "p_n_7_not",
+      "response": "1. The scholarship applications close at midnight\n2. on the fifteenth, and late entries\n3. will not be considered under any circumstances.",
+      "requirement": "The response uses bullet points, not numbered items.",
+      "met": false
+    },
+    {
+      "id": "p_n_7_nummet",
+      "response": "1. The scholarship applications close at midnight\n2. on the fifteenth, and late entries\n3. will not be considered under any circumstances.",
+      "requirement": "The response uses exactly 3 numbered items.",
+      "met": true
+    },
+    {
+      "id": "p_s_7_2met",
+      "response": "The scholarship applications close at midnight on the fifteenth,. And late entries will not be considered under any circumstances..",
+      "requirement": "The response is exactly two sentences.",
+      "met": true
+    },
+    {
+      "id": "p_s_7_1not",
+      "response": "The scholarship applications close at midnight on the fifteenth, and late entries will not be considered under any circumstances..",
+      "requirement": "The response is exactly two sentences.",
+      "met": false
+    }
+  ]
+}

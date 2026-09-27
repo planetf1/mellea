@@ -1,0 +1,101 @@
+{
+  "arm": "switch",
+  "model": "ibm-granite/granite-switch-4.1-3b-preview",
+  "host": "p1-r28-n2.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "switch": true,
+    "L1": {
+      "description": "check_certainty on confident vs hedged context",
+      "certain": {
+        "value": 0.8872096349378498,
+        "latency_s": 4.753
+      },
+      "hedged": {
+        "value": 0.4479116983402085,
+        "latency_s": 1.16
+      },
+      "timings": {
+        "L1": 5.91
+      }
+    },
+    "L2": {
+      "description": "requirement-check (french, bullets) + certainty",
+      "french": {
+        "value": 0.06008680815204768,
+        "latency_s": 1.161
+      },
+      "bullets": {
+        "value": 0.04208782632229409,
+        "latency_s": 0.949
+      },
+      "certainty": {
+        "value": 0.8268195710242955,
+        "latency_s": 1.061
+      },
+      "timings": {
+        "L2": 3.17
+      }
+    },
+    "L3": {
+      "description": "answerability -> rewrite -> generate -> requirement-check",
+      "answerability": {
+        "value": "answerable",
+        "latency_s": 0.812
+      },
+      "rewritten_query": {
+        "value": "What is the capital of Australia?",
+        "latency_s": 2.84,
+        "prompt_tokens": 7
+      },
+      "generated": {
+        "latency_s": 0.224,
+        "prompt_tokens": 87,
+        "completion_tokens": 2
+      },
+      "generated_answer": "Canberra",
+      "grounded_check": {
+        "value": 0.7310585962062793,
+        "latency_s": 1.118,
+        "completion_tokens": 2
+      },
+      "timings": {
+        "L3": 5.0
+      }
+    },
+    "L4": {
+      "description": "retry until requirement met (max 3)",
+      "requirement": "The response uses bullet points and is written in French.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "response": "Cardiff is the capital and largest city of Wales, located in the historic county of Glamorgan.",
+          "score": 0.017986280605321408,
+          "gen_latency_s": 1.34,
+          "gen_tokens": 20,
+          "check_latency_s": 1.122
+        },
+        {
+          "attempt": 2,
+          "response": "Cardiff is the capital city of Wales, situated in the county of Glamorgan, and serves as",
+          "score": 0.017986285637102372,
+          "gen_latency_s": 1.35,
+          "gen_tokens": 20,
+          "check_latency_s": 1.112
+        },
+        {
+          "attempt": 3,
+          "response": "Cardiff is the capital and most populous city of Wales, located in the historic county of Glamorgan",
+          "score": 0.015906436493984634,
+          "gen_latency_s": 1.277,
+          "gen_tokens": 20,
+          "check_latency_s": 1.113
+        }
+      ],
+      "passed": false,
+      "timings": {
+        "L4": 7.32
+      }
+    }
+  }
+}

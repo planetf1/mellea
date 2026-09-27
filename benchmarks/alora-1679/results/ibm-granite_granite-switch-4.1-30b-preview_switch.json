@@ -1,0 +1,101 @@
+{
+  "arm": "switch",
+  "model": "ibm-granite/granite-switch-4.1-30b-preview",
+  "host": "p2-r01-n4.bluevela.rmf.ibm.com",
+  "platform": "Linux-5.14.0-611.30.1.el9_7.x86_64-x86_64-with-glibc2.34",
+  "levels": {
+    "switch": true,
+    "L1": {
+      "description": "check_certainty on confident vs hedged context",
+      "certain": {
+        "value": 0.9393730429623853,
+        "latency_s": 5.04
+      },
+      "hedged": {
+        "value": 0.3952574413389251,
+        "latency_s": 1.55
+      },
+      "timings": {
+        "L1": 6.59
+      }
+    },
+    "L2": {
+      "description": "requirement-check (french, bullets) + certainty",
+      "french": {
+        "value": 0.001032235244659272,
+        "latency_s": 1.55
+      },
+      "bullets": {
+        "value": 0.0019267358550350347,
+        "latency_s": 1.395
+      },
+      "certainty": {
+        "value": 0.855544074271712,
+        "latency_s": 1.48
+      },
+      "timings": {
+        "L2": 4.42
+      }
+    },
+    "L3": {
+      "description": "answerability -> rewrite -> generate -> requirement-check",
+      "answerability": {
+        "value": "answerable",
+        "latency_s": 1.112
+      },
+      "rewritten_query": {
+        "value": "What is the capital of Australia?",
+        "latency_s": 3.715,
+        "prompt_tokens": 7
+      },
+      "generated": {
+        "latency_s": 0.804,
+        "prompt_tokens": 87,
+        "completion_tokens": 8
+      },
+      "generated_answer": "Canberra is the capital of Australia.",
+      "grounded_check": {
+        "value": 0.9525741108954611,
+        "latency_s": 1.482,
+        "completion_tokens": 8
+      },
+      "timings": {
+        "L3": 7.11
+      }
+    },
+    "L4": {
+      "description": "retry until requirement met (max 3)",
+      "requirement": "The response uses bullet points and is written in French.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "response": "Cardiff is the capital city of Wales, located in the United Kingdom. It serves as a major",
+          "score": 0.0001584373701633197,
+          "gen_latency_s": 1.153,
+          "gen_tokens": 20,
+          "check_latency_s": 1.542
+        },
+        {
+          "attempt": 2,
+          "response": "Cardiff is the vibrant capital city of Wales, situated in the United Kingdom. As the largest city",
+          "score": 0.00020342756673981765,
+          "gen_latency_s": 1.759,
+          "gen_tokens": 20,
+          "check_latency_s": 1.548
+        },
+        {
+          "attempt": 3,
+          "response": "Cardiff is the capital and largest city of Wales, located in the United Kingdom. Known for its",
+          "score": 0.0002959579214143223,
+          "gen_latency_s": 1.303,
+          "gen_tokens": 20,
+          "check_latency_s": 1.544
+        }
+      ],
+      "passed": false,
+      "timings": {
+        "L4": 8.85
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "probes": [
+    {"id": "fr_met", "response": "C'est la capitale du pays de Galles.", "requirement": "The response is written in French.", "met": true},
+    {"id": "fr_not", "response": "Cardiff is the capital city of Wales.", "requirement": "The response is written in French.", "met": false},
+    {"id": "en_met", "response": "Cardiff is the capital city of Wales.", "requirement": "The response is written in English.", "met": true},
+    {"id": "en_not", "response": "C'est la capitale du pays de Galles.", "requirement": "The response is written in English.", "met": false},
+    {"id": "bullets_met", "response": "- The sky is blue.\n- The sea is salt.", "requirement": "The response uses bullet points.", "met": true},
+    {"id": "bullets_not", "response": "The sky is blue and the sea is salt.", "requirement": "The response uses bullet points.", "met": false},
+    {"id": "numbered_not", "response": "1. The sky is blue.\n2. The sea is salt.", "requirement": "The response uses bullet points.", "met": false},
+    {"id": "words_max_met", "response": "Two plus two is four.", "requirement": "The response uses at most 5 words.", "met": true},
+    {"id": "words_max_not", "response": "Two plus two is four, as everyone knows.", "requirement": "The response uses at most 5 words.", "met": false},
+    {"id": "words_min_met", "response": "The quick brown fox jumps over the lazy dog near the river.", "requirement": "The response uses at least 10 words.", "met": true},
+    {"id": "words_min_not", "response": "The fox jumps over the dog.", "requirement": "The response uses at least 10 words.", "met": false},
+    {"id": "caps_not", "response": "THE SKY IS BLUE.", "requirement": "The response is in lowercase.", "met": false},
+    {"id": "lower_met", "response": "the sky is blue.", "requirement": "The response is in lowercase.", "met": true},
+    {"id": "neg_not", "response": "Paris is famous for the Eiffel Tower.", "requirement": "The response must not mention Paris.", "met": false},
+    {"id": "neg_met", "response": "Lyon is famous for its food.", "requirement": "The response must not mention Paris.", "met": true},
+    {"id": "neg_met2", "response": "Lyon is famous for its food.", "requirement": "The response must not mention Rome.", "met": true},
+    {"id": "mixed_met", "response": "- C'est la capitale.\n- Elle est au pays de Galles.", "requirement": "The response uses bullet points and is written in French.", "met": true},
+    {"id": "mixed_half_bullets", "response": "- Cardiff is the capital city of Wales.", "requirement": "The response uses bullet points and is written in French.", "met": false},
+    {"id": "mixed_half_fr", "response": "C'est la capitale du pays de Galles.", "requirement": "The response uses bullet points and is written in French.", "met": false},
+    {"id": "mixed_none", "response": "Cardiff is the capital city of Wales.", "requirement": "The response uses bullet points and is written in French.", "met": false},
+    {"id": "tone_met", "response": "We would be delighted to confirm your booking at your earliest convenience.", "requirement": "The response uses a formal tone.", "met": true},
+    {"id": "tone_not", "response": "yep ur booked lol", "requirement": "The response uses a formal tone.", "met": false}
+  ]
+}

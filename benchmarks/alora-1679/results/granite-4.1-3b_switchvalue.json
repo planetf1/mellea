@@ -1,0 +1,103 @@
+{
+  "host": "p2-r05-n4.bluevela.rmf.ibm.com",
+  "peft": {
+    "kind": "peft_alora",
+    "load_model_s": 14.32,
+    "register_adapters_s": 130.09,
+    "gpu_mem_gib": 6.53,
+    "set_adapter_s": 0.01065,
+    "calls": [
+      {
+        "call": "uncertainty0",
+        "latency_s": 6.382
+      },
+      {
+        "call": "requirement0",
+        "latency_s": 0.933
+      },
+      {
+        "call": "answerability0",
+        "latency_s": 0.795
+      },
+      {
+        "call": "policy0",
+        "latency_s": 1.007
+      },
+      {
+        "call": "gen0",
+        "latency_s": 1.151
+      },
+      {
+        "call": "uncertainty1",
+        "latency_s": 0.572
+      },
+      {
+        "call": "requirement1",
+        "latency_s": 0.593
+      },
+      {
+        "call": "answerability1",
+        "latency_s": 0.594
+      },
+      {
+        "call": "policy1",
+        "latency_s": 0.657
+      },
+      {
+        "call": "gen1",
+        "latency_s": 0.501
+      }
+    ],
+    "n_adapters_loaded": 4
+  },
+  "switch": {
+    "kind": "switch_embedded",
+    "load_model_s": 13.46,
+    "register_adapters_s": 0.0,
+    "gpu_mem_gib": 7.76,
+    "set_adapter_s": null,
+    "calls": [
+      {
+        "call": "uncertainty0",
+        "latency_s": 1.025
+      },
+      {
+        "call": "requirement0",
+        "latency_s": 0.978
+      },
+      {
+        "call": "answerability0",
+        "latency_s": 0.825
+      },
+      {
+        "call": "policy0",
+        "latency_s": 1.309
+      },
+      {
+        "call": "gen0",
+        "latency_s": 0.62
+      },
+      {
+        "call": "uncertainty1",
+        "latency_s": 0.84
+      },
+      {
+        "call": "requirement1",
+        "latency_s": 0.846
+      },
+      {
+        "call": "answerability1",
+        "latency_s": 0.613
+      },
+      {
+        "call": "policy1",
+        "latency_s": 0.958
+      },
+      {
+        "call": "gen1",
+        "latency_s": 0.595
+      }
+    ],
+    "n_adapters_loaded": null
+  }
+}
