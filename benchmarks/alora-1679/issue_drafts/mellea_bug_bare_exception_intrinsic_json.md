@@ -42,12 +42,32 @@ like a raw parser crash even though a (wrong) wrapper exists.
 
 ## Reproduction (two ways)
 
-1. **Forced truncation** (deterministic): run any intrinsic with the
-   output cap below the JSON length, e.g.
-   `model_options={"max_completion_tokens": 3}` on
-   `core.check_certainty` with granite-4.1-3b. The raised object is
-   `builtins.Exception`, neither `ValueError` nor
-   `AdapterSchemaMismatchError`.
+1. **Forced truncation** (deterministic, verified 2026-09-27 on
+   granite-4.1-3b): run any intrinsic with the output cap below the JSON
+   length:
+
+   ```python
+   from mellea import start_backend
+   from mellea.backends import ModelOption
+   from mellea.stdlib.components import Message
+   from mellea.stdlib.components.intrinsic import core
+   from mellea.stdlib.context import ChatContext
+
+   ctx, backend = start_backend("hf", model_id="ibm-granite/granite-4.1-3b",
+                                context_type="chat")
+   c = ChatContext().add(Message("user", "What is the square root of 16?")).add(
+       Message("assistant", "The square root of 16 is 4."))
+   try:
+       core.check_certainty(c, backend,
+                            model_options={ModelOption.MAX_NEW_TOKENS: 3})
+   except BaseException as e:
+       print(type(e), isinstance(e, ValueError))
+   # <class 'Exception'> False
+   ```
+
+   Note: plain-string option keys (e.g. `{"max_new_tokens": 3}`) are
+   silently ignored - the sentinel keys from `mellea.backends.ModelOption`
+   are the working form.
 2. **Observed in the wild (5+ reproductions)**: granite-4.1-30b *base
    model* (no active adapter) + `core.check_certainty` on a normal
    context emits truncated JSON such as `'{\n  "score":         '` and
